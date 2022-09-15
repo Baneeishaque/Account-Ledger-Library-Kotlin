@@ -1,0 +1,3 @@
+[submodule "common-lib"]
+	path = common-lib
+	url = https://github.com/Baneeishaque/Common-Utils-Library-Kotlin-Gradle.git
