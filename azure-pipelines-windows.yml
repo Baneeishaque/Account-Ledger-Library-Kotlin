@@ -6,6 +6,9 @@ variables:
   repositoryName: Account-Ledger-Library-Kotlin-Gradle
 
 steps:
+  - checkout: self
+    submodules: recursive
+    
   - task: Cache@2.198.0
     inputs:
       key: 'gradle | "$(Agent.OS)"'
