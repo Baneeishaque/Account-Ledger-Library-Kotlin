@@ -9,4 +9,4 @@
  */
 
 rootProject.name = "Account-Ledger-Library"
-include(":common-lib:lib",":lib")
+include(":common-lib:common-lib",":account-ledger-lib")

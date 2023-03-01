@@ -23,7 +23,7 @@ dependencies {
     implementation(platform("org.jetbrains.kotlin:kotlin-bom"))
 //    implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
 
-    implementation(project(":common-lib:lib"))
+    implementation(project(":common-lib:common-lib"))
 
     implementation("com.squareup.retrofit2:retrofit:2.9.0")
     implementation("com.squareup.retrofit2:converter-gson:2.9.0")
