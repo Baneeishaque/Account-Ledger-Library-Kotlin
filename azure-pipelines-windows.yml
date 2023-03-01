@@ -1,0 +1,22 @@
+pool:
+  vmImage: 'windows-latest'
+
+variables:
+  GRADLE_USER_HOME: $(Pipeline.Workspace)/.gradle
+  repositoryName: Account-Ledger-Library-Kotlin-Gradle
+
+steps:
+  - task: Cache@2.198.0
+    inputs:
+      key: 'gradle | "$(Agent.OS)"'
+      restoreKeys: gradle
+      path: $(GRADLE_USER_HOME)
+    displayName: Gradle Build Cache
+
+  - task: Gradle@3.208.0
+    displayName: 'Gradle Build Task'
+    inputs:
+      gradleOptions: '-Xmx3072m'
+
+  - script: 'gradlew --stop'
+    displayName: Stop Gradle Daemon
