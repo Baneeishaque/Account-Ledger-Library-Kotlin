@@ -1,10 +1,10 @@
-package accountLedgerCli.cli
+package account.ledger.library.cli
 
 import account.ledger.library.api.response.AccountsResponse
 import account.ledger.library.api.response.TransactionsResponse
-import accountLedgerCli.retrofit.data.AccountsDataSource
-import accountLedgerCli.retrofit.data.TransactionsDataSource
-import accountLedgerCli.to_utils.ApiUtils
+import account.ledger.library.retrofit.data.AccountsDataSource
+import account.ledger.library.retrofit.data.TransactionsDataSource
+import common.utils.library.utils.ApiUtils as CommonApiUtils
 import kotlinx.coroutines.runBlocking
 
 internal fun getAccounts(
@@ -16,7 +16,7 @@ internal fun getAccounts(
 
 ): Result<AccountsResponse> {
 
-    return ApiUtils.getResultFromApiRequestWithOptionalRetries(apiCallFunction = fun(): Result<AccountsResponse> {
+    return CommonApiUtils.getResultFromApiRequestWithOptionalRetries(apiCallFunction = fun(): Result<AccountsResponse> {
 
         return runBlocking {
 
@@ -38,7 +38,7 @@ internal fun getUserTransactionsForAnAccount(
 
 ): Result<TransactionsResponse> {
 
-    return ApiUtils.getResultFromApiRequestWithOptionalRetries(
+    return CommonApiUtils.getResultFromApiRequestWithOptionalRetries(
 
         apiCallFunction = fun(): Result<TransactionsResponse> {
 

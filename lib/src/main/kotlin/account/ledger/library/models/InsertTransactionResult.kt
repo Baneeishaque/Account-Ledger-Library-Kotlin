@@ -1,4 +1,4 @@
-package accountLedgerCli.models
+package account.ledger.library.models
 
 import account.ledger.library.api.response.AccountResponse
 

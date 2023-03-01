@@ -1,28 +1,25 @@
-package accountLedgerCli.cli
+package account.ledger.library.cli
 
 import account.ledger.library.api.response.AccountResponse
 import account.ledger.library.api.response.TransactionsResponse
-import account.ledger.library.cli.App
-import account.ledger.library.cli.checkAffectedAccountsAfterSpecifiedDate
-import account.ledger.library.cli.viewChildAccounts
 import account.ledger.library.cli.App.Companion.commandLinePrintMenuWithEnterPrompt
-import accountLedgerCli.constants.Constants
-import accountLedgerCli.enums.BalanceSheetRefineLevelEnum
-import accountLedgerCli.enums.EnvironmentFileEntryEnum
-import accountLedgerCli.enums.FunctionCallSourceEnum
-import accountLedgerCli.enums.TransactionTypeEnum
-import accountLedgerCli.models.AccountFrequencyModel
-import accountLedgerCli.models.FrequencyOfAccountsModel
-import accountLedgerCli.models.InsertTransactionResult
-import accountLedgerCli.models.UserModel
-import accountLedgerCli.retrofit.data.TransactionsDataSource
-import accountLedgerCli.to_models.IsOkModel
-import accountLedgerCli.to_utils.*
-import accountLedgerCli.utils.AccountUtils
-import accountLedgerCli.utils.ApiUtils
+import account.ledger.library.constants.Constants
+import account.ledger.library.enums.BalanceSheetRefineLevelEnum
+import account.ledger.library.enums.EnvironmentFileEntryEnum
+import account.ledger.library.enums.FunctionCallSourceEnum
+import account.ledger.library.enums.TransactionTypeEnum
+import account.ledger.library.models.AccountFrequencyModel
+import account.ledger.library.models.FrequencyOfAccountsModel
+import account.ledger.library.models.InsertTransactionResult
+import account.ledger.library.models.UserModel
+import account.ledger.library.retrofit.data.TransactionsDataSource
+import account.ledger.library.utils.AccountUtils
+import account.ledger.library.utils.ApiUtils
+import common.utils.library.models.IsOkModel
+import common.utils.library.utils.*
 import kotlinx.coroutines.runBlocking
-import accountLedgerCli.to_utils.ApiUtils as CommonApiUtils
-import accountLedgerCli.to_utils.HandleResponses as CommonHandleResponses
+import common.utils.library.utils.ApiUtils as CommonApiUtils
+import common.utils.library.utils.HandleResponses as CommonHandleResponses
 
 object Screens {
 
@@ -60,7 +57,7 @@ object Screens {
             commandLinePrintMenuWithEnterPrompt.printMenuWithEnterPromptFromListOfCommands(
                 listOf(
                     "\nUser : $username",
-                    AccountUtils.getFrequentlyUsedTop10Accounts(userId = userId),
+                    AccountUtils.getFrequentlyUsedTop10Accounts(userId = userId, isDevelopmentMode),
                     "1 - List Accounts : Top Levels",
                     "2 - ${getQuickTransactionOnWalletText()}",
                     "3 - ${getQuickTransactionOnWalletToFrequent1Text()}",
@@ -107,7 +104,7 @@ object Screens {
                     "Enter Your Choice : "
                 )
             )
-            when (readLine()!!) {
+            when (readln()) {
 
                 "1" -> {
 
@@ -899,7 +896,7 @@ object Screens {
 
         if (getUserAccountsMapResult.isOK && getUserAccountsMapResult.data!!.containsKey(desiredAccountIndex)) {
 
-            val selectedAccount: AccountResponse = getUserAccountsMapResult.data[desiredAccountIndex]!!
+            val selectedAccount: AccountResponse = getUserAccountsMapResult.data!![desiredAccountIndex]!!
             localInsertTransactionResult = TransactionViews.viewTransactionsForAnAccount(
 
                 userId = userId,
@@ -924,6 +921,8 @@ object Screens {
 
     ): List<AccountFrequencyModel>? {
 
+        //TODO : Allow a range of user ids
+        //TODO : Accumulate frequencies of same Accounts
         return frequencyOfAccounts.users.find { user: UserModel -> user.id == userId }?.accountFrequencies
     }
 
@@ -987,7 +986,7 @@ object Screens {
                     "Enter Your Choice : "
                 )
             )
-            when (readLine()!!) {
+            when (readln()) {
 
                 "1" -> {
                     localInsertTransactionResult = TransactionViews.viewTransactionsForAnAccount(
@@ -1221,7 +1220,8 @@ object Screens {
         viaAccount: AccountResponse,
         toAccount: AccountResponse,
         transactionType: TransactionTypeEnum,
-        userId: UInt
+        userId: UInt,
+        isDevelopmentMode: Boolean
 
     ): List<String> {
 
@@ -1237,7 +1237,7 @@ object Screens {
         }
         menuItems = menuItems + listOf(
             "To Account - ${toAccount.id} : ${toAccount.fullName}",
-            AccountUtils.getFrequentlyUsedTop40Accounts(userId = userId)
+            AccountUtils.getFrequentlyUsedTop40Accounts(userId = userId, isDevelopmentMode)
         )
         return menuItems
     }

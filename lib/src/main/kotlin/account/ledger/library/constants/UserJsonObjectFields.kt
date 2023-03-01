@@ -1,4 +1,4 @@
-package accountLedgerCli.constants
+package account.ledger.library.constants
 
 internal object UserJsonObjectFields {
     //    internal const val name: String = "name"

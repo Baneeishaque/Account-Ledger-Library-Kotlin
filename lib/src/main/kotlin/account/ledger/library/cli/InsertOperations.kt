@@ -1,23 +1,27 @@
-package accountLedgerCli.cli
+package account.ledger.library.cli
 
 import account.ledger.library.api.response.AccountResponse
 import account.ledger.library.api.response.TransactionManipulationResponse
-import account.ledger.library.cli.App
 import account.ledger.library.cli.App.Companion.commandLinePrintMenuWithEnterPrompt
-import accountLedgerCli.cli.Screens.quickTransactionOnWallet
-import accountLedgerCli.constants.Constants
-import accountLedgerCli.enums.*
-import accountLedgerCli.enums.AccountExchangeTypeEnum
-import accountLedgerCli.enums.HandleAccountsApiResponseResult
-import accountLedgerCli.models.*
-import accountLedgerCli.retrofit.data.TransactionDataSource
-import accountLedgerCli.to_models.IsOkModel
-import accountLedgerCli.to_utils.*
-import accountLedgerCli.utils.ApiUtils
-import accountLedgerCli.utils.ChooseAccountUtils
+import account.ledger.library.cli.Screens.quickTransactionOnWallet
+import account.ledger.library.constants.Constants
+import account.ledger.library.enums.AccountExchangeTypeEnum
+import account.ledger.library.enums.AccountTypeEnum
+import account.ledger.library.enums.HandleAccountsApiResponseResult
+import account.ledger.library.enums.TransactionTypeEnum
+import account.ledger.library.models.AccountFrequencyModel
+import account.ledger.library.models.ChooseAccountResult
+import account.ledger.library.models.FrequencyOfAccountsModel
+import account.ledger.library.models.InsertTransactionResult
+import account.ledger.library.models.UserModel
+import account.ledger.library.retrofit.data.TransactionDataSource
+import account.ledger.library.utils.ApiUtils
+import account.ledger.library.utils.ChooseAccountUtils
+import common.utils.library.models.IsOkModel
+import common.utils.library.utils.*
 import kotlinx.coroutines.runBlocking
-import accountLedgerCli.to_utils.ApiUtils as CommonApiUtils
-import accountLedgerCli.to_utils.HandleResponses as CommonHandleResponses
+import common.utils.library.utils.ApiUtils as CommonApiUtils
+import common.utils.library.utils.HandleResponses as CommonHandleResponses
 
 object InsertOperations {
 
@@ -102,7 +106,7 @@ object InsertOperations {
                         transactionType = TransactionTypeEnum.NORMAL,
                         fromAccount = getUserAccountsMapResult.data!![account1.value]!!,
                         viaAccount = viaAccount,
-                        toAccount = getUserAccountsMapResult.data[account2.value]!!,
+                        toAccount = getUserAccountsMapResult.data!![account2.value]!!,
                         dateTimeInText = dateTimeInText,
                         transactionParticulars = transactionParticulars,
                         transactionAmount = transactionAmount,
@@ -214,7 +218,8 @@ object InsertOperations {
                     viaAccount = localInsertTransactionResult.viaAccount,
                     toAccount = localInsertTransactionResult.toAccount,
                     transactionType = transactionType,
-                    userId = userId
+                    userId = userId,
+                    isDevelopmentMode = isDevelopmentMode
 
                 ) + listOf(
 
@@ -250,7 +255,7 @@ object InsertOperations {
                     "Enter Your Choice : "
                 )
             )
-            when (readLine()!!) {
+            when (readln()) {
 
                 "1" -> {
 
@@ -1505,12 +1510,12 @@ object InsertOperations {
             "S" -> {
 
                 print("Enter No. of Splits : ")
-                val thresholdValue: UInt = 0u
+                val thresholdValue = 0u
                 val noOfSplits: UInt = InputUtils.getGreaterUnsignedInt(
 
                     inputUInt = InputUtils.getValidUnsignedInt(
 
-                        inputText = readLine()!!, invalidMessage = "Please Enter Valid Unsigned Integer"
+                        inputText = readln(), invalidMessage = "Please Enter Valid Unsigned Integer"
 
                     ), thresholdValue = thresholdValue, constructInvalidMessage = fun(currentUInt: UInt): String {
 
@@ -1571,7 +1576,7 @@ object InsertOperations {
                     SentenceUtils.reverseOrderOfWords(sentence = localTransactionParticulars)
                 print("Enter Particulars (Current Value - $localTransactionParticulars), R to Reverse (Reversed Value - $reversedTransactionParticulars), AS to Add Suffix, AP to Add Prefix : ")
 
-                val transactionParticularsInput: String = readLine()!!
+                val transactionParticularsInput: String = readln()
                 if (transactionParticularsInput.isNotEmpty()) {
 
                     localTransactionParticulars = if (transactionParticularsInput == "R") {
@@ -1581,13 +1586,13 @@ object InsertOperations {
                     } else if (transactionParticularsInput == "AS") {
 
                         print("Enter Suffix : ")
-                        val transactionSuffixInput: String = readLine()!!
+                        val transactionSuffixInput: String = readln()
                         val suffixedTransactionParticulars = "$localTransactionParticulars$transactionSuffixInput"
 
                         do {
                             print("Particulars (Current Value - $localTransactionParticulars), (Suffixed Value - $suffixedTransactionParticulars), Do you want to Continue (Y/N) : ")
 
-                            when (readLine()!!) {
+                            when (readln()) {
 
                                 "Y", "" -> {
 
@@ -1612,13 +1617,13 @@ object InsertOperations {
                     } else if (transactionParticularsInput == "AP") {
 
                         print("Enter Prefix : ")
-                        val transactionPrefixInput: String = readLine()!!
+                        val transactionPrefixInput: String = readln()
                         val prefixedTransactionParticulars = "$transactionPrefixInput$localTransactionParticulars"
 
                         do {
                             print("Particulars (Current Value - $localTransactionParticulars), (Prefixed Value - $prefixedTransactionParticulars), Do you want to Continue (Y/N) : ")
 
-                            when (readLine()!!) {
+                            when (readln()) {
 
                                 "Y" -> {
 
@@ -1655,7 +1660,7 @@ object InsertOperations {
                 print("Enter Amount (Current Value - $localTransactionAmount) : ")
                 val transactionAmountInput
 
-                        : String = readLine()!!
+                        : String = readln()
                 if (transactionAmountInput.isNotEmpty()) {
 
                     localTransactionAmount = InputUtils.getValidFloat(
@@ -1683,7 +1688,7 @@ object InsertOperations {
                     commandLinePrintMenuWithEnterPrompt.printMenuWithEnterPromptFromListOfCommands(
                         listOfCommands = menuItems
                     )
-                    when (readLine()!!) {
+                    when (readln()) {
 
                         "Y", "" -> {
 

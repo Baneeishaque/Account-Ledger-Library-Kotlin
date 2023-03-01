@@ -1,4 +1,4 @@
-package accountLedgerCli.retrofit
+package account.ledger.library.retrofit
 
 /**
  * A generic class that holds a value with its loading status.

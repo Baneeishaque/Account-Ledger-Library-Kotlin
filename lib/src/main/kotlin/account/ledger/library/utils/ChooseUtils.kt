@@ -1,9 +1,9 @@
-package accountLedgerCli.utils
+package account.ledger.library.utils
 
-import accountLedgerCli.models.ChooseByIdResult
-import accountLedgerCli.to_models.IsOkModel
+import account.ledger.library.models.ChooseByIdResult
+import common.utils.library.models.IsOkModel
 import java.util.*
-import accountLedgerCli.to_utils.ApiUtils as CommonApiUtils
+import common.utils.library.utils.ApiUtils as CommonApiUtils
 
 internal object ChooseUtils {
 

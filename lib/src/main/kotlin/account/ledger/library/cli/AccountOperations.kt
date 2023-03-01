@@ -5,16 +5,13 @@ import account.ledger.library.api.response.AccountsResponse
 import account.ledger.library.api.response.TransactionResponse
 import account.ledger.library.api.response.TransactionsResponse
 import account.ledger.library.cli.App.Companion.commandLinePrintMenuWithEnterPrompt
-import accountLedgerCli.cli.TransactionViews
-import accountLedgerCli.cli.getAccounts
-import accountLedgerCli.cli.processChildAccountScreenInput
-import accountLedgerCli.enums.FunctionCallSourceEnum
-import accountLedgerCli.models.InsertTransactionResult
-import accountLedgerCli.models.ViewTransactionsOutput
-import accountLedgerCli.retrofit.data.TransactionsDataSource
-import accountLedgerCli.utils.AccountUtils
-import accountLedgerCli.utils.ApiUtils
-import accountLedgerCli.utils.TransactionUtils
+import account.ledger.library.enums.FunctionCallSourceEnum
+import account.ledger.library.models.InsertTransactionResult
+import account.ledger.library.models.ViewTransactionsOutput
+import account.ledger.library.retrofit.data.TransactionsDataSource
+import account.ledger.library.utils.AccountUtils
+import account.ledger.library.utils.ApiUtils
+import account.ledger.library.utils.TransactionUtils
 import common.utils.library.models.IsOkModel
 import common.utils.library.utils.MysqlUtils
 import common.utils.library.utils.invalidOptionMessage
@@ -62,7 +59,7 @@ internal fun checkAffectedAccountsAfterSpecifiedDate(
             println("Error : ${(apiResponse.exceptionOrNull() as Exception).localizedMessage}")
             do {
                 print("Retry (Y/N) ? : ")
-                when (readLine()!!) {
+                when (readln()) {
 
                     "Y", "" -> {
 
@@ -99,7 +96,7 @@ internal fun checkAffectedAccountsAfterSpecifiedDate(
 
                 val accounts: MutableMap<UInt, String> = mutableMapOf()
 
-                var userTransactionsAfterSpecifiedDate: List<TransactionResponse> =
+                val userTransactionsAfterSpecifiedDate: List<TransactionResponse> =
                     TransactionUtils.filterTransactionsForUptoDateTime(
                         isUpToTimeStamp = isUpToTimeStamp,
                         upToTimeStamp = upToTimeStamp,
@@ -239,7 +236,7 @@ internal fun viewChildAccounts(
         println("Error : ${(apiResponse.exceptionOrNull() as Exception).localizedMessage}")
         do {
             print("Retry (Y/N) ? : ")
-            when (readLine()!!) {
+            when (readln()) {
                 "Y", "" -> {
                     return viewChildAccounts(
                         username = username, userId = userId,

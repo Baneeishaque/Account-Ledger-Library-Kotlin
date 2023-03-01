@@ -1,6 +1,7 @@
-package accountLedgerCli.retrofit.data
+package account.ledger.library.retrofit.data
 
 import account.ledger.library.api.response.TransactionManipulationResponse
+import account.ledger.library.retrofit.data.AppDataSource
 
 internal class TransactionDataSource : AppDataSource<TransactionManipulationResponse>() {
 

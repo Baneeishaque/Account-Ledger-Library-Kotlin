@@ -1,11 +1,11 @@
-package accountLedgerCli.cli
+package account.ledger.library.cli
 
 import account.ledger.library.api.response.AccountResponse
 import account.ledger.library.cli.App.Companion.commandLinePrintMenuWithContinuePrompt
-import accountLedgerCli.enums.TransactionTypeEnum
-import accountLedgerCli.models.InsertTransactionResult
-import accountLedgerCli.to_utils.DateTimeUtils
-import accountLedgerCli.to_utils.invalidOptionMessage
+import account.ledger.library.enums.TransactionTypeEnum
+import account.ledger.library.models.InsertTransactionResult
+import common.utils.library.utils.DateTimeUtils
+import common.utils.library.utils.invalidOptionMessage
 
 internal fun isAccountsAreAvailable(
 
@@ -59,13 +59,14 @@ internal fun transactionContinueCheck(
                 viaAccount = viaAccount,
                 toAccount = toAccount,
                 transactionType = transactionType,
-                userId = userId
+                userId = userId,
+                isDevelopmentMode = isDevelopmentMode
 
             ) + listOf(
                 "", "Continue (Y/N) : "
             )
         )
-        when (readLine()!!) {
+        when (readln()) {
             "Y", "" -> {
 
                 return addTransactionWithAccountAvailabilityCheck(

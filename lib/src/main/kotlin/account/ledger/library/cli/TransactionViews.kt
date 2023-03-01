@@ -1,30 +1,30 @@
-package accountLedgerCli.cli
+package account.ledger.library.cli
 
 import account.ledger.library.api.response.AccountResponse
 import account.ledger.library.api.response.AccountsResponse
 import account.ledger.library.api.response.TransactionResponse
 import account.ledger.library.api.response.TransactionsResponse
-import account.ledger.library.cli.App
 import account.ledger.library.cli.App.Companion.commandLinePrintMenuWithEnterPrompt
-import accountLedgerCli.constants.Constants
-import accountLedgerCli.enums.FunctionCallSourceEnum
-import accountLedgerCli.enums.TransactionTypeEnum
-import accountLedgerCli.enums.AccountTypeEnum
-import accountLedgerCli.models.InsertTransactionResult
-import accountLedgerCli.models.ViewTransactionsOutput
-import accountLedgerCli.models.ChooseAccountResult
-import accountLedgerCli.to_models.IsOkModel
-import accountLedgerCli.to_utils.DateTimeUtils
-import accountLedgerCli.to_utils.MysqlUtils
-import accountLedgerCli.to_utils.ToDoUtils
-import accountLedgerCli.to_utils.invalidOptionMessage
-import accountLedgerCli.utils.AccountUtils
-import accountLedgerCli.utils.ApiUtils
-import accountLedgerCli.utils.TransactionUtils
-import accountLedgerCli.utils.ChooseAccountUtils
-import accountLedgerCli.to_utils.ApiUtils as CommonApiUtils
-import accountLedgerCli.to_utils.HandleResponses as CommonHandleResponses
-import accountLedgerCli.to_constants.Constants as CommonConstants
+import account.ledger.library.constants.Constants
+import account.ledger.library.enums.FunctionCallSourceEnum
+import account.ledger.library.enums.TransactionTypeEnum
+import account.ledger.library.enums.AccountTypeEnum
+import account.ledger.library.models.InsertTransactionResult
+import account.ledger.library.models.ViewTransactionsOutput
+import account.ledger.library.models.ChooseAccountResult
+import account.ledger.library.utils.AccountUtils
+import account.ledger.library.utils.ApiUtils
+import account.ledger.library.utils.TransactionUtils
+import account.ledger.library.utils.ChooseAccountUtils
+import common.utils.library.models.IsOkModel
+import common.utils.library.utils.DateTimeUtils
+import common.utils.library.utils.MysqlUtils
+import common.utils.library.utils.ToDoUtils
+import common.utils.library.utils.invalidOptionMessage
+import common.utils.library.utils.ApiUtils as CommonApiUtils
+import common.utils.library.utils.HandleResponses as CommonHandleResponses
+import common.utils.library.constants.Constants as CommonConstants
+
 
 object TransactionViews {
 
@@ -245,7 +245,7 @@ object TransactionViews {
                 }
                 commandLinePrintMenuWithEnterPrompt.printMenuWithEnterPromptFromListOfCommands(menuItems)
 
-                choice = readLine()!!
+                choice = readln()
 
                 var addTransactionResult = InsertTransactionResult(
 
@@ -418,7 +418,7 @@ object TransactionViews {
                                     userAccountsMap[selectedTransaction.from_account_id]!!
                                 do {
                                     println("Do you want to change Withdraw A/C (Y/N) (Default : N) : ")
-                                    when (readLine()!!) {
+                                    when (readln()) {
                                         "Y" -> {
 
                                             val chooseAccountResult: ChooseAccountResult =
@@ -449,7 +449,7 @@ object TransactionViews {
                                     userAccountsMap[selectedTransaction.to_account_id]!!
                                 do {
                                     print("Do you want to change Deposit A/C (Y/N) (Default : N) : ")
-                                    when (readLine()!!) {
+                                    when (readln()) {
                                         "Y" -> {
 
                                             val chooseAccountResult: ChooseAccountResult =
@@ -549,7 +549,7 @@ object TransactionViews {
                                 isDevelopmentMode = isDevelopmentMode
                             )
 
-                            var upPreviousTransactionKey: UInt = 0u
+                            var upPreviousTransactionKey = 0u
                             userTransactionsMap.keys.forEach { key ->
                                 if (key == upTransactionKey) {
                                     return@forEach
@@ -688,7 +688,7 @@ object TransactionViews {
                                 }
                             }
 
-                            var upPreviousTransactionKey: UInt = 0u
+                            var upPreviousTransactionKey = 0u
                             var isUpPreviousTransactionKeyNotFound = true
                             userTransactionsMapSortedByTime.values.forEach { currentTransaction ->
 
@@ -937,14 +937,10 @@ object TransactionViews {
 
     private fun isCallNotFromCheckAccounts(functionCallSource: FunctionCallSourceEnum): Boolean {
 
-        if (isCallNotFromCheckAccounts(
+        return isCallNotFromCheckAccounts(
 
-                functionCallSource = functionCallSource,
-                furtherActionsOnFalse = { invalidOptionMessage() })
-        ) {
-            return true
-        }
-        return false
+            functionCallSource = functionCallSource,
+            furtherActionsOnFalse = { invalidOptionMessage() })
     }
 
     private fun isCallNotFromCheckAccounts(
@@ -989,7 +985,7 @@ object TransactionViews {
 
     ) {
         print("Enter Account Index or 0 to Back : A")
-        val userInputForAccountIndex: String = readLine()!!
+        val userInputForAccountIndex: String = readln()
         if (userInputForAccountIndex != "0") {
 
             val getUserAccountsMapResult: IsOkModel<LinkedHashMap<UInt, AccountResponse>> =
@@ -1015,13 +1011,13 @@ object TransactionViews {
                         itemSpecification = Constants.accountText,
                         items = AccountUtils.userAccountsToStringFromList(
 
-                            accounts = getUserAccountsMapResult.data.values.toList()
+                            accounts = getUserAccountsMapResult.data!!.values.toList()
                         ),
                         backValue = 0u
                     )
                     if (accountIndex != 0u) {
 
-                        val selectedAccount: AccountResponse = getUserAccountsMapResult.data[accountIndex]!!
+                        val selectedAccount: AccountResponse = getUserAccountsMapResult.data!![accountIndex]!!
                         viewTransactionsForAnAccount(
 
                             userId = userId,

@@ -1,7 +1,7 @@
-package accountLedgerCli.cli
+package account.ledger.library.cli
 
-import accountLedgerCli.enums.EnvironmentFileEntryEnum
-import accountLedgerCli.to_models.EnvironmentFileEntryModel
+import account.ledger.library.enums.EnvironmentFileEntryEnum
+import common.utils.library.models.EnvironmentFileEntryModel
 
 object EnvironmentalFileEntries {
 

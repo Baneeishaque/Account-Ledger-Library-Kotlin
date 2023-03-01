@@ -1,20 +1,20 @@
-package accountLedgerCli.cli
+package account.ledger.library.cli
 
 import account.ledger.library.api.response.TransactionResponse
 import account.ledger.library.api.response.TransactionsResponse
 import account.ledger.library.api.response.UserResponse
 import account.ledger.library.cli.App.Companion.dotenv
-import accountLedgerCli.constants.Constants
-import accountLedgerCli.enums.BalanceSheetRefineLevelEnum
-import accountLedgerCli.models.BalanceSheetDataModel
-import accountLedgerCli.models.BalanceSheetDataRowModel
-import accountLedgerCli.models.ChooseUserResult
-import accountLedgerCli.retrofit.data.TransactionsDataSource
-import accountLedgerCli.to_models.IsOkModel
-import accountLedgerCli.to_utils.DateTimeUtils
-import accountLedgerCli.to_utils.MysqlUtils
-import accountLedgerCli.to_utils.invalidOptionMessage
-import accountLedgerCli.utils.UserUtils
+import account.ledger.library.constants.Constants
+import account.ledger.library.enums.BalanceSheetRefineLevelEnum
+import account.ledger.library.models.BalanceSheetDataModel
+import account.ledger.library.models.BalanceSheetDataRowModel
+import account.ledger.library.models.ChooseUserResult
+import account.ledger.library.retrofit.data.TransactionsDataSource
+import account.ledger.library.utils.UserUtils
+import common.utils.library.models.IsOkModel
+import common.utils.library.utils.DateTimeUtils
+import common.utils.library.utils.MysqlUtils
+import common.utils.library.utils.invalidOptionMessage
 import kotlinx.coroutines.runBlocking
 import kotlinx.serialization.json.Json
 
@@ -90,7 +90,7 @@ internal fun printBalanceSheetOfUser(
                 println("Error : ${(apiResponse.exceptionOrNull() as Exception).localizedMessage}")
                 do {
                     print("Retry (Y/N) ? : ")
-                    when (readLine()!!) {
+                    when (readln()) {
                         "Y", "" -> {
                             printBalanceSheetOfUser(
                                 currentUserName = currentUserName,

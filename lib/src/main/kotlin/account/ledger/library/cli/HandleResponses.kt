@@ -1,19 +1,19 @@
-package accountLedgerCli.cli
+package account.ledger.library.cli
 
 import account.ledger.library.api.response.AccountResponse
 import account.ledger.library.api.response.AccountsResponse
 import account.ledger.library.cli.App.Companion.commandLinePrintMenuWithEnterPrompt
-import accountLedgerCli.constants.Constants
-import accountLedgerCli.enums.AccountTypeEnum
-import accountLedgerCli.enums.HandleAccountsApiResponseResult
-import accountLedgerCli.models.InsertTransactionResult
-import accountLedgerCli.models.ViewTransactionsOutput
-import accountLedgerCli.to_models.IsOkModel
-import accountLedgerCli.to_utils.EnumUtils
-import accountLedgerCli.to_utils.invalidOptionMessage
-import accountLedgerCli.utils.AccountUtils
-import accountLedgerCli.to_constants.Constants as CommonConstants
-import accountLedgerCli.to_utils.HandleResponses as CommonHandleResponses
+import account.ledger.library.constants.Constants
+import account.ledger.library.enums.AccountTypeEnum
+import account.ledger.library.enums.HandleAccountsApiResponseResult
+import account.ledger.library.models.InsertTransactionResult
+import account.ledger.library.models.ViewTransactionsOutput
+import account.ledger.library.utils.AccountUtils
+import common.utils.library.models.IsOkModel
+import common.utils.library.utils.EnumUtils
+import common.utils.library.utils.invalidOptionMessage
+import common.utils.library.constants.Constants as CommonConstants
+import common.utils.library.utils.HandleResponses as CommonHandleResponses
 
 object HandleResponses {
 
@@ -67,7 +67,7 @@ object HandleResponses {
 
                     val processChildAccountScreenInputResult: ViewTransactionsOutput = processChildAccountScreenInput(
 
-                        userAccountsMap = getUserAccountsMapResult.data,
+                        userAccountsMap = getUserAccountsMapResult.data!!,
                         userId = userId,
                         username = username,
                         fromAccount = localInsertTransactionResult.fromAccount,
@@ -152,7 +152,7 @@ object HandleResponses {
                             "Enter Your Choice : "
                         )
                     )
-                    when (readLine()!!) {
+                    when (readln()) {
                         "1" -> {
                             return getHandleAccountsResponseFromApiResult(
 

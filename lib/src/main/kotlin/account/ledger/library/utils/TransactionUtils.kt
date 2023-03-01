@@ -1,10 +1,10 @@
-package accountLedgerCli.utils
+package account.ledger.library.utils
 
 import account.ledger.library.api.response.TransactionResponse
-import accountLedgerCli.models.TransactionLedgerInText
-import accountLedgerCli.to_models.IsOkModel
-import accountLedgerCli.to_utils.MysqlUtils
-import accountLedgerCli.to_utils.DateTimeUtils
+import account.ledger.library.models.TransactionLedgerInText
+import common.utils.library.models.IsOkModel
+import common.utils.library.utils.DateTimeUtils
+import common.utils.library.utils.MysqlUtils
 
 import java.time.LocalDateTime
 
@@ -119,17 +119,17 @@ internal object TransactionUtils {
         transactions: List<TransactionResponse>
     ): List<TransactionResponse> {
 
-        if (isUpToTimeStamp) {
+        return if (isUpToTimeStamp) {
 
-            return getTransactionsUptoDateTime(upToTimeStamp = upToTimeStamp, transactions = transactions)
+            getTransactionsUptoDateTime(upToTimeStamp = upToTimeStamp, transactions = transactions)
 
         } else {
 
-            return transactions
+            transactions
         }
     }
 
-    internal fun getTransactionsUptoDateTime(
+    private fun getTransactionsUptoDateTime(
         upToTimeStamp: String,
         transactions: List<TransactionResponse>
     ): List<TransactionResponse> {

@@ -1,12 +1,12 @@
-package accountLedgerCli.utils
+package account.ledger.library.utils
 
 import account.ledger.library.api.response.AccountResponse
 import account.ledger.library.api.response.AccountsResponse
-import accountLedgerCli.constants.Constants
-import accountLedgerCli.enums.AccountTypeEnum
-import accountLedgerCli.models.ChooseAccountResult
-import accountLedgerCli.models.ChooseByIdResult
-import accountLedgerCli.to_utils.EnumUtils
+import account.ledger.library.constants.Constants
+import account.ledger.library.enums.AccountTypeEnum
+import account.ledger.library.models.ChooseAccountResult
+import account.ledger.library.models.ChooseByIdResult
+import common.utils.library.utils.EnumUtils
 
 internal object ChooseAccountUtils {
 
@@ -45,7 +45,7 @@ internal object ChooseAccountUtils {
             } else {
 
                 val userAccountsMap: LinkedHashMap<UInt, AccountResponse> =
-                    AccountUtils.prepareUserAccountsMap(chooseByIdResult.isOkWithData.data.accounts)
+                    AccountUtils.prepareUserAccountsMap(chooseByIdResult.isOkWithData.data!!.accounts)
 
                 if (userAccountsMap.containsKey(chooseByIdResult.id!!)) {
 

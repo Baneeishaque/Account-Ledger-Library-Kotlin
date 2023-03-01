@@ -1,11 +1,11 @@
-package accountLedgerCli.cli
+package account.ledger.library.cli
 
 import account.ledger.library.api.response.AccountResponse
 import account.ledger.library.cli.App.Companion.commandLinePrintMenuWithEnterPrompt
-import accountLedgerCli.constants.Constants
-import accountLedgerCli.to_utils.invalidOptionMessage
-import accountLedgerCli.utils.AccountUtils
-import accountLedgerCli.to_constants.Constants as CommonConstants
+import account.ledger.library.constants.Constants
+import account.ledger.library.utils.AccountUtils
+import common.utils.library.utils.invalidOptionMessage
+import common.utils.library.constants.Constants as CommonConstants
 
 internal fun searchAccount(
 
@@ -17,7 +17,7 @@ internal fun searchAccount(
     commandLinePrintMenuWithEnterPrompt.printMenuWithEnterPromptFromListOfCommands(
         listOf("\nEnter Search Key : ")
     )
-    val searchKeyInput: String = readLine()!!
+    val searchKeyInput: String = readln()
 
     val searchResult: LinkedHashMap<UInt, AccountResponse> = searchOnHashMapValues(
 
@@ -39,7 +39,7 @@ internal fun searchAccount(
                 )
             )
 
-            val input: String = readLine()!!
+            val input: String = readln()
 
             if (input == "1") return searchAccount(
                 userAccountsMap = userAccountsMap,
@@ -65,7 +65,7 @@ internal fun searchAccount(
                     "Enter Your Choice : "
                 )
             )
-            val input: String = readLine()!!
+            val input: String = readln()
             if (input == "1") {
 
                 return getValidIndexWithInputPrompt(

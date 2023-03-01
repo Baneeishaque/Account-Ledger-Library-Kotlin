@@ -1,4 +1,4 @@
-package accountLedgerCli.cli
+package account.ledger.library.cli
 
 import com.github.doyaaaaaken.kotlincsv.dsl.csvReader
 

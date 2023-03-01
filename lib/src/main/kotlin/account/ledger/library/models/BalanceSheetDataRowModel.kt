@@ -1,4 +1,4 @@
-package accountLedgerCli.models
+package account.ledger.library.models
 
 import kotlinx.serialization.Required
 import kotlinx.serialization.Serializable

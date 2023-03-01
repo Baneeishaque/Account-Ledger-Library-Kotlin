@@ -1,4 +1,4 @@
-package accountLedgerCli.constants
+package account.ledger.library.constants
 
 internal object Constants {
 
@@ -10,6 +10,9 @@ internal object Constants {
     internal const val transactionText: String = "Transaction"
     internal const val accountHeaderIdentifier: String = "A/C Ledger "
     internal const val walletAccountHeaderIdentifier: String = "Wallet"
-    internal const val bankAccountHeaderIdentifier: String = "Bank"
-    internal const val accountHeaderUnderlineCharacter: String = "+"
+
+    //    internal const val bankAccountHeaderIdentifier: String = "Bank"
+    internal const val bankAccountHeaderIdentifier: String = "PNB"
+    internal const val accountHeaderUnderlineCharacter: String = "~"
+    internal const val dateUnderlineCharacter: String = "-"
 }

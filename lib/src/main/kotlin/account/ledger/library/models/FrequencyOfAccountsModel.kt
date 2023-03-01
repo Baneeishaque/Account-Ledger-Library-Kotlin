@@ -1,6 +1,6 @@
-package accountLedgerCli.models
+package account.ledger.library.models
 
-import accountLedgerCli.constants.FrequencyOfAccountsJsonObjectFields
+import account.ledger.library.constants.FrequencyOfAccountsJsonObjectFields
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 

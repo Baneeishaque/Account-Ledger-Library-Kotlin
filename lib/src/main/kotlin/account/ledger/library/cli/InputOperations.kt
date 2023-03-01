@@ -1,13 +1,13 @@
-package accountLedgerCli.cli
+package account.ledger.library.cli
 
 import account.ledger.library.cli.App.Companion.commandLinePrintMenuWithEnterPrompt
 import account.ledger.library.cli.App.Companion.commandLinePrintMenuWithTryPrompt
-import accountLedgerCli.enums.AccountTypeEnum
-import accountLedgerCli.enums.HandleAccountsApiResponseResult
-import accountLedgerCli.enums.TransactionTypeEnum
-import accountLedgerCli.to_utils.InputUtils
-import accountLedgerCli.to_utils.invalidOptionMessage
-import accountLedgerCli.utils.ApiUtils
+import account.ledger.library.enums.AccountTypeEnum
+import account.ledger.library.enums.HandleAccountsApiResponseResult
+import account.ledger.library.enums.TransactionTypeEnum
+import account.ledger.library.utils.ApiUtils
+import common.utils.library.utils.InputUtils
+import common.utils.library.utils.invalidOptionMessage
 
 internal fun <T> getValidIndexWithInputPrompt(
 
@@ -28,7 +28,7 @@ internal fun <T> getValidIndexWithInputPrompt(
         )
     )
 
-    val idInput: String = readLine()!!
+    val idInput: String = readln()
     if (idInput == backValue.toString()) return backValue
 
     return getValidIndex(
@@ -90,7 +90,7 @@ private fun <T> getValidIndex(
 
             listOfCommands = listOf("Invalid $itemSpecification Index, Try again ? (Y/N) : ")
         )
-        return when (readLine()) {
+        return when (readlnOrNull()) {
 
             "Y", "" -> {
 
@@ -260,7 +260,7 @@ internal fun enterDateWithTime(
     print(
         "$dateTimeInText Correct? (Y/N), D+Tr to increase 1 Day with Time Reset, D+ to increase 1 Day, D- to decrease 1 Day, D2+Tr to increase 2 Days with Time Reset, D2+ to increase 2 Days, D2- to decrease 2 Days,${if (transactionType == TransactionTypeEnum.VIA) " Ex12 to exchange From & Via A/Cs, Ex23 to exchange Via & To A/Cs, Ex13 to exchange From & To A/Cs" else " Ex to exchange From & To A/Cs"}${if (isNotFromSplitTransaction) ", S to Split Transactions" else ""}, B to Back : "
     )
-    when (readLine()) {
+    when (readlnOrNull()) {
         "Y", "" -> {
 
             return dateTimeInText

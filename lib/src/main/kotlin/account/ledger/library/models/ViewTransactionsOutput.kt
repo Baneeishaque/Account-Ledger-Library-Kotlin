@@ -1,4 +1,6 @@
-package accountLedgerCli.models
+package account.ledger.library.models
+
+import account.ledger.library.models.InsertTransactionResult
 
 internal data class ViewTransactionsOutput(
 

@@ -1,10 +1,19 @@
+val ktorVersion: String = "2.1.2"
+
 plugins {
     id("org.jetbrains.kotlin.jvm") version "1.7.0"
+    kotlin("plugin.serialization") version "1.7.10"
     `java-library`
 }
 
 repositories {
     mavenCentral()
+    maven {
+        url = uri("https://maven.pkg.jetbrains.space/public/p/ktor/eap")
+    }
+    maven {
+        url = uri("https://maven.pkg.jetbrains.space/kotlin/p/kotlin/dev")
+    }
 }
 
 dependencies {
@@ -18,6 +27,25 @@ dependencies {
 
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.6.4")
     implementation("io.github.cdimascio:dotenv-kotlin:6.3.1")
+
+    implementation("org.jetbrains.kotlinx:kotlinx-cli:0.3.5")
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.6.4")
+    implementation("com.github.doyaaaaaken:kotlin-csv-jvm:1.8.0")
+    implementation("com.massisframework:j-text-utils:0.3.4")
+    implementation("io.github.cdimascio:dotenv-kotlin:6.4.1")
+
+    implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.5.0")
+
+    implementation("io.ktor:ktor-client-core:$ktorVersion")
+    implementation("io.ktor:ktor-client-cio:$ktorVersion")
+
+    implementation("io.ktor:ktor-client-logging:$ktorVersion")
+    implementation("ch.qos.logback:logback-classic:1.4.5")
+
+    implementation("io.ktor:ktor-client-auth:$ktorVersion")
+
+    implementation("io.ktor:ktor-client-content-negotiation:$ktorVersion")
+    implementation("io.ktor:ktor-serialization-kotlinx-json:$ktorVersion")
 }
 
 testing {

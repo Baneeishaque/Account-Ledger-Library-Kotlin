@@ -1,4 +1,4 @@
-package accountLedgerCli.retrofit.data
+package account.ledger.library.retrofit.data
 
 import retrofit2.Response
 

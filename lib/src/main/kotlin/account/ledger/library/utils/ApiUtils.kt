@@ -1,10 +1,10 @@
-package accountLedgerCli.utils
+package account.ledger.library.utils
 
 import account.ledger.library.api.response.AccountsResponse
-import accountLedgerCli.constants.Constants
-import accountLedgerCli.retrofit.data.AccountsDataSource
+import account.ledger.library.constants.Constants
+import account.ledger.library.retrofit.data.AccountsDataSource
 import kotlinx.coroutines.runBlocking
-import accountLedgerCli.to_utils.ApiUtils as CommonApiUtils
+import common.utils.library.utils.ApiUtils as CommonApiUtils
 
 internal object ApiUtils {
 

@@ -1,4 +1,4 @@
-package accountLedgerCli.constants
+package account.ledger.library.constants
 
 internal object AccountFrequencyJsonObjectFields {
     internal const val accountID: String = "accountID"

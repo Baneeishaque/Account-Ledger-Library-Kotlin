@@ -1,26 +1,26 @@
-package accountLedgerCli.cli
+package account.ledger.library.cli
 
 import account.ledger.library.api.response.AccountResponse
 import account.ledger.library.api.response.AuthenticationResponse
 import account.ledger.library.api.response.UserResponse
 import account.ledger.library.api.response.UsersResponse
 import account.ledger.library.cli.App.Companion.commandLinePrintMenuWithEnterPrompt
-import accountLedgerCli.constants.Constants
-import accountLedgerCli.enums.BalanceSheetOutputFormatsEnum
-import accountLedgerCli.enums.BalanceSheetRefineLevelEnum
-import accountLedgerCli.enums.CommandLineApiMethodBalanceSheetOptionsEnum
-import accountLedgerCli.models.BalanceSheetDataModel
-import accountLedgerCli.models.ChooseUserResult
-import accountLedgerCli.models.InsertTransactionResult
-import accountLedgerCli.models.UserCredentials
-import accountLedgerCli.retrofit.ResponseHolder
-import accountLedgerCli.retrofit.data.AuthenticationDataSource
-import accountLedgerCli.retrofit.data.UsersDataSource
-import accountLedgerCli.to_utils.invalidOptionMessage
-import accountLedgerCli.utils.UserUtils
-import accountLedgerCli.to_constants.Constants as CommonConstants
+import account.ledger.library.constants.Constants
+import account.ledger.library.enums.BalanceSheetOutputFormatsEnum
+import account.ledger.library.enums.BalanceSheetRefineLevelEnum
+import account.ledger.library.enums.CommandLineApiMethodBalanceSheetOptionsEnum
+import account.ledger.library.models.BalanceSheetDataModel
+import account.ledger.library.models.ChooseUserResult
+import account.ledger.library.models.InsertTransactionResult
+import account.ledger.library.models.UserCredentials
+import account.ledger.library.retrofit.ResponseHolder
+import account.ledger.library.retrofit.data.AuthenticationDataSource
+import account.ledger.library.retrofit.data.UsersDataSource
+import account.ledger.library.utils.UserUtils
+import common.utils.library.utils.invalidOptionMessage
 import kotlinx.coroutines.runBlocking
 import kotlinx.serialization.json.Json
+import common.utils.library.constants.Constants as CommonConstants
 
 import java.nio.file.Paths
 
@@ -72,7 +72,7 @@ class UserOperations {
                     do {
                         displayCurrentUser(user)
                         print("Do you want to continue (Y/N) : ")
-                        when (readLine().toString()) {
+                        when (readlnOrNull().toString()) {
                             "Y", "" -> {
                                 break
                             }
@@ -103,7 +103,7 @@ class UserOperations {
                     println("Error : ${(apiResponse.getValue() as Exception).localizedMessage}")
                     do {
                         print("Retry (Y/N) ? : ")
-                        when (readLine()!!) {
+                        when (readln()) {
                             "Y", "" -> {
                                 return login(
                                     username = username,
@@ -347,7 +347,7 @@ class UserOperations {
                 println("Error : ${(apiResponse.getValue() as Exception).localizedMessage}")
                 do {
                     print("Retry (Y/N) ? : ")
-                    when (readLine()!!) {
+                    when (readln()) {
                         "Y", "" -> {
                             return listUsers(
                                 fromAccount = fromAccount,
@@ -418,7 +418,7 @@ class UserOperations {
                                 "Enter Your Choice : "
                             )
                         )
-                        when (readLine()!!) {
+                        when (readln()) {
                             "1" -> {
                                 balanceSheetOfUser(
 

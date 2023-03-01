@@ -1,15 +1,15 @@
-package accountLedgerCli.utils
+package account.ledger.library.utils
 
 import account.ledger.library.api.response.AccountResponse
 import account.ledger.library.cli.App
-import accountLedgerCli.cli.Screens
-import accountLedgerCli.constants.Constants
-import accountLedgerCli.models.AccountFrequencyModel
-import accountLedgerCli.models.ChooseAccountResult
-import accountLedgerCli.models.FrequencyOfAccountsModel
-import accountLedgerCli.to_models.IsOkModel
-import accountLedgerCli.to_utils.JsonFileUtils
-import accountLedgerCli.to_constants.Constants as CommonConstants
+import account.ledger.library.cli.Screens
+import account.ledger.library.constants.Constants
+import account.ledger.library.models.AccountFrequencyModel
+import account.ledger.library.models.ChooseAccountResult
+import account.ledger.library.models.FrequencyOfAccountsModel
+import common.utils.library.models.IsOkModel
+import common.utils.library.utils.JsonFileUtils
+import common.utils.library.constants.Constants as CommonConstants
 
 internal object AccountUtils {
 
@@ -51,31 +51,31 @@ internal object AccountUtils {
     }
 
     @JvmStatic
-    internal fun getFrequentlyUsedTop10Accounts(userId: UInt): String {
+    internal fun getFrequentlyUsedTop10Accounts(userId: UInt, isDevelopmentMode: Boolean): String {
 
-        return getFrequentlyUsedTopXAccounts(userId = userId, x = 10)
+        return getFrequentlyUsedTopXAccounts(userId = userId, x = 10, isDevelopmentMode = isDevelopmentMode)
     }
 
     @JvmStatic
-    internal fun getFrequentlyUsedTop20Accounts(userId: UInt): String {
+    internal fun getFrequentlyUsedTop20Accounts(userId: UInt, isDevelopmentMode: Boolean): String {
 
-        return getFrequentlyUsedTopXAccounts(userId = userId, x = 20)
+        return getFrequentlyUsedTopXAccounts(userId = userId, x = 20, isDevelopmentMode = isDevelopmentMode)
     }
 
     @JvmStatic
-    internal fun getFrequentlyUsedTop30Accounts(userId: UInt): String {
+    internal fun getFrequentlyUsedTop30Accounts(userId: UInt, isDevelopmentMode: Boolean): String {
 
-        return getFrequentlyUsedTopXAccounts(userId = userId, x = 30)
+        return getFrequentlyUsedTopXAccounts(userId = userId, x = 30, isDevelopmentMode = isDevelopmentMode)
     }
 
     @JvmStatic
-    internal fun getFrequentlyUsedTop40Accounts(userId: UInt): String {
+    internal fun getFrequentlyUsedTop40Accounts(userId: UInt, isDevelopmentMode: Boolean): String {
 
-        return getFrequentlyUsedTopXAccounts(userId = userId, x = 40)
+        return getFrequentlyUsedTopXAccounts(userId = userId, x = 40, isDevelopmentMode = isDevelopmentMode)
     }
 
     @JvmStatic
-    internal fun getFrequentlyUsedTopXAccounts(userId: UInt, x: Int): String {
+    internal fun getFrequentlyUsedTopXAccounts(userId: UInt, x: Int, isDevelopmentMode:Boolean): String {
 
         var result = ""
 
@@ -96,11 +96,17 @@ internal object AccountUtils {
                 accountFrequency.countOfRepetition
 
             }?.take(n = x)
+            ?.sortedBy { accountFrequency: AccountFrequencyModel ->
 
-                ?.forEach { accountFrequency: AccountFrequencyModel ->
+                accountFrequency.accountName
 
-                    result += "${accountFrequency.accountID} : ${accountFrequency.accountName} [${accountFrequency.countOfRepetition}]\n"
-                }
+            }?.forEach { accountFrequency: AccountFrequencyModel ->
+
+                result += "${accountFrequency.accountID} : ${accountFrequency.accountName} [${accountFrequency.countOfRepetition}]\n"
+            }
+        }
+        if(isDevelopmentMode){
+            println("result = $result")
         }
         return if (result.isEmpty()) {
 

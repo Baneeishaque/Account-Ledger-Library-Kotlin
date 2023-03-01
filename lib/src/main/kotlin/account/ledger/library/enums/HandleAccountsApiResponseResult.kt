@@ -1,4 +1,4 @@
-package accountLedgerCli.enums
+package account.ledger.library.enums
 
 import account.ledger.library.api.response.AccountResponse
 

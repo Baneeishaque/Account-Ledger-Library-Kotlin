@@ -1,8 +1,8 @@
-package accountLedgerCli.utils
+package account.ledger.library.utils
 
 import account.ledger.library.api.response.UserResponse
-import accountLedgerCli.constants.Constants
-import accountLedgerCli.models.UserCredentials
+import account.ledger.library.constants.Constants
+import account.ledger.library.models.UserCredentials
 
 object UserUtils {
 
@@ -29,9 +29,9 @@ object UserUtils {
 
         val user = UserCredentials(username = "", passcode = "")
         print("Enter Your Username : ")
-        user.username = readLine().toString()
+        user.username = readlnOrNull().toString()
         print("Enter Your Password : ")
-        user.passcode = readLine().toString()
+        user.passcode = readlnOrNull().toString()
         return user
     }
 }

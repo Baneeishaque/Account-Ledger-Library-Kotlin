@@ -1,4 +1,4 @@
-package accountLedgerCli.retrofit
+package account.ledger.library.retrofit
 
 import account.ledger.library.api.Api
 import account.ledger.library.api.ApiConstants

@@ -1,31 +1,29 @@
 package account.ledger.library.cli
 
 import account.ledger.library.api.response.AccountResponse
-import accountLedgerCli.cli.EnvironmentalFileEntries
-import accountLedgerCli.cli.UserOperations
-import accountLedgerCli.constants.Constants
-import accountLedgerCli.enums.*
-import accountLedgerCli.models.BalanceSheetDataModel
-import accountLedgerCli.models.InsertTransactionResult
-import accountLedgerCli.utils.AccountUtils
-import common.utils.library.constants.Constants as CommonConstants
+import account.ledger.library.constants.Constants
+import account.ledger.library.enums.*
+import account.ledger.library.models.BalanceSheetDataModel
+import account.ledger.library.models.InsertTransactionResult
+import account.ledger.library.models.Root
+import account.ledger.library.utils.AccountUtils
+import common.utils.library.utils.*
 import io.github.cdimascio.dotenv.Dotenv
 import io.github.cdimascio.dotenv.dotenv
-import kotlinx.cli.*
-import kotlinx.serialization.json.Json
-import java.nio.file.Paths
 import io.ktor.client.*
-import io.ktor.client.plugins.logging.*
+import io.ktor.client.call.*
+import io.ktor.client.plugins.*
 import io.ktor.client.plugins.auth.*
 import io.ktor.client.plugins.auth.providers.*
-import io.ktor.client.request.*
-import io.ktor.client.statement.*
-import io.ktor.client.plugins.*
-import kotlinx.coroutines.*
 import io.ktor.client.plugins.contentnegotiation.*
+import io.ktor.client.plugins.logging.*
+import io.ktor.client.request.*
 import io.ktor.serialization.kotlinx.json.*
-import accountLedgerCli.models.Root
-import io.ktor.client.call.*
+import kotlinx.cli.*
+import kotlinx.coroutines.runBlocking
+import kotlinx.serialization.json.Json
+import java.nio.file.Paths
+import common.utils.library.constants.Constants as CommonConstants
 
 class App {
     companion object {
@@ -95,7 +93,7 @@ class App {
                             "Enter Your Choice : "
                         )
                     )
-                    when (readLine()!!) {
+                    when (readln()) {
                         "1", "" -> {
                         // "1" -> {
 
@@ -146,7 +144,7 @@ class App {
 
                             runBlocking {
 
-                                HttpClient() {
+                                HttpClient {
                                     expectSuccess = true
                                     install(Logging) {
 
@@ -176,60 +174,110 @@ class App {
                                         client.get("https://api.github.com/gists/${dotenv[EnvironmentFileEntryEnum.GIST_ID.name] ?: Constants.defaultValueForStringEnvironmentVariables}") {
                                             onDownload { bytesSentTotal, contentLength ->
 
-                                                if(isDevelopmentMode) {
+                                                if (isDevelopmentMode) {
 
                                                     println("Received $bytesSentTotal bytes from $contentLength")
                                                 }
                                             }
                                         }.body()
                                     val gistContent = gistResponse.files.mainTxt.content
-                                    val gistContentlines: List<String> = gistContent.lines();
-                                    if(isDevelopmentMode){
+                                    val gistContentLines: List<String> = gistContent.lines()
+                                    if (isDevelopmentMode) {
                                         // println("Gist : $gistResponse")
                                         println("Gist Contents")
                                         // println(gistContent)
-                                        gistContentlines.forEach { println(it) }
+                                        gistContentLines.forEach { println(it) }
                                         println(CommonConstants.dashedLineSeparator)
                                     }
 
                                     // var isWalletHeaderFound: Boolean = false
                                     val accountHeaderIdentifier: String = Constants.accountHeaderIdentifier
-                                    var currentAccountId: UInt = 0u
-                                    var processedLedger: LinkedHashMap<UInt, List<String>> = LinkedHashMap<UInt, List<String>>()
+                                    var currentAccountId = 0u
+                                    val processedLedger: LinkedHashMap<UInt, MutableList<String>> = LinkedHashMap()
+                                    var isPreviousLineIsNotAccountHeader = false
 
-                                    gistContentlines.forEach { line:String ->
+                                    var i = 1u
+                                    gistContentLines.forEach { line: String ->
 
-                                            println(line)
+//                                        println(line)
 
-                                            if(line.contains(other=accountHeaderIdentifier)){
+                                        if (line.contains(other = accountHeaderIdentifier)) {
 
-                                //                 // isWalletHeaderFound = true
-                                                // var accountName = line.replace(regex = accountHeaderIdentifier, replacement = "").trim()
-                                                // if( accountName == Constants.walletAccountHeaderIdentifier){
+//                                            println("$i : $line")
 
-                                                //     // TODO : set currentAccountId from environment variable
-                                                //     currentAccountId = 6u
-                                                // }
-                                                // TODO : check for custom bank name
-                                                // else if(accountName == Constants.bankAccountHeaderIdentifier){
+                                            val accountName = line.replace(
+                                                regex = accountHeaderIdentifier.toRegex(),
+                                                replacement = ""
+                                            ).trim()
+                                            if (accountName == Constants.walletAccountHeaderIdentifier) {
 
-                                                //     // TODO : set currentAccountId from environment variable
-                                                //     currentAccountId = 11u
-                                                // }
-                                                // continue
+                                                // TODO : set currentAccountId from environment variable
+                                                currentAccountId = 6u
                                             }
+                                            // TODO : check for custom bank name
+                                            else if (accountName == Constants.bankAccountHeaderIdentifier) {
 
-                                //             // if(isWalletHeaderFound){
+//                                                      TODO : set currentAccountId from environment variable
+                                                currentAccountId = 11u
+                                            }
+//                                            println(message = "currentAccountId = $currentAccountId")
+                                            isPreviousLineIsNotAccountHeader = false
 
-                                                if(line.contains(Constants.accountHeaderUnderlineCharacter) || line.isEmpty()){
-                                                    // continue
+                                        } else {
+
+                                            if (line.isNotEmpty()) {
+
+//                                                println(line)
+                                                if (!line.contains(other = Constants.accountHeaderUnderlineCharacter)) {
+
+//                                                    println(line)
+                                                    addLineToCurrentAccountLedger(
+                                                        ledgerToProcess = processedLedger,
+                                                        desiredAccountId = currentAccountId,
+                                                        desiredLine = line
+                                                    )
+                                                } else {
+
+                                                    if (isPreviousLineIsNotAccountHeader) {
+
+//                                                        println("$i : $line")
+//                                                        println(line)
+                                                        addLineToCurrentAccountLedger(
+                                                            ledgerToProcess = processedLedger,
+                                                            desiredAccountId = currentAccountId,
+                                                            desiredLine = line
+                                                        )
+                                                    }
                                                 }
-                                                // processedLedger.putIfAbsent(currentAccountId, line)
-
-                                //             // }
+                                            }
+                                            isPreviousLineIsNotAccountHeader = true
+                                        }
+                                        i++
                                     }
-                                    println(processedLedger)
+                                    processedLedger.forEach { (localCurrentAccountId: UInt, currentAccountLedgerLines: List<String>) ->
 
+                                        println("currentAccountId = $localCurrentAccountId")
+                                        currentAccountLedgerLines.forEach { ledgerLine: String ->
+
+//                                            println(ledgerLine)
+                                            val indexOfFirstSpace: Int = ledgerLine.indexOf(char = ' ')
+                                            var dateOrAmount = ""
+                                            if (indexOfFirstSpace != -1) {
+
+                                                dateOrAmount = ledgerLine.substring(
+                                                    startIndex = 0,
+                                                    endIndex = indexOfFirstSpace
+                                                )
+                                            } else if (!ledgerLine.contains(other = Constants.dateUnderlineCharacter)) {
+
+                                                dateOrAmount = ledgerLine.trim()
+                                            }
+                                            if (dateOrAmount.isNotEmpty()) {
+
+                                                println(dateOrAmount)
+                                            }
+                                        }
+                                    }
                                 }
                             }
                             return
@@ -368,6 +416,17 @@ class App {
 
                 parser.parse(args = args)
             }
+        }
+
+        private fun addLineToCurrentAccountLedger(
+            ledgerToProcess: LinkedHashMap<UInt, MutableList<String>>,
+            desiredAccountId: UInt,
+            desiredLine: String
+        ) {
+            val currentAccountLedgerLines: MutableList<String> =
+                ledgerToProcess.getOrDefault(key = desiredAccountId, defaultValue = mutableListOf())
+            currentAccountLedgerLines.add(element = desiredLine)
+            ledgerToProcess[desiredAccountId] = currentAccountLedgerLines
         }
 
         private fun processInsertTransactionResult(insertTransactionResult: InsertTransactionResult) {

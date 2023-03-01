@@ -1,8 +1,8 @@
-package accountLedgerCli.retrofit.data
+package account.ledger.library.retrofit.data
 
 import account.ledger.library.api.response.UsersResponse
-import accountLedgerCli.retrofit.ProjectRetrofitClient
-import accountLedgerCli.retrofit.ResponseHolder
+import account.ledger.library.retrofit.ProjectRetrofitClient
+import account.ledger.library.retrofit.ResponseHolder
 import retrofit2.Response
 import java.io.IOException
 
