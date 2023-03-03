@@ -5,7 +5,7 @@ import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
-internal data class FrequencyOfAccountsModel(
+data class FrequencyOfAccountsModel(
     @SerialName(FrequencyOfAccountsJsonObjectFields.users)
     var users: List<UserModel>
 )

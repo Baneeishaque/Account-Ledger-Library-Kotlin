@@ -5,7 +5,7 @@ import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
-internal data class AccountFrequencyModel(
+data class AccountFrequencyModel(
     @SerialName(AccountFrequencyJsonObjectFields.accountID)
     val accountID: UInt,
     @SerialName(AccountFrequencyJsonObjectFields.accountName)

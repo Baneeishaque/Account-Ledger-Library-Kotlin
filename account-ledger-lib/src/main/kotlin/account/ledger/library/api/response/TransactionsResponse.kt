@@ -1,7 +1,7 @@
 package account.ledger.library.api.response
 
-internal data class TransactionsResponse(
+data class TransactionsResponse(
 
-    internal val status: UInt,
-    internal var transactions: List<TransactionResponse>
+    val status: UInt,
+    var transactions: List<TransactionResponse>
 )

@@ -1,3 +1,3 @@
 package account.ledger.library.models
 
-internal data class UserCredentials(internal var username: String, internal var passcode: String)
+data class UserCredentials(var username: String, var passcode: String)

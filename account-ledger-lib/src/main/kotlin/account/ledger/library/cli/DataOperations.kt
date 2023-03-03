@@ -4,7 +4,7 @@ import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 import java.util.*
 
-internal fun getUserInitialTransactionDateFromUsername(username: String): LocalDate {
+fun getUserInitialTransactionDateFromUsername(username: String): LocalDate {
 
     return LocalDate.parse(
         username.removePrefix("banee_ishaque_k_"),

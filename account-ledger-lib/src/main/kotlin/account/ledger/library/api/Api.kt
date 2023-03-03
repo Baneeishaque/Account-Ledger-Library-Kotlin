@@ -8,7 +8,7 @@ import account.ledger.library.api.response.UsersResponse
 import retrofit2.Response
 import retrofit2.http.*
 
-internal interface Api {
+interface Api {
 
     @GET("${ApiConstants.selectUserMethod}.${ApiConstants.serverFileExtension}")
     suspend fun authenticateUser(

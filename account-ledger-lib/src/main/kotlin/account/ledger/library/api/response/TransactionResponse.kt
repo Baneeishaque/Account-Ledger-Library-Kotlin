@@ -1,16 +1,16 @@
 package account.ledger.library.api.response
 
-internal data class TransactionResponse(
+data class TransactionResponse(
 
-    internal val id: UInt,
-    internal var event_date_time: String,
-    internal var particulars: String,
-    internal var amount: Float,
+    val id: UInt,
+    var event_date_time: String,
+    var particulars: String,
+    var amount: Float,
     internal val insertion_date_time: String,
-    internal var from_account_name: String,
-    internal var from_account_full_name: String,
-    internal var from_account_id: UInt,
-    internal var to_account_name: String,
-    internal var to_account_full_name: String,
-    internal var to_account_id: UInt
+    var from_account_name: String,
+    var from_account_full_name: String,
+    var from_account_id: UInt,
+    var to_account_name: String,
+    var to_account_full_name: String,
+    var to_account_id: UInt
 )

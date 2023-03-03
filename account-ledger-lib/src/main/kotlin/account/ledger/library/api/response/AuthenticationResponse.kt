@@ -2,8 +2,8 @@ package account.ledger.library.api.response
 
 import com.google.gson.annotations.SerializedName
 
-internal data class AuthenticationResponse(
+data class AuthenticationResponse(
 
-    internal val id: UInt,
-    @SerializedName("user_count") internal val userCount: UInt
+    val id: UInt,
+    @SerializedName("user_count") val userCount: UInt
 )

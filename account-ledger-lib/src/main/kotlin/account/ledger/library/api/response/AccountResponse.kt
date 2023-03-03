@@ -4,9 +4,9 @@ import com.google.gson.annotations.SerializedName
 
 data class AccountResponse(
 
-    @SerializedName("account_id") internal val id: UInt,
-    @SerializedName("full_name") internal val fullName: String,
-    internal val name: String,
+    @SerializedName("account_id") val id: UInt,
+    @SerializedName("full_name") val fullName: String,
+    val name: String,
     @SerializedName("parent_account_id") internal val parentAccountId: UInt,
     @SerializedName("account_type") internal val accountType: String,
     internal val notes: String?,

@@ -3,7 +3,7 @@ package account.ledger.library.retrofit.data
 import account.ledger.library.api.response.TransactionsResponse
 import account.ledger.library.retrofit.data.AppDataSource
 
-internal class TransactionsDataSource : AppDataSource<TransactionsResponse>() {
+class TransactionsDataSource : AppDataSource<TransactionsResponse>() {
 
     internal suspend fun selectUserTransactions(
 
@@ -22,7 +22,7 @@ internal class TransactionsDataSource : AppDataSource<TransactionsResponse>() {
         )
     }
 
-    internal suspend fun selectTransactions(
+    suspend fun selectTransactions(
 
         userId: UInt
 
@@ -37,7 +37,7 @@ internal class TransactionsDataSource : AppDataSource<TransactionsResponse>() {
         )
     }
 
-    internal suspend fun selectUserTransactionsAfterSpecifiedDate(
+    suspend fun selectUserTransactionsAfterSpecifiedDate(
 
         userId: UInt,
         specifiedDate: String

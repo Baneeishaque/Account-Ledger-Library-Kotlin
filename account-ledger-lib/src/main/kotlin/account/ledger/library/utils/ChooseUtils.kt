@@ -5,10 +5,10 @@ import common.utils.library.models.IsOkModel
 import java.util.*
 import common.utils.library.utils.ApiUtils as CommonApiUtils
 
-internal object ChooseUtils {
+object ChooseUtils {
 
     @JvmStatic
-    internal fun <T> chooseById(
+    fun <T> chooseById(
 
         itemSpecification: String,
         apiCallFunction: () -> Result<T>,

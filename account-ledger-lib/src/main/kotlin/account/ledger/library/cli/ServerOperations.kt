@@ -7,7 +7,7 @@ import account.ledger.library.retrofit.data.TransactionsDataSource
 import common.utils.library.utils.ApiUtils as CommonApiUtils
 import kotlinx.coroutines.runBlocking
 
-internal fun getAccounts(
+fun getAccounts(
 
     userId: UInt,
     parentAccountId: UInt = 0u,
@@ -29,7 +29,7 @@ internal fun getAccounts(
     }, isConsoleMode = isConsoleMode, isDevelopmentMode = isDevelopmentMode)
 }
 
-internal fun getUserTransactionsForAnAccount(
+fun getUserTransactionsForAnAccount(
 
     userId: UInt,
     accountId: UInt,

@@ -8,10 +8,10 @@ import common.utils.library.utils.MysqlUtils
 
 import java.time.LocalDateTime
 
-internal object TransactionUtils {
+object TransactionUtils {
 
     @JvmStatic
-    internal fun prepareUserTransactionsMap(transactions: List<TransactionResponse>): LinkedHashMap<UInt, TransactionResponse> {
+    fun prepareUserTransactionsMap(transactions: List<TransactionResponse>): LinkedHashMap<UInt, TransactionResponse> {
 
         val userTransactionsMap = LinkedHashMap<UInt, TransactionResponse>()
         transactions.forEach { currentTransaction: TransactionResponse ->
@@ -20,7 +20,7 @@ internal object TransactionUtils {
         return userTransactionsMap
     }
 
-    internal fun userTransactionsToTextFromList(
+    fun userTransactionsToTextFromList(
 
         transactions: List<TransactionResponse>,
         currentAccountId: UInt,
@@ -113,7 +113,7 @@ internal object TransactionUtils {
         return "${currentTextLedger}[${currentTransaction.id}] [${currentTransaction.event_date_time}]\t[(${currentTransaction.from_account_full_name}) -> (${currentTransaction.to_account_full_name})]\t[${currentTransaction.particulars}]\t[${currentTransaction.amount}]\n"
     }
 
-    internal fun filterTransactionsForUptoDateTime(
+    fun filterTransactionsForUptoDateTime(
         isUpToTimeStamp: Boolean,
         upToTimeStamp: String,
         transactions: List<TransactionResponse>

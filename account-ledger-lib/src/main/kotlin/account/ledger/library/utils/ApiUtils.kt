@@ -6,10 +6,10 @@ import account.ledger.library.retrofit.data.AccountsDataSource
 import kotlinx.coroutines.runBlocking
 import common.utils.library.utils.ApiUtils as CommonApiUtils
 
-internal object ApiUtils {
+object ApiUtils {
 
     @JvmStatic
-    internal fun getAccountsFull(
+    fun getAccountsFull(
         userId: UInt,
         isConsoleMode: Boolean,
         isDevelopmentMode: Boolean
@@ -31,7 +31,7 @@ internal object ApiUtils {
     }
 
     @JvmStatic
-    internal fun isNoTransactionsResponseWithMessage(
+    fun isNoTransactionsResponseWithMessage(
 
         responseStatus: UInt,
         noDataBeforeMessageActions: () -> Unit = fun() {}
@@ -46,7 +46,7 @@ internal object ApiUtils {
         )
     }
 
-    internal fun isNotNoTransactionsResponseWithMessage(
+    fun isNotNoTransactionsResponseWithMessage(
 
         responseStatus: UInt,
         noDataBeforeMessageActions: () -> Unit = fun() {}

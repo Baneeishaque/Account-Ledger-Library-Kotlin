@@ -1,18 +1,18 @@
 package account.ledger.library.constants
 
-internal object Constants {
+object Constants {
 
-    internal const val defaultValueForStringEnvironmentVariables: String = "N/A"
+    const val defaultValueForStringEnvironmentVariables: String = "N/A"
     internal const val defaultValueForIntegerEnvironmentVariables: Int = 0
-    internal const val accountText: String = "Account"
-    internal const val userText: String = "User"
-    internal const val frequencyOfAccountsFileName = "frequencyOfAccounts.json"
-    internal const val transactionText: String = "Transaction"
-    internal const val accountHeaderIdentifier: String = "A/C Ledger "
-    internal const val walletAccountHeaderIdentifier: String = "Wallet"
+    const val accountText: String = "Account"
+    const val userText: String = "User"
+    const val frequencyOfAccountsFileName = "frequencyOfAccounts.json"
+    const val transactionText: String = "Transaction"
+    const val accountHeaderIdentifier: String = "A/C Ledger "
+    const val walletAccountHeaderIdentifier: String = "Wallet"
 
     //    internal const val bankAccountHeaderIdentifier: String = "Bank"
-    internal const val bankAccountHeaderIdentifier: String = "PNB"
-    internal const val accountHeaderUnderlineCharacter: String = "~"
-    internal const val dateUnderlineCharacter: String = "-"
+    const val bankAccountHeaderIdentifier: String = "PNB"
+    const val accountHeaderUnderlineCharacter: String = "~"
+    const val dateUnderlineCharacter: String = "-"
 }

@@ -8,30 +8,30 @@ object EnvironmentalFileEntries {
     private const val accountIdFormalName: String = "Account Index No."
     private const val frequentText: String = "Frequent"
 
-    internal val walletAccountId = EnvironmentFileEntryModel(
+    val walletAccountId = EnvironmentFileEntryModel(
         entryName = EnvironmentFileEntryEnum.WALLET_ACCOUNT_ID,
         entryFormalName = "Wallet $accountIdFormalName"
     )
 
-    internal val frequent1AccountId = EnvironmentFileEntryModel(
+    val frequent1AccountId = EnvironmentFileEntryModel(
         entryName = EnvironmentFileEntryEnum.FREQUENT_1_ACCOUNT_ID,
         entryFormalName = "$frequentText 1 $accountIdFormalName"
     )
 
-    internal val frequent2AccountId = EnvironmentFileEntryModel(
+    val frequent2AccountId = EnvironmentFileEntryModel(
         entryName = EnvironmentFileEntryEnum.FREQUENT_2_ACCOUNT_ID,
         entryFormalName = "$frequentText 2 $accountIdFormalName"
     )
 
-    internal val frequent3AccountId = EnvironmentFileEntryModel(
+    val frequent3AccountId = EnvironmentFileEntryModel(
         entryName = EnvironmentFileEntryEnum.FREQUENT_3_ACCOUNT_ID,
         entryFormalName = "$frequentText 3 $accountIdFormalName"
     )
 
-    internal val bankAccountId = EnvironmentFileEntryModel(
+    val bankAccountId = EnvironmentFileEntryModel(
         entryName = EnvironmentFileEntryEnum.BANK_ACCOUNT_ID,
         entryFormalName = "Bank $accountIdFormalName"
     )
 
-    internal val isDevelopmentMode = EnvironmentFileEntryModel(entryName = EnvironmentFileEntryEnum.IS_DEVELOPMENT_MODE)
+    val isDevelopmentMode = EnvironmentFileEntryModel(entryName = EnvironmentFileEntryEnum.IS_DEVELOPMENT_MODE)
 }

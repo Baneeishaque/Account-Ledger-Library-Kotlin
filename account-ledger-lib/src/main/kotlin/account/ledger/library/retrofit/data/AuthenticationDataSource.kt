@@ -6,11 +6,11 @@ import account.ledger.library.retrofit.ResponseHolder
 import retrofit2.Response
 import java.io.IOException
 
-internal class AuthenticationDataSource {
+class AuthenticationDataSource {
 
     private val retrofitClient = ProjectRetrofitClient.retrofitClient
 
-    internal suspend fun authenticateUser(
+    suspend fun authenticateUser(
         username: String,
         password: String
     ): ResponseHolder<AuthenticationResponse> {

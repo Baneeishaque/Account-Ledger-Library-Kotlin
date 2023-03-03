@@ -3,9 +3,9 @@ package account.ledger.library.retrofit.data
 import account.ledger.library.api.response.TransactionManipulationResponse
 import account.ledger.library.retrofit.data.AppDataSource
 
-internal class TransactionDataSource : AppDataSource<TransactionManipulationResponse>() {
+class TransactionDataSource : AppDataSource<TransactionManipulationResponse>() {
 
-    internal suspend fun insertTransaction(
+    suspend fun insertTransaction(
 
         userId: UInt,
         eventDateTimeString: String,
@@ -28,7 +28,7 @@ internal class TransactionDataSource : AppDataSource<TransactionManipulationResp
         )
     }
 
-    internal suspend fun updateTransaction(
+    suspend fun updateTransaction(
 
         transactionId: UInt,
         eventDateTimeString: String,
@@ -52,7 +52,7 @@ internal class TransactionDataSource : AppDataSource<TransactionManipulationResp
 
     }
 
-    internal suspend fun deleteTransaction(transactionId: UInt): Result<TransactionManipulationResponse> {
+    suspend fun deleteTransaction(transactionId: UInt): Result<TransactionManipulationResponse> {
 
         return handleApiResponse(
             apiResponse = retrofitClient.deleteTransaction(

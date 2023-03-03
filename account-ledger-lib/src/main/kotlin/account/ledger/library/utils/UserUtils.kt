@@ -7,7 +7,7 @@ import account.ledger.library.models.UserCredentials
 object UserUtils {
 
     @JvmStatic
-    internal fun prepareUsersMap(users: List<UserResponse>): LinkedHashMap<UInt, UserResponse> {
+    fun prepareUsersMap(users: List<UserResponse>): LinkedHashMap<UInt, UserResponse> {
 
         val usersMap = LinkedHashMap<UInt, UserResponse>()
         users.forEach { currentUser -> usersMap[currentUser.id] = currentUser }
@@ -15,7 +15,7 @@ object UserUtils {
         return usersMap
     }
 
-    internal fun usersToStringFromLinkedHashMap(
+    fun usersToStringFromLinkedHashMap(
         usersMap: LinkedHashMap<UInt, UserResponse>
     ): String {
 
@@ -25,7 +25,7 @@ object UserUtils {
     }
 
     @JvmStatic
-    internal fun getUserCredentials(): UserCredentials {
+    fun getUserCredentials(): UserCredentials {
 
         val user = UserCredentials(username = "", passcode = "")
         print("Enter Your Username : ")

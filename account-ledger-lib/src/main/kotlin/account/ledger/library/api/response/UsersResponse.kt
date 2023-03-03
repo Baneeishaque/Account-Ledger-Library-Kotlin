@@ -1,7 +1,7 @@
 package account.ledger.library.api.response
 
-internal data class UsersResponse(
+data class UsersResponse(
 
-    internal val status: UInt,
-    internal val users: List<UserResponse>
+    val status: UInt,
+    val users: List<UserResponse>
 )
