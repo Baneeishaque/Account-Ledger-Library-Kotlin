@@ -1,5 +1,5 @@
 package account.ledger.library.enums
 
-enum class CommandLineApiMethodBalanceSheetArgumentsEnum {
+enum class CommandLineApiMethodCommonArgumentsEnum {
     Username, Password
 }
