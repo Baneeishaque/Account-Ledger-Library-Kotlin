@@ -1,7 +1,6 @@
 package account.ledger.library.models
 
 import account.ledger.library.constants.UserJsonObjectFields
-import account.ledger.library.models.AccountFrequencyModel
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
