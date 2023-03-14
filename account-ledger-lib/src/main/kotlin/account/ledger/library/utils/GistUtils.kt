@@ -132,7 +132,8 @@ object GistUtils {
 
                                 } catch (_: DateTimeParseException) {
 
-                                    val transactionAmount: Double = dateOrAmount.toDouble()
+                                    val transactionAmount: Double =
+                                        if (dateOrAmount.contains(char = '+')) dateOrAmount.toDouble() else -(dateOrAmount.toDouble())
                                     val transactionParticulars: String = ledgerLineContents[1]
 
                                     val transactionDateAsText: String =
