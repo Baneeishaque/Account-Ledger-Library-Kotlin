@@ -43,7 +43,7 @@ fun isAccountsAreAvailable(
     return 0
 }
 
-internal fun addTransactionWithAccountAvailabilityCheck(
+fun addTransactionWithAccountAvailabilityCheck(
 
     userId: UInt,
     username: String,
@@ -72,7 +72,7 @@ internal fun addTransactionWithAccountAvailabilityCheck(
             fromAccountMissingActions = fromAccountMissingActions,
             toAccountMissingActions = toAccountMissingActions,
             viaAccountMissingActions = viaAccountMissingActions
-        
+
         ) == 0
     ) {
         when (transactionType) {
