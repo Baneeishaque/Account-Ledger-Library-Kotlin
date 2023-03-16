@@ -10,8 +10,8 @@ object InsertOperations {
     fun manipulateTransaction(
 
         transactionManipulationApiRequest: () -> Result<TransactionManipulationResponse>,
-        transactionManipulationSuccessActions: () -> Unit,
-        transactionManipulationFailureActions: (String) -> Unit,
+        transactionManipulationSuccessActions: () -> Unit = {},
+        transactionManipulationFailureActions: (String) -> Unit = {},
         isConsoleMode: Boolean,
         isDevelopmentMode: Boolean
 
