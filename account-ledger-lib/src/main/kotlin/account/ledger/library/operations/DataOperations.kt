@@ -1,4 +1,4 @@
-package account.ledger.library.cli
+package account.ledger.library.operations
 
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter

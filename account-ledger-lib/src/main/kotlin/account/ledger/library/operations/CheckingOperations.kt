@@ -1,4 +1,4 @@
-package account.ledger.library.cli
+package account.ledger.library.operations
 
 import account.ledger.library.api.response.AccountResponse
 import account.ledger.library.enums.TransactionTypeEnum
