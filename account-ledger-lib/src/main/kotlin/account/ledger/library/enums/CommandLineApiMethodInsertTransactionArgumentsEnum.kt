@@ -1,5 +1,5 @@
 package account.ledger.library.enums
 
 enum class CommandLineApiMethodInsertTransactionArgumentsEnum {
-    userId
+    UserId, EventDateTime, Particulars, Amount, FromAccountId, ToAccountId
 }

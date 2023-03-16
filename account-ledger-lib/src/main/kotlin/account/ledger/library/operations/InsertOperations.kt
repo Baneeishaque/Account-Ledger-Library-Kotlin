@@ -2,14 +2,12 @@ package account.ledger.library.operations
 
 import account.ledger.library.api.response.AccountResponse
 import account.ledger.library.api.response.TransactionManipulationResponse
-import account.ledger.library.constants.Constants
 import account.ledger.library.models.AccountFrequencyModel
 import account.ledger.library.models.FrequencyOfAccountsModel
 import account.ledger.library.models.UserModel
 import account.ledger.library.retrofit.data.TransactionDataSource
 import common.utils.library.models.IsOkModel
 import common.utils.library.utils.ApiUtils
-import common.utils.library.utils.JsonFileUtils
 import common.utils.library.utils.MysqlUtils
 import kotlinx.coroutines.runBlocking
 
@@ -22,8 +20,8 @@ object InsertOperations {
         eventDateTime: String,
         particulars: String,
         amount: Float,
-        fromAccount: AccountResponse,
-        toAccount: AccountResponse,
+        fromAccountId: UInt,
+        toAccountId: UInt,
         isConsoleMode: Boolean,
         isDevelopmentMode: Boolean,
         eventDateTimeConversionFunction: () -> IsOkModel<String> = {
@@ -38,7 +36,8 @@ object InsertOperations {
                     )
                 },
             )
-        }
+        },
+        transactionManipulationSuccessActions: () -> Unit = {}
 
     ): Boolean {
 
@@ -54,86 +53,15 @@ object InsertOperations {
 
                         TransactionDataSource().insertTransaction(
                             userId = userId,
-                            fromAccountId = fromAccount.id,
+                            fromAccountId = fromAccountId,
                             eventDateTimeString = eventDateTimeConversionResult.data!!,
                             particulars = particulars,
                             amount = amount,
-                            toAccountId = toAccount.id
+                            toAccountId = toAccountId
                         )
                     }
                 },
-                transactionManipulationSuccessActions = fun() {
-
-                    val readFrequencyOfAccountsFileResult: IsOkModel<FrequencyOfAccountsModel> =
-                        JsonFileUtils.readJsonFile(
-
-                            fileName = Constants.frequencyOfAccountsFileName,
-                            isDevelopmentMode = isDevelopmentMode
-                        )
-
-                    if (isDevelopmentMode) {
-
-                        println("readFrequencyOfAccountsFileResult : $readFrequencyOfAccountsFileResult")
-                    }
-
-                    if (readFrequencyOfAccountsFileResult.isOK) {
-
-                        var frequencyOfAccounts: FrequencyOfAccountsModel = readFrequencyOfAccountsFileResult.data!!
-                        val user: UserModel? = frequencyOfAccounts.users.find { user: UserModel -> user.id == userId }
-                        if (user != null) {
-
-                            frequencyOfAccounts = updateAccountFrequency(
-
-                                user = user,
-                                account = fromAccount,
-                                frequencyOfAccounts = frequencyOfAccounts,
-                                userId = userId,
-                                isDevelopmentMode = isDevelopmentMode
-                            )
-                            frequencyOfAccounts = updateAccountFrequency(
-
-                                user = user,
-                                account = toAccount,
-                                frequencyOfAccounts = frequencyOfAccounts,
-                                userId = userId,
-                                isDevelopmentMode = isDevelopmentMode
-                            )
-
-                        } else {
-                            frequencyOfAccounts.users = frequencyOfAccounts.users.plusElement(
-
-                                element = getInitialAccountFrequencyForUser(
-
-                                    userId = userId,
-                                    fromAccount = fromAccount,
-                                    toAccount = toAccount
-                                )
-                            )
-                        }
-                        JsonFileUtils.writeJsonFile(
-
-                            fileName = Constants.frequencyOfAccountsFileName,
-                            data = frequencyOfAccounts
-                        )
-                    } else {
-
-                        JsonFileUtils.writeJsonFile(
-
-                            fileName = Constants.frequencyOfAccountsFileName,
-                            data = FrequencyOfAccountsModel(
-
-                                users = listOf(
-                                    getInitialAccountFrequencyForUser(
-
-                                        userId = userId,
-                                        fromAccount = fromAccount,
-                                        toAccount = toAccount
-                                    )
-                                )
-                            )
-                        )
-                    }
-                },
+                transactionManipulationSuccessActions = transactionManipulationSuccessActions,
                 isConsoleMode = isConsoleMode,
                 isDevelopmentMode = isDevelopmentMode
             )
@@ -177,7 +105,7 @@ object InsertOperations {
         return false
     }
 
-    private fun updateAccountFrequency(
+    fun updateAccountFrequency(
 
         user: UserModel,
         account: AccountResponse,
@@ -222,7 +150,7 @@ object InsertOperations {
         return frequencyOfAccounts
     }
 
-    private fun getInitialAccountFrequencyForUser(
+    fun getInitialAccountFrequencyForUser(
 
         userId: UInt,
         fromAccount: AccountResponse,
