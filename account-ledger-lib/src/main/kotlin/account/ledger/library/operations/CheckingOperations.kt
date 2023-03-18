@@ -38,7 +38,7 @@ object CheckingOperations {
             toAccountMissingActions.invoke()
             return 2
 
-        } else if ((transactionType == TransactionTypeEnum.VIA) && (viaAccount.id == 0u)) {
+        } else if (((transactionType == TransactionTypeEnum.VIA) ||(transactionType == TransactionTypeEnum.CYCLIC_VIA)) && (viaAccount.id == 0u)) {
 
             viaAccountMissingActions.invoke()
             return 3
