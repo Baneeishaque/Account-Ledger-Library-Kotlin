@@ -2,10 +2,12 @@ package account.ledger.library.operations
 
 import account.ledger.library.api.response.AccountResponse
 import account.ledger.library.api.response.TransactionManipulationResponse
+import account.ledger.library.enums.TransactionTypeEnum
 import account.ledger.library.models.AccountFrequencyModel
 import account.ledger.library.models.FrequencyOfAccountsModel
 import account.ledger.library.models.UserModel
 import account.ledger.library.retrofit.data.TransactionDataSource
+import common.utils.library.constants.Constants
 import common.utils.library.models.IsOkModel
 import common.utils.library.utils.ApiUtils
 import common.utils.library.utils.MysqlUtils
@@ -105,6 +107,7 @@ object InsertOperations {
         return false
     }
 
+    @JvmStatic
     fun updateAccountFrequency(
 
         user: UserModel,
@@ -150,6 +153,7 @@ object InsertOperations {
         return frequencyOfAccounts
     }
 
+    @JvmStatic
     fun getInitialAccountFrequencyForUser(
 
         userId: UInt,
@@ -175,4 +179,223 @@ object InsertOperations {
             )
         )
     )
+
+    @JvmStatic
+    fun updateTransaction(
+
+        transactionId: UInt,
+        eventDateTime: String,
+        particulars: String,
+        amount: Float,
+        fromAccountId: UInt,
+        toAccountId: UInt,
+        isDateTimeUpdateOperation: Boolean = false,
+        isConsoleMode: Boolean,
+        isDevelopmentMode: Boolean,
+        transactionManipulationSuccessActions: () -> Unit = {},
+        transactionManipulationFailureActions: (String) -> Unit = {},
+        manipulateTransactionOperation: (() -> Result<TransactionManipulationResponse>, () -> Unit, (String) -> Unit, Boolean, Boolean) -> Boolean = InsertOperations::manipulateTransaction,
+        eventDateTimeConversionOperation: () -> IsOkModel<String> = {
+
+            MysqlUtils.dateTimeTextConversion(dateTimeTextConversionFunction = fun(): IsOkModel<String> {
+
+                return MysqlUtils.normalDateTimeTextToMySqlDateTimeText(
+
+                    normalDateTimeText = eventDateTime
+                )
+            })
+        }
+
+    ): Boolean {
+
+        if (isDateTimeUpdateOperation) {
+
+            return manipulateTransactionOperation.invoke(
+
+                fun(): Result<TransactionManipulationResponse> {
+
+                    return runBlocking {
+
+                        TransactionDataSource().updateTransaction(
+
+                            transactionId = transactionId,
+                            fromAccountId = fromAccountId,
+                            eventDateTimeString = eventDateTime,
+                            particulars = particulars,
+                            amount = amount,
+                            toAccountId = toAccountId
+                        )
+                    }
+                },
+                transactionManipulationSuccessActions,
+                transactionManipulationFailureActions,
+                isConsoleMode,
+                isDevelopmentMode
+            )
+        } else {
+
+            val eventDateTimeConversionResult: IsOkModel<String> = eventDateTimeConversionOperation.invoke()
+            if (eventDateTimeConversionResult.isOK) {
+
+                return manipulateTransactionOperation(
+
+                    fun(): Result<TransactionManipulationResponse> {
+                        return runBlocking {
+
+                            TransactionDataSource().updateTransaction(
+                                transactionId = transactionId,
+                                fromAccountId = fromAccountId,
+                                eventDateTimeString = eventDateTimeConversionResult.data!!,
+                                particulars = particulars,
+                                amount = amount,
+                                toAccountId = toAccountId
+                            )
+                        }
+                    },
+                    transactionManipulationSuccessActions,
+                    transactionManipulationFailureActions,
+                    isConsoleMode,
+                    isDevelopmentMode
+                )
+            }
+        }
+        return false
+    }
+
+    @JvmStatic
+    fun insertTransactionVariants(
+
+        userId: UInt,
+        transactionType: TransactionTypeEnum,
+        fromAccountId: UInt,
+        viaAccountId: UInt,
+        toAccountId: UInt,
+        isViaStep: Boolean = false,
+        isTwoWayStep: Boolean = false,
+        transactionId: UInt = 0u,
+        dateTimeInText: String,
+        transactionParticulars: String,
+        transactionAmount: Float,
+        isEditStep: Boolean = false,
+        isConsoleMode: Boolean,
+        isDevelopmentMode: Boolean,
+        isCyclicViaStep: Boolean
+
+    ): IsOkModel<String> {
+
+        if (isEditStep) {
+
+            when (transactionType) {
+
+                TransactionTypeEnum.NORMAL -> {
+
+                    return IsOkModel(
+
+                        isOK = updateTransaction(
+
+                            transactionId = transactionId,
+                            eventDateTime = dateTimeInText,
+                            particulars = transactionParticulars,
+                            amount = transactionAmount,
+                            fromAccountId = fromAccountId,
+                            toAccountId = toAccountId,
+                            isConsoleMode = isConsoleMode,
+                            isDevelopmentMode = isDevelopmentMode
+                        )
+                    )
+                }
+
+                TransactionTypeEnum.VIA -> return IsOkModel(isOK = false, data = Constants.notImplementedMessage)
+                TransactionTypeEnum.TWO_WAY -> return IsOkModel(isOK = false, data = Constants.notImplementedMessage)
+                TransactionTypeEnum.CYCLIC_VIA -> return IsOkModel(isOK = false, data = Constants.notImplementedMessage)
+            }
+        } else if (isTwoWayStep) {
+
+            return IsOkModel(
+
+                isOK = insertTransaction(
+                    userId = userId,
+                    eventDateTime = dateTimeInText,
+                    particulars = transactionParticulars,
+                    amount = transactionAmount,
+                    fromAccountId = toAccountId,
+                    toAccountId = fromAccountId,
+                    isConsoleMode = isConsoleMode,
+                    isDevelopmentMode = isDevelopmentMode
+                )
+            )
+        } else if (isViaStep) {
+
+            return IsOkModel(
+
+                isOK = insertTransaction(
+
+                    userId = userId,
+                    eventDateTime = dateTimeInText,
+                    particulars = transactionParticulars,
+                    amount = transactionAmount,
+                    fromAccountId = viaAccountId,
+                    toAccountId = toAccountId,
+                    isConsoleMode = isConsoleMode,
+                    isDevelopmentMode = isDevelopmentMode
+                )
+            )
+        } else if (isCyclicViaStep) {
+
+            return IsOkModel(
+
+                isOK = insertTransaction(
+
+                    userId = userId,
+                    eventDateTime = dateTimeInText,
+                    particulars = transactionParticulars,
+                    amount = transactionAmount,
+                    fromAccountId = toAccountId,
+                    toAccountId = fromAccountId,
+                    isConsoleMode = isConsoleMode,
+                    isDevelopmentMode = isDevelopmentMode
+                )
+            )
+        } else {
+
+            when (transactionType) {
+
+                TransactionTypeEnum.NORMAL, TransactionTypeEnum.TWO_WAY -> {
+
+                    return IsOkModel(
+
+                        isOK = insertTransaction(
+
+                            userId = userId,
+                            eventDateTime = dateTimeInText,
+                            particulars = transactionParticulars,
+                            amount = transactionAmount,
+                            fromAccountId = fromAccountId,
+                            toAccountId = toAccountId,
+                            isConsoleMode = isConsoleMode,
+                            isDevelopmentMode = isDevelopmentMode
+                        )
+                    )
+                }
+
+                TransactionTypeEnum.VIA, TransactionTypeEnum.CYCLIC_VIA -> {
+
+                    return IsOkModel(
+
+                        isOK = insertTransaction(
+
+                            userId = userId,
+                            eventDateTime = dateTimeInText,
+                            particulars = transactionParticulars,
+                            amount = transactionAmount,
+                            fromAccountId = fromAccountId,
+                            toAccountId = viaAccountId,
+                            isConsoleMode = isConsoleMode,
+                            isDevelopmentMode = isDevelopmentMode
+                        )
+                    )
+                }
+            }
+        }
+    }
 }
