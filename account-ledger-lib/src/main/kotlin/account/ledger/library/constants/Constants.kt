@@ -1,5 +1,7 @@
 package account.ledger.library.constants
 
+import common.utils.library.constants.Constants as CommonConstants
+
 object Constants {
 
     const val defaultValueForStringEnvironmentVariables: String = "N/A"
@@ -17,4 +19,6 @@ object Constants {
     const val accountBalanceHolderOpeningBrace: String = "{"
     const val dateUnderlineCharacter: Char = '-'
     const val finalBalancePrefixCharacter: String = "="
+    const val timeResetCommandIndicator = "Tr"
+    val timeResetPatternRegex: Regex = Regex("$timeResetCommandIndicator${CommonConstants.railwayTimeRegex}");
 }
