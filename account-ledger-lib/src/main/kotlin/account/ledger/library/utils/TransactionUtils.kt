@@ -141,7 +141,7 @@ object TransactionUtils {
     ): List<TransactionResponse> {
 
         val upToTimeStampInDateTime: LocalDateTime =
-            DateTimeUtils.normalDateTimeTextToDateTime(normalDateTimeText = upToTimeStamp).data!!
+            DateTimeUtils.normalDateTimeInTextToDateTime(normalDateTimeInText = upToTimeStamp).data!!
         return transactions.filter { transactionResponse: TransactionResponse ->
 
             MysqlUtils.mySqlDateTimeTextToDateTime(mySqlDateTimeText = transactionResponse.event_date_time).data!! <= upToTimeStampInDateTime
