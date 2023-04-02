@@ -3,6 +3,7 @@ package account.ledger.library.operations
 import account.ledger.library.api.response.AccountResponse
 import account.ledger.library.enums.TransactionTypeEnum
 import account.ledger.library.models.InsertTransactionResult
+import account.ledger.library.utils.TransactionUtils
 import common.utils.library.utils.DateTimeUtils
 
 object CheckingOperations {
@@ -38,7 +39,7 @@ object CheckingOperations {
             toAccountMissingActions.invoke()
             return 2
 
-        } else if (((transactionType == TransactionTypeEnum.VIA) ||(transactionType == TransactionTypeEnum.CYCLIC_VIA)) && (viaAccount.id == 0u)) {
+        } else if (((transactionType == TransactionTypeEnum.VIA) || (transactionType == TransactionTypeEnum.CYCLIC_VIA)) && (viaAccount.id == 0u)) {
 
             viaAccountMissingActions.invoke()
             return 3
@@ -172,9 +173,8 @@ object CheckingOperations {
                 )
             }
         }
-        return InsertTransactionResult(
+        return TransactionUtils.getFailedInsertTransactionResult(
 
-            isSuccess = false,
             dateTimeInText = dateTimeInText,
             transactionParticulars = transactionParticulars,
             transactionAmount = transactionAmount,
@@ -240,9 +240,9 @@ object CheckingOperations {
                         toAccount = toAccount,
                         isViaStep = furtherStepIndicator == 1u,
                         isTwoWayStep = furtherStepIndicator == 2u,
-                        dateTimeInText = dateTimeInText,
-                        transactionParticulars = transactionParticulars,
-                        transactionAmount = transactionAmount,
+                        dateTimeInText = DateTimeUtils.add5MinutesToDateTimeInText(addTransactionResult.dateTimeInText),
+                        transactionParticulars = addTransactionResult.transactionParticulars,
+                        transactionAmount = addTransactionResult.transactionAmount,
                         isConsoleMode = isConsoleMode,
                         isDevelopmentMode = isDevelopmentMode
                     )
@@ -273,9 +273,9 @@ object CheckingOperations {
                         viaAccount = viaAccount,
                         toAccount = toAccount,
                         isViaStep = true,
-                        dateTimeInText = dateTimeInText,
-                        transactionParticulars = transactionParticulars,
-                        transactionAmount = transactionAmount,
+                        dateTimeInText = DateTimeUtils.add5MinutesToDateTimeInText(addTransactionResult.dateTimeInText),
+                        transactionParticulars = addTransactionResult.transactionParticulars,
+                        transactionAmount = addTransactionResult.transactionAmount,
                         isConsoleMode = isConsoleMode,
                         isDevelopmentMode = isDevelopmentMode
                     )
@@ -291,9 +291,9 @@ object CheckingOperations {
                             viaAccount = viaAccount,
                             toAccount = toAccount,
                             isCyclicViaStep = true,
-                            dateTimeInText = dateTimeInText,
-                            transactionParticulars = transactionParticulars,
-                            transactionAmount = transactionAmount,
+                            dateTimeInText = DateTimeUtils.add5MinutesToDateTimeInText(addTransactionResult.dateTimeInText),
+                            transactionParticulars = addTransactionResult.transactionParticulars,
+                            transactionAmount = addTransactionResult.transactionAmount,
                             isConsoleMode = isConsoleMode,
                             isDevelopmentMode = isDevelopmentMode
                         )
@@ -315,9 +315,8 @@ object CheckingOperations {
                 }
             }
         }
-        return InsertTransactionResult(
+        return TransactionUtils.getFailedInsertTransactionResult(
 
-            isSuccess = false,
             dateTimeInText = dateTimeInText,
             transactionParticulars = transactionParticulars,
             transactionAmount = transactionAmount,
