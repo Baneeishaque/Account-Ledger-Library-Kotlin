@@ -1,6 +1,8 @@
 package account.ledger.library.utils
 
+import account.ledger.library.api.response.AccountResponse
 import account.ledger.library.api.response.TransactionResponse
+import account.ledger.library.models.InsertTransactionResult
 import account.ledger.library.models.TransactionLedgerInText
 import common.utils.library.models.IsOkModel
 import common.utils.library.utils.DateTimeUtils
@@ -20,6 +22,7 @@ object TransactionUtils {
         return userTransactionsMap
     }
 
+    @JvmStatic
     fun userTransactionsToTextFromList(
 
         transactions: List<TransactionResponse>,
@@ -61,7 +64,8 @@ object TransactionUtils {
         }
     }
 
-    private fun appendToLedger(
+    @JvmStatic
+    fun appendToLedger(
 
         currentTransaction: TransactionResponse,
         currentAccountId: UInt,
@@ -113,7 +117,8 @@ object TransactionUtils {
         return "${currentTextLedger}[${currentTransaction.id}] [${currentTransaction.event_date_time}]\t[(${currentTransaction.from_account_full_name}) -> (${currentTransaction.to_account_full_name})]\t[${currentTransaction.particulars}]\t[${currentTransaction.amount}]\n"
     }
 
-    fun filterTransactionsForUptoDateTime(
+    @JvmStatic
+    fun filterTransactionsForUpToDateTime(
         isUpToTimeStamp: Boolean,
         upToTimeStamp: String,
         transactions: List<TransactionResponse>
@@ -121,7 +126,7 @@ object TransactionUtils {
 
         return if (isUpToTimeStamp) {
 
-            getTransactionsUptoDateTime(upToTimeStamp = upToTimeStamp, transactions = transactions)
+            getTransactionsUpToDateTime(upToTimeStamp = upToTimeStamp, transactions = transactions)
 
         } else {
 
@@ -129,7 +134,8 @@ object TransactionUtils {
         }
     }
 
-    private fun getTransactionsUptoDateTime(
+    @JvmStatic
+    fun getTransactionsUpToDateTime(
         upToTimeStamp: String,
         transactions: List<TransactionResponse>
     ): List<TransactionResponse> {
