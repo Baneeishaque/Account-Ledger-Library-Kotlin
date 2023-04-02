@@ -19,6 +19,7 @@ object Constants {
     const val accountBalanceHolderOpeningBrace: String = "{"
     const val dateUnderlineCharacter: Char = '-'
     const val finalBalancePrefixCharacter: String = "="
+
     const val timeResetCommandIndicator = "Tr"
-    val timeResetPatternRegex: Regex = Regex("$timeResetCommandIndicator${CommonConstants.railwayTimeRegex}");
+    val timeResetPatternRegex: Regex = Regex("$timeResetCommandIndicator${CommonConstants.railwayTimeRegexPattern}");
 }

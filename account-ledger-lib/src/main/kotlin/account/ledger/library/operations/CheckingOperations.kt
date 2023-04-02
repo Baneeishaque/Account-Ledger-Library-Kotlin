@@ -105,7 +105,7 @@ object CheckingOperations {
                         return InsertTransactionResult(
 
                             isSuccess = true,
-                            dateTimeInText = DateTimeUtils.add5MinutesToDateTimeInText(dateTimeInText = addTransactionResult.dateTimeInText),
+                            dateTimeInText = DateTimeUtils.add5MinutesToNormalDateTimeInText(dateTimeInText = addTransactionResult.dateTimeInText),
                             transactionParticulars = addTransactionResult.transactionParticulars,
                             transactionAmount = addTransactionResult.transactionAmount,
                             fromAccount = fromAccount,
@@ -240,7 +240,7 @@ object CheckingOperations {
                         toAccount = toAccount,
                         isViaStep = furtherStepIndicator == 1u,
                         isTwoWayStep = furtherStepIndicator == 2u,
-                        dateTimeInText = DateTimeUtils.add5MinutesToDateTimeInText(addTransactionResult.dateTimeInText),
+                        dateTimeInText = DateTimeUtils.add5MinutesToNormalDateTimeInText(addTransactionResult.dateTimeInText),
                         transactionParticulars = addTransactionResult.transactionParticulars,
                         transactionAmount = addTransactionResult.transactionAmount,
                         isConsoleMode = isConsoleMode,
@@ -251,7 +251,7 @@ object CheckingOperations {
                         return InsertTransactionResult(
 
                             isSuccess = true,
-                            dateTimeInText = DateTimeUtils.add5MinutesToDateTimeInText(dateTimeInText = addTransactionResult.dateTimeInText),
+                            dateTimeInText = DateTimeUtils.add5MinutesToNormalDateTimeInText(dateTimeInText = addTransactionResult.dateTimeInText),
                             transactionParticulars = addTransactionResult.transactionParticulars,
                             transactionAmount = addTransactionResult.transactionAmount,
                             fromAccount = fromAccount,
@@ -273,7 +273,7 @@ object CheckingOperations {
                         viaAccount = viaAccount,
                         toAccount = toAccount,
                         isViaStep = true,
-                        dateTimeInText = DateTimeUtils.add5MinutesToDateTimeInText(addTransactionResult.dateTimeInText),
+                        dateTimeInText = DateTimeUtils.add5MinutesToNormalDateTimeInText(addTransactionResult.dateTimeInText),
                         transactionParticulars = addTransactionResult.transactionParticulars,
                         transactionAmount = addTransactionResult.transactionAmount,
                         isConsoleMode = isConsoleMode,
@@ -291,7 +291,7 @@ object CheckingOperations {
                             viaAccount = viaAccount,
                             toAccount = toAccount,
                             isCyclicViaStep = true,
-                            dateTimeInText = DateTimeUtils.add5MinutesToDateTimeInText(addTransactionResult.dateTimeInText),
+                            dateTimeInText = DateTimeUtils.add5MinutesToNormalDateTimeInText(addTransactionResult.dateTimeInText),
                             transactionParticulars = addTransactionResult.transactionParticulars,
                             transactionAmount = addTransactionResult.transactionAmount,
                             isConsoleMode = isConsoleMode,
@@ -303,7 +303,7 @@ object CheckingOperations {
                             return InsertTransactionResult(
 
                                 isSuccess = true,
-                                dateTimeInText = DateTimeUtils.add5MinutesToDateTimeInText(dateTimeInText = addTransactionResult.dateTimeInText),
+                                dateTimeInText = DateTimeUtils.add5MinutesToNormalDateTimeInText(dateTimeInText = addTransactionResult.dateTimeInText),
                                 transactionParticulars = addTransactionResult.transactionParticulars,
                                 transactionAmount = addTransactionResult.transactionAmount,
                                 fromAccount = fromAccount,
