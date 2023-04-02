@@ -10,7 +10,7 @@ object CheckingOperations {
     /*
     Receives fromAccount, viaAccount, toAccount & Checks them.
     Returns 0 if all are available.
-        1 if fromAccount unavailable & toAccount available.
+        1 if fromAccount is unavailable & toAccount available.
         2 if toAccount available.
         3 if transactionType is Via, viaAccount unavailable & toAccount & fromAccounts are there.
       It also executes actions on missing desired account.
