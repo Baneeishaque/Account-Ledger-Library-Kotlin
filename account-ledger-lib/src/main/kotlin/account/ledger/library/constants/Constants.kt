@@ -26,4 +26,12 @@ object Constants {
     const val hourIncrementOrDecrementCommandIndicator = "H"
     val hourIncrementOrDecrementPatternRegex: Regex =
         Regex("$hourIncrementOrDecrementCommandIndicator${CommonConstants.digitIncrementOrDecrementRegexPattern}")
+
+    const val minuteIncrementOrDecrementCommandIndicator = "M"
+    val minuteIncrementOrDecrementPatternRegex: Regex =
+        Regex("$minuteIncrementOrDecrementCommandIndicator${CommonConstants.digitIncrementOrDecrementRegexPattern}")
+
+    const val secondIncrementOrDecrementCommandIndicator = "S"
+    val secondIncrementOrDecrementPatternRegex: Regex =
+        Regex("$secondIncrementOrDecrementCommandIndicator${CommonConstants.digitIncrementOrDecrementRegexPattern}")
 }
