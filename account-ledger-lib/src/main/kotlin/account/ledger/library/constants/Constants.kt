@@ -38,4 +38,7 @@ object Constants {
     const val dayIncrementOrDecrementCommandIndicator = "D"
     val dayIncrementOrDecrementPatternRegex: Regex =
         Regex("$dayIncrementOrDecrementCommandIndicator${CommonConstants.digitIncrementOrDecrementRegexPattern}")
+
+    val dayIncrementOrDecrementWithTimeResetPatternRegex =
+        Regex("($dayIncrementOrDecrementCommandIndicator${CommonConstants.digitIncrementOrDecrementRegexPattern})($timeResetCommandIndicator${CommonConstants.railwayTimeRegexPattern})")
 }
