@@ -22,4 +22,8 @@ object Constants {
 
     const val timeResetCommandIndicator = "Tr"
     val timeResetPatternRegex: Regex = Regex("$timeResetCommandIndicator${CommonConstants.railwayTimeRegexPattern}");
+
+    const val hourIncrementOrDecrementCommandIndicator = "H"
+    val hourIncrementOrDecrementPatternRegex: Regex =
+        Regex("$hourIncrementOrDecrementCommandIndicator${CommonConstants.digitIncrementOrDecrementRegexPattern}")
 }
