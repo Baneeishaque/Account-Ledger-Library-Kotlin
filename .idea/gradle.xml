@@ -10,6 +10,8 @@
           <set>
             <option value="$PROJECT_DIR$" />
             <option value="$PROJECT_DIR$/account-ledger-lib" />
+            <option value="$PROJECT_DIR$/account-ledger-lib-multi-platform" />
+            <option value="$PROJECT_DIR$/account-ledger-lib-multi-platform/lib" />
             <option value="$PROJECT_DIR$/common-lib" />
             <option value="$PROJECT_DIR$/common-lib/common-lib" />
           </set>

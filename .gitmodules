@@ -1,3 +1,6 @@
 [submodule "common-lib"]
 	path = common-lib
 	url = https://github.com/Baneeishaque/Common-Utils-Library-Kotlin-Gradle.git
+[submodule "account-ledger-lib-multi-platform"]
+	path = account-ledger-lib-multi-platform
+	url = https://github.com/Baneeishaque/Account-Ledger-Library-Kotlin-Native.git

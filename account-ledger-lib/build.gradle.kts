@@ -23,6 +23,7 @@ dependencies {
     implementation(platform("org.jetbrains.kotlin:kotlin-bom"))
 
     implementation(project(":common-lib:common-lib"))
+    implementation(project(":account-ledger-lib-multi-platform:lib"))
 
     implementation("com.squareup.retrofit2:retrofit:2.9.0")
     implementation("com.squareup.retrofit2:converter-gson:2.9.0")
