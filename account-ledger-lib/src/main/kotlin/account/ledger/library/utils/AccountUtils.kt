@@ -1,11 +1,11 @@
 package account.ledger.library.utils
 
 import account.ledger.library.api.response.AccountResponse
-import account.ledger.library.constants.Constants
 import account.ledger.library.models.AccountFrequencyModel
 import account.ledger.library.models.ChooseAccountResult
 import account.ledger.library.models.FrequencyOfAccountsModel
 import account.ledger.library.models.UserModel
+import account_ledger_library.constants.Constants
 import common.utils.library.models.IsOkModel
 import common.utils.library.utils.JsonFileUtils
 import common.utils.library.constants.Constants as CommonConstants

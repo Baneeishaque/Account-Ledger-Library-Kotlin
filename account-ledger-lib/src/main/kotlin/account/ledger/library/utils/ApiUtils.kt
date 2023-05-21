@@ -1,8 +1,8 @@
 package account.ledger.library.utils
 
 import account.ledger.library.api.response.AccountsResponse
-import account.ledger.library.constants.Constants
 import account.ledger.library.retrofit.data.AccountsDataSource
+import account_ledger_library.constants.Constants
 import kotlinx.coroutines.runBlocking
 import common.utils.library.utils.ApiUtils as CommonApiUtils
 

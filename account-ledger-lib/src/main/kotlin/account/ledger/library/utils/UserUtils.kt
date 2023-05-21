@@ -1,8 +1,8 @@
 package account.ledger.library.utils
 
 import account.ledger.library.api.response.UserResponse
-import account.ledger.library.constants.Constants
 import account.ledger.library.models.UserCredentials
+import account_ledger_library.constants.Constants
 
 object UserUtils {
 
