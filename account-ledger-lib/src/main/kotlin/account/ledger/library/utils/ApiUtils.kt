@@ -31,7 +31,7 @@ object ApiUtils {
     }
 
     @JvmStatic
-    fun isNoTransactionsResponseWithMessage(
+    fun isNoTransactionResponseWithMessage(
 
         responseStatus: UInt,
         noDataBeforeMessageActions: () -> Unit = fun() {}
@@ -46,12 +46,12 @@ object ApiUtils {
         )
     }
 
-    fun isNotNoTransactionsResponseWithMessage(
+    fun isNotNoTransactionResponseWithMessage(
 
         responseStatus: UInt,
         noDataBeforeMessageActions: () -> Unit = fun() {}
 
-    ): Boolean = !isNoTransactionsResponseWithMessage(
+    ): Boolean = !isNoTransactionResponseWithMessage(
 
         responseStatus = responseStatus,
         noDataBeforeMessageActions = noDataBeforeMessageActions
