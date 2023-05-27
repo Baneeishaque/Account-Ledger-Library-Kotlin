@@ -38,7 +38,7 @@ object HandleResponses {
                     AccountUtils.prepareUserAccountsMap(localAccountsResponseWithStatus.accounts)
 
                 if (isDevelopmentMode) {
-                    println(userAccountsMap)
+                    println("userAccountsMap = $userAccountsMap")
                 }
 
                 IsOkModel(
@@ -47,5 +47,22 @@ object HandleResponses {
                 )
             }
         }
+    }
+
+    fun getUserAccountsMapForSerializer(
+
+        apiResponse: Result<AccountsResponse>,
+        isDevelopmentMode: Boolean = false,
+        isConsoleMode: Boolean = false
+
+    ): IsOkModel<Map<UInt, AccountResponse>> {
+
+        val getUserAccountsMapResult: IsOkModel<java.util.LinkedHashMap<UInt, AccountResponse>> =
+            getUserAccountsMap(apiResponse, isDevelopmentMode, isConsoleMode)
+        return IsOkModel(
+            isOK = getUserAccountsMapResult.isOK,
+            data = getUserAccountsMapResult.data,
+            error = getUserAccountsMapResult.error
+        )
     }
 }

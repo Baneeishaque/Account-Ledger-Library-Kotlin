@@ -2,8 +2,9 @@ val ktorVersion: String = "2.1.2"
 
 plugins {
 
-    id("org.jetbrains.kotlin.jvm") version "1.8.21"
-    kotlin("plugin.serialization") version "1.8.21"
+    val kotlinVersion = "1.9.20-dev-947"
+    kotlin("jvm") version kotlinVersion
+    kotlin("plugin.serialization") version kotlinVersion
     `java-library`
 }
 
