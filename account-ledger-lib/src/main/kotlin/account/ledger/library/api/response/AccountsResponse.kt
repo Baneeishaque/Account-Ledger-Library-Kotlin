@@ -1,7 +1,11 @@
 package account.ledger.library.api.response
 
+import kotlinx.serialization.Required
+import kotlinx.serialization.Serializable
+
+@Serializable
 data class AccountsResponse(
 
-    val status: UInt,
-    val accounts: List<AccountResponse>
+    @Required val status: UInt,
+    @Required val accounts: List<AccountResponse>
 )

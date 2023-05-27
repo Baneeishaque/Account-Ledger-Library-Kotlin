@@ -55,13 +55,19 @@ object HandleResponses {
         isDevelopmentMode: Boolean = false,
         isConsoleMode: Boolean = false
 
-    ): IsOkModel<Map<UInt, AccountResponse>> {
+    ): IsOkModel<List<AccountResponse>> {
 
-        val getUserAccountsMapResult: IsOkModel<java.util.LinkedHashMap<UInt, AccountResponse>> =
-            getUserAccountsMap(apiResponse, isDevelopmentMode, isConsoleMode)
+        val getUserAccountsMapResult: IsOkModel<LinkedHashMap<UInt, AccountResponse>> =
+            getUserAccountsMap(
+                apiResponse = apiResponse,
+                isDevelopmentMode = isDevelopmentMode,
+                isConsoleMode = isConsoleMode
+            )
         return IsOkModel(
             isOK = getUserAccountsMapResult.isOK,
-            data = getUserAccountsMapResult.data,
+            data = getUserAccountsMapResult.data?.values?.let { accountResponses: MutableCollection<AccountResponse> ->
+                accountResponses.toList()
+            },
             error = getUserAccountsMapResult.error
         )
     }
