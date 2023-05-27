@@ -24,7 +24,7 @@ object InsertOperations {
         amount: Float,
         fromAccountId: UInt,
         toAccountId: UInt,
-        isConsoleMode: Boolean,
+        isConsoleMode: Boolean = false,
         isDevelopmentMode: Boolean,
         eventDateTimeConversionFunction: () -> IsOkModel<String> = {
 
