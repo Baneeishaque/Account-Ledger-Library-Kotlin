@@ -1,9 +1,9 @@
 package account.ledger.library.operations
 
 import account.ledger.library.api.response.AccountsResponse
-import account.ledger.library.api.response.TransactionsResponse
+import account.ledger.library.api.response.MultipleTransactionResponse
 import account.ledger.library.retrofit.data.AccountsDataSource
-import account.ledger.library.retrofit.data.TransactionsDataSource
+import account.ledger.library.retrofit.data.MultipleTransactionDataSource
 import common.utils.library.utils.ApiUtilsCommon
 import kotlinx.coroutines.runBlocking
 
@@ -36,15 +36,15 @@ fun getUserTransactionsForAnAccount(
     isNotFromBalanceSheet: Boolean = true,
     isDevelopmentMode: Boolean
 
-): Result<TransactionsResponse> {
+): Result<MultipleTransactionResponse> {
 
     return ApiUtilsCommon.getResultFromApiRequestWithOptionalRetries(
 
-        apiCallFunction = fun(): Result<TransactionsResponse> {
+        apiCallFunction = fun(): Result<MultipleTransactionResponse> {
 
             return runBlocking {
 
-                TransactionsDataSource().selectUserTransactions(
+                MultipleTransactionDataSource().selectUserTransactions(
 
                     userId = userId,
                     accountId = accountId

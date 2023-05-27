@@ -186,9 +186,9 @@ object CheckingOperations {
 
     // Further Step Indicators
     // --------------------------
-    // 1 : Via.
-    // 2 : Two Way
-    // 3 : Cyclic Via.
+    // 1: Via.
+    // 2: Two Ways
+    // 3: Cyclic Via.
     @JvmStatic
     private fun actionWithFurtherActions(
 

@@ -77,21 +77,21 @@ object TransactionUtils {
         val transactionDirection: String
         val secondAccountName: String
 
-        if (currentTransaction.from_account_id == currentAccountId) {
+        if (currentTransaction.fromAccountId == currentAccountId) {
 
             localCurrentBalance -= currentTransaction.amount
             transactionDirection = "-"
-            secondAccountName = currentTransaction.to_account_full_name
+            secondAccountName = currentTransaction.toAccountFullName
 
         } else {
 
             localCurrentBalance += currentTransaction.amount
             transactionDirection = "+"
-            secondAccountName = currentTransaction.from_account_full_name
+            secondAccountName = currentTransaction.fromAccountFullName
         }
 
         val toNormalDateTimeConversionResult: IsOkModel<String> =
-            MysqlUtils.mySqlDateTimeTextToNormalDateTimeText(mySqlDateTimeText = currentTransaction.event_date_time)
+            MysqlUtils.mySqlDateTimeTextToNormalDateTimeText(mySqlDateTimeText = currentTransaction.eventDateTime)
         if (toNormalDateTimeConversionResult.isOK) {
 
             return TransactionLedgerInText(
@@ -102,7 +102,7 @@ object TransactionUtils {
         }
         return TransactionLedgerInText(
 
-            text = "${currentLedger.text}[${currentTransaction.id}] [${currentTransaction.event_date_time}]\t[${currentTransaction.particulars}]\t[${transactionDirection}${currentTransaction.amount}]\t[${secondAccountName}]\t[${localCurrentBalance}]\n",
+            text = "${currentLedger.text}[${currentTransaction.id}] [${currentTransaction.eventDateTime}]\t[${currentTransaction.particulars}]\t[${transactionDirection}${currentTransaction.amount}]\t[${secondAccountName}]\t[${localCurrentBalance}]\n",
             balance = localCurrentBalance
         )
     }
@@ -114,7 +114,7 @@ object TransactionUtils {
 
     ): String {
 
-        return "${currentTextLedger}[${currentTransaction.id}] [${currentTransaction.event_date_time}]\t[(${currentTransaction.from_account_full_name}) -> (${currentTransaction.to_account_full_name})]\t[${currentTransaction.particulars}]\t[${currentTransaction.amount}]\n"
+        return "${currentTextLedger}[${currentTransaction.id}] [${currentTransaction.eventDateTime}]\t[(${currentTransaction.fromAccountFullName}) -> (${currentTransaction.toAccountFullName})]\t[${currentTransaction.particulars}]\t[${currentTransaction.amount}]\n"
     }
 
     @JvmStatic
@@ -144,7 +144,7 @@ object TransactionUtils {
             DateTimeUtils.normalDateTimeInTextToDateTime(normalDateTimeInText = upToTimeStamp).data!!
         return transactions.filter { transactionResponse: TransactionResponse ->
 
-            MysqlUtils.mySqlDateTimeTextToDateTime(mySqlDateTimeText = transactionResponse.event_date_time).data!! <= upToTimeStampInDateTime
+            MysqlUtils.mySqlDateTimeTextToDateTime(mySqlDateTimeText = transactionResponse.eventDateTime).data!! <= upToTimeStampInDateTime
         }
 
     }

@@ -117,6 +117,7 @@ object AccountUtils {
         }
     }
 
+    @JvmStatic
     internal fun getAccountFrequenciesForUser(
 
         frequencyOfAccounts: FrequencyOfAccountsModel,

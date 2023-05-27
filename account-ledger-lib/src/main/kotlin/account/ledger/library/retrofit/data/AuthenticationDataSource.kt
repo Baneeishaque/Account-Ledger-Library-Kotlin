@@ -1,5 +1,6 @@
 package account.ledger.library.retrofit.data
 
+import account.ledger.library.api.Api
 import account.ledger.library.api.response.AuthenticationResponse
 import account.ledger.library.retrofit.ProjectRetrofitClient
 import account.ledger.library.retrofit.ResponseHolder
@@ -8,7 +9,7 @@ import java.io.IOException
 
 class AuthenticationDataSource {
 
-    private val retrofitClient = ProjectRetrofitClient.retrofitClient
+    private val retrofitClient: Api = ProjectRetrofitClient.retrofitClient
 
     suspend fun authenticateUser(
         username: String,
@@ -37,7 +38,7 @@ private fun processApiResponse(apiResponse: Response<AuthenticationResponse>): R
 
         } else {
 
-            ResponseHolder.Error(Exception("Invalid Response Body - $loginApiResponseBody"))
+            ResponseHolder.Error(Exception("Invalid Response Body - null"))
         }
     }
     return ResponseHolder.Error(IOException("Exception Code - ${apiResponse.code()}, Message - ${apiResponse.message()}"))

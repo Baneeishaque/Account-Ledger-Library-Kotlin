@@ -3,8 +3,8 @@ package account.ledger.library.api
 import account.ledger.library.api.response.AccountsResponse
 import account.ledger.library.api.response.AuthenticationResponse
 import account.ledger.library.api.response.TransactionManipulationResponse
-import account.ledger.library.api.response.TransactionsResponse
-import account.ledger.library.api.response.UsersResponse
+import account.ledger.library.api.response.MultipleTransactionResponse
+import account.ledger.library.api.response.MultipleUserResponse
 import retrofit2.Response
 import retrofit2.http.*
 
@@ -17,7 +17,7 @@ interface Api {
     ): Response<AuthenticationResponse>
 
     @GET("${ApiConstants.selectUsersMethod}.${ApiConstants.serverFileExtension}")
-    suspend fun selectUsers(): Response<UsersResponse>
+    suspend fun selectUsers(): Response<MultipleUserResponse>
 
     @GET("${ApiConstants.selectUserAccountsV2Method}.${ApiConstants.serverFileExtension}")
     suspend fun selectUserAccounts(
@@ -32,12 +32,12 @@ interface Api {
     suspend fun selectUserTransactionsV2M(
         @Query("user_id") userId: UInt,
         @Query("account_id") accountId: UInt
-    ): Response<TransactionsResponse>
+    ): Response<MultipleTransactionResponse>
 
     @GET("${ApiConstants.selectTransactionsV2MMethod}.${ApiConstants.serverFileExtension}")
     suspend fun selectTransactionsV2M(
         @Query("user_id") userId: UInt
-    ): Response<TransactionsResponse>
+    ): Response<MultipleTransactionResponse>
 
     @FormUrlEncoded
     @POST("${ApiConstants.insertTransactionMethod}.${ApiConstants.serverFileExtension}")
@@ -71,5 +71,5 @@ interface Api {
     suspend fun selectUserTransactionsAfterSpecifiedDate(
         @Query("user_id") userId: UInt,
         @Query("specified_date") specifiedDate: String
-    ): Response<TransactionsResponse>
+    ): Response<MultipleTransactionResponse>
 }
