@@ -2,7 +2,7 @@ package account.ledger.library.utils
 
 import account.ledger.library.api.response.UserResponse
 import account.ledger.library.models.UserCredentials
-import account_ledger_library.constants.Constants
+import account_ledger_library.constants.ConstantsNative
 
 object UserUtils {
 
@@ -20,7 +20,7 @@ object UserUtils {
     ): String {
 
         var result = ""
-        usersMap.forEach { user -> result += "${Constants.userText.first()}${user.key} - ${user.value.username}\n" }
+        usersMap.forEach { user -> result += "${ConstantsNative.userText.first()}${user.key} - ${user.value.username}\n" }
         return result
     }
 

@@ -5,10 +5,10 @@ import account.ledger.library.models.AccountFrequencyModel
 import account.ledger.library.models.ChooseAccountResult
 import account.ledger.library.models.FrequencyOfAccountsModel
 import account.ledger.library.models.UserModel
-import account_ledger_library.constants.Constants
+import account_ledger_library.constants.ConstantsNative
+import common.utils.library.constants.CommonConstants
 import common.utils.library.models.IsOkModel
 import common.utils.library.utils.JsonFileUtils
-import common.utils.library.constants.Constants as CommonConstants
 
 object AccountUtils {
 
@@ -45,7 +45,7 @@ object AccountUtils {
     fun userAccountsToStringFromList(accounts: List<AccountResponse>): String {
 
         var result = ""
-        accounts.forEach { account -> result += "${Constants.accountText.first()}${account.id} - ${account.fullName}\n" }
+        accounts.forEach { account -> result += "${ConstantsNative.accountText.first()}${account.id} - ${account.fullName}\n" }
         return result
     }
 
@@ -80,7 +80,7 @@ object AccountUtils {
 
         val readFrequencyOfAccountsFileResult: IsOkModel<FrequencyOfAccountsModel> =
             JsonFileUtils.readJsonFile(
-                fileName = Constants.frequencyOfAccountsFileName,
+                fileName = ConstantsNative.frequencyOfAccountsFileName,
                 isDevelopmentMode = isDevelopmentMode
             )
         if (readFrequencyOfAccountsFileResult.isOK) {

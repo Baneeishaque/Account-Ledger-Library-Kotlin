@@ -3,7 +3,7 @@ package account.ledger.library.utils
 import account.ledger.library.models.ChooseByIdResult
 import common.utils.library.models.IsOkModel
 import java.util.*
-import common.utils.library.utils.ApiUtils as CommonApiUtils
+import common.utils.library.utils.ApiUtilsCommon
 
 object ChooseUtils {
 
@@ -31,7 +31,7 @@ object ChooseUtils {
                 if (idInput == 0u) return ChooseByIdResult(isOkWithData = IsOkModel(isOK = false))
 
                 return ChooseByIdResult(
-                    isOkWithData = CommonApiUtils.makeApiRequestWithOptionalRetries(
+                    isOkWithData = ApiUtilsCommon.makeApiRequestWithOptionalRetries(
 
                         apiCallFunction = apiCallFunction,
                         isConsoleMode = isConsoleMode,

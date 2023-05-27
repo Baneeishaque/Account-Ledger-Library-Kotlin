@@ -7,9 +7,9 @@ import account.ledger.library.models.AccountFrequencyModel
 import account.ledger.library.models.FrequencyOfAccountsModel
 import account.ledger.library.models.UserModel
 import account.ledger.library.retrofit.data.TransactionDataSource
-import common.utils.library.constants.Constants
+import common.utils.library.constants.CommonConstants
 import common.utils.library.models.IsOkModel
-import common.utils.library.utils.ApiUtils
+import common.utils.library.utils.ApiUtilsCommon
 import common.utils.library.utils.MysqlUtils
 import kotlinx.coroutines.runBlocking
 
@@ -83,7 +83,7 @@ object InsertOperations {
     ): Boolean {
 
         val transactionManipulationApiRequestResult: IsOkModel<TransactionManipulationResponse> =
-            ApiUtils.makeApiRequestWithOptionalRetries(
+            ApiUtilsCommon.makeApiRequestWithOptionalRetries(
 
                 apiCallFunction = transactionManipulationApiRequest,
                 isConsoleMode = isConsoleMode,
@@ -305,9 +305,9 @@ object InsertOperations {
                     )
                 }
 
-                TransactionTypeEnum.VIA -> return IsOkModel(isOK = false, data = Constants.notImplementedMessage)
-                TransactionTypeEnum.TWO_WAY -> return IsOkModel(isOK = false, data = Constants.notImplementedMessage)
-                TransactionTypeEnum.CYCLIC_VIA -> return IsOkModel(isOK = false, data = Constants.notImplementedMessage)
+                TransactionTypeEnum.VIA -> return IsOkModel(isOK = false, data = CommonConstants.notImplementedMessage)
+                TransactionTypeEnum.TWO_WAY -> return IsOkModel(isOK = false, data = CommonConstants.notImplementedMessage)
+                TransactionTypeEnum.CYCLIC_VIA -> return IsOkModel(isOK = false, data = CommonConstants.notImplementedMessage)
             }
         } else if (isTwoWayStep) {
 

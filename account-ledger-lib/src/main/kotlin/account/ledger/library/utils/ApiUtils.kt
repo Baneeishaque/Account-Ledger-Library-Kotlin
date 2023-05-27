@@ -2,9 +2,9 @@ package account.ledger.library.utils
 
 import account.ledger.library.api.response.AccountsResponse
 import account.ledger.library.retrofit.data.AccountsDataSource
-import account_ledger_library.constants.Constants
+import account_ledger_library.constants.ConstantsNative
 import kotlinx.coroutines.runBlocking
-import common.utils.library.utils.ApiUtils as CommonApiUtils
+import common.utils.library.utils.ApiUtilsCommon
 
 object ApiUtils {
 
@@ -16,7 +16,7 @@ object ApiUtils {
     ): Result<AccountsResponse> {
 
         //TODO : Change return to AccountsResponse instead of Result<AccountsResponse>
-        return CommonApiUtils.getResultFromApiRequestWithOptionalRetries(
+        return ApiUtilsCommon.getResultFromApiRequestWithOptionalRetries(
 
             apiCallFunction = fun(): Result<AccountsResponse> {
 
@@ -38,11 +38,11 @@ object ApiUtils {
 
     ): Boolean {
 
-        return CommonApiUtils.isNoDataResponseWithMessageIncludingBeforeMessageActionsAnd1AsIndicator(
+        return ApiUtilsCommon.isNoDataResponseWithMessageIncludingBeforeMessageActionsAnd1AsIndicator(
 
             responseStatus = responseStatus,
             noDataMessageBeforeActions = noDataBeforeMessageActions,
-            itemSpecification = Constants.transactionText
+            itemSpecification = ConstantsNative.transactionText
         )
     }
 
