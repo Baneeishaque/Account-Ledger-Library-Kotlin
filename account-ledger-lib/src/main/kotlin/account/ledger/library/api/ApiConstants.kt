@@ -2,8 +2,7 @@ package account.ledger.library.api
 
 internal object ApiConstants {
 
-    //TODO : Move to environment credentials
-    internal const val serverApiAddress = "http://account-ledger.professionalstudycentre.com/"
+    internal const val serverApiAddress = "https://nomadllerindia.com/account_ledger_server/http_api/"
 
     internal const val serverFileExtension = "php"
 
