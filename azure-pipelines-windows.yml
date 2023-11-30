@@ -20,6 +20,7 @@ steps:
     displayName: 'Gradle Build Task'
     inputs:
       gradleOptions: '-Xmx3072m'
+      tasks: 'mingwX64Binaries'
 
   - script: 'gradlew --stop'
     displayName: Stop Gradle Daemon
