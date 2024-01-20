@@ -31,7 +31,7 @@ dependencies {
     implementation("org.jetbrains.kotlinx:kotlinx-cli:0.3.6")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.7.3")
 
-    implementation("com.github.doyaaaaaken:kotlin-csv-jvm:1.9.2")
+    implementation("com.github.doyaaaaaken:kotlin-csv-jvm:1.9.3")
     implementation("com.massisframework:j-text-utils:0.3.4")
     implementation("io.github.cdimascio:dotenv-kotlin:6.4.1")
 
