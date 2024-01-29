@@ -27,6 +27,7 @@ object TransactionUtils {
 
         transactions: List<TransactionResponse>,
         currentAccountId: UInt,
+        isCreditDebitMode: Boolean = false,
         isDevelopmentMode: Boolean
 
     ): String {
@@ -51,19 +52,56 @@ object TransactionUtils {
         } else {
 
             var currentLedger = TransactionLedgerInText(text = "", balance = 0.0F)
+            var currentCreditLedger = TransactionLedgerInText(text = "", balance = 0.0F)
+            var currentDebitLedger = TransactionLedgerInText(text = "", balance = 0.0F)
+
             transactions.forEach { currentTransaction: TransactionResponse ->
 
-                currentLedger = appendToLedger(
+                if (isCreditDebitMode) {
 
-                    currentTransaction = currentTransaction,
-                    currentAccountId = currentAccountId,
-                    currentLedger = currentLedger
-                )
+                    val appendToLedgerWithDebitCreditLedgersResult: Triple<Boolean, Triple<TransactionLedgerInText, TransactionLedgerInText, TransactionLedgerInText>, String?> =
+                        appendToLedgerWithDebitCreditLedgers(
+
+                            currentTransaction = currentTransaction,
+                            currentAccountId = currentAccountId,
+                            currentLedger = currentLedger,
+                            currentCreditLedger = currentCreditLedger,
+                            currentDebitLedger = currentDebitLedger
+                        )
+                    if (appendToLedgerWithDebitCreditLedgersResult.first) {
+
+                        currentLedger = appendToLedgerWithDebitCreditLedgersResult.second.first
+                        currentCreditLedger = appendToLedgerWithDebitCreditLedgersResult.second.second
+                        currentDebitLedger = appendToLedgerWithDebitCreditLedgersResult.second.third
+
+                    } else {
+
+                        // TODO : Handle Date Conversion Error
+                        currentLedger.text = appendToLedgerWithDebitCreditLedgersResult.third.toString()
+                        return@forEach
+                    }
+
+                } else {
+                    currentLedger = appendToLedger(
+
+                        currentTransaction = currentTransaction,
+                        currentAccountId = currentAccountId,
+                        currentLedger = currentLedger
+                    )
+                }
             }
-            return currentLedger.text
+            return if (isCreditDebitMode) {
+
+                "Credit\n----------------\n${currentCreditLedger.text}===============\n${currentCreditLedger.balance}\n\nDebit\n--------------------\n${currentDebitLedger.text}================\n${currentDebitLedger.balance}\n\nBalance => ${currentCreditLedger.balance} - ${currentDebitLedger.balance} = ${currentCreditLedger.balance - currentDebitLedger.balance}\n"
+
+            } else {
+
+                currentLedger.text
+            }
         }
     }
 
+    //TODO : Replace this function with appendToLedgerWithDebitCreditLedgers
     @JvmStatic
     fun appendToLedger(
 
@@ -100,11 +138,72 @@ object TransactionUtils {
                 balance = localCurrentBalance
             )
         }
+        //TODO : Throw Error
         return TransactionLedgerInText(
 
             text = "${currentLedger.text}[${currentTransaction.id}] [${currentTransaction.eventDateTime}]\t[${currentTransaction.particulars}]\t[${transactionDirection}${currentTransaction.amount}]\t[${secondAccountName}]\t[${localCurrentBalance}]\n",
             balance = localCurrentBalance
         )
+    }
+
+    @JvmStatic
+    fun appendToLedgerWithDebitCreditLedgers(
+
+        currentTransaction: TransactionResponse,
+        currentAccountId: UInt,
+        currentLedger: TransactionLedgerInText,
+        currentCreditLedger: TransactionLedgerInText,
+        currentDebitLedger: TransactionLedgerInText
+
+    ): Triple<Boolean, Triple<TransactionLedgerInText, TransactionLedgerInText, TransactionLedgerInText>, String?> {
+
+        val validatedDateResult: IsOkModel<String> =
+            MysqlUtils.mySqlDateTimeTextToNormalDateTimeText(mySqlDateTimeText = currentTransaction.eventDateTime)
+
+        if (validatedDateResult.isOK) {
+
+            var localCurrentBalance: Float = currentLedger.balance
+            val transactionDirection: String
+            val secondAccountName: String
+
+            //TODO : Use flag if balance needed on each rows of credit/debit ledgers
+            //TODO : Use flag if secondAccountName needed on each rows of credit/debit ledgers
+            //TODO : Use flag if transactionId needed on each rows of credit/debit ledgers
+            //TODO : Use flag if eventDateTime needed on each rows of credit/debit ledgers
+            //TODO : Use flag if placeholders needed for each item on each rows of credit/debit ledgers
+            if (currentTransaction.fromAccountId == currentAccountId) {
+
+                localCurrentBalance -= currentTransaction.amount
+                transactionDirection = "-"
+                secondAccountName = currentTransaction.toAccountFullName
+
+                currentCreditLedger.balance += currentTransaction.amount
+                currentCreditLedger.text += "${currentTransaction.particulars}\t${currentTransaction.amount}\n"
+
+            } else {
+
+                localCurrentBalance += currentTransaction.amount
+                transactionDirection = "+"
+                secondAccountName = currentTransaction.fromAccountFullName
+
+                currentDebitLedger.balance += currentTransaction.amount
+                currentDebitLedger.text += "${currentTransaction.particulars}\t${currentTransaction.amount}\n"
+            }
+
+            return Triple(
+                true,
+                Triple(
+                    TransactionLedgerInText(
+                        text = "${currentLedger.text}[${currentTransaction.id}] [${validatedDateResult.data}]\t[${currentTransaction.particulars}]\t[${transactionDirection}${currentTransaction.amount}]\t[${secondAccountName}]\t[${localCurrentBalance}]\n",
+                        balance = localCurrentBalance
+                    ),
+                    currentCreditLedger,
+                    currentDebitLedger
+                ),
+                null
+            )
+        }
+        return Triple(false, Triple(currentLedger, currentCreditLedger, currentDebitLedger), validatedDateResult.error)
     }
 
     private fun appendToTextLedger(
@@ -158,7 +257,7 @@ object TransactionUtils {
         fromAccount: AccountResponse,
         viaAccount: AccountResponse,
         toAccount: AccountResponse
-        
+
     ) = InsertTransactionResult(
 
         isSuccess = false,
