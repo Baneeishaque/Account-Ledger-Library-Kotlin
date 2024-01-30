@@ -10,9 +10,11 @@ object ApiUtils {
 
     @JvmStatic
     fun getAccountsFull(
+
         userId: UInt,
         isConsoleMode: Boolean,
         isDevelopmentMode: Boolean
+
     ): Result<AccountsResponse> {
 
         //TODO : Change return to AccountsResponse instead of Result<AccountsResponse>
