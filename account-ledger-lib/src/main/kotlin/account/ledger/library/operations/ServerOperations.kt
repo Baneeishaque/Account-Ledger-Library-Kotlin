@@ -7,51 +7,56 @@ import account.ledger.library.retrofit.data.MultipleTransactionDataSource
 import common.utils.library.utils.ApiUtilsCommon
 import kotlinx.coroutines.runBlocking
 
-fun getAccounts(
+object ServerOperations {
 
-    userId: UInt,
-    parentAccountId: UInt = 0u,
-    isConsoleMode: Boolean,
-    isDevelopmentMode: Boolean
+    @JvmStatic
+    fun getAccounts(
 
-): Result<AccountsResponse> {
+        userId: UInt,
+        parentAccountId: UInt = 0u,
+        isConsoleMode: Boolean,
+        isDevelopmentMode: Boolean
 
-    return ApiUtilsCommon.getResultFromApiRequestWithOptionalRetries(apiCallFunction = fun(): Result<AccountsResponse> {
+    ): Result<AccountsResponse> {
 
-        return runBlocking {
-
-            AccountsDataSource().selectUserAccounts(
-
-                userId = userId,
-                parentAccountId = parentAccountId
-            )
-        }
-    }, isConsoleMode = isConsoleMode, isDevelopmentMode = isDevelopmentMode)
-}
-
-fun getUserTransactionsForAnAccount(
-
-    userId: UInt,
-    accountId: UInt,
-    isNotFromBalanceSheet: Boolean = true,
-    isDevelopmentMode: Boolean
-
-): Result<MultipleTransactionResponse> {
-
-    return ApiUtilsCommon.getResultFromApiRequestWithOptionalRetries(
-
-        apiCallFunction = fun(): Result<MultipleTransactionResponse> {
+        return ApiUtilsCommon.getResultFromApiRequestWithOptionalRetries(apiCallFunction = fun(): Result<AccountsResponse> {
 
             return runBlocking {
 
-                MultipleTransactionDataSource().selectUserTransactions(
+                AccountsDataSource().selectUserAccounts(
 
                     userId = userId,
-                    accountId = accountId
+                    parentAccountId = parentAccountId
                 )
             }
-        },
-        isConsoleMode = isNotFromBalanceSheet,
-        isDevelopmentMode = isDevelopmentMode
-    )
+        }, isConsoleMode = isConsoleMode, isDevelopmentMode = isDevelopmentMode)
+    }
+
+    @JvmStatic
+    fun getUserTransactionsForAnAccount(
+
+        userId: UInt,
+        accountId: UInt,
+        isNotFromBalanceSheet: Boolean = true,
+        isDevelopmentMode: Boolean
+
+    ): Result<MultipleTransactionResponse> {
+
+        return ApiUtilsCommon.getResultFromApiRequestWithOptionalRetries(
+
+            apiCallFunction = fun(): Result<MultipleTransactionResponse> {
+
+                return runBlocking {
+
+                    MultipleTransactionDataSource().selectUserTransactions(
+
+                        userId = userId,
+                        accountId = accountId
+                    )
+                }
+            },
+            isConsoleMode = isNotFromBalanceSheet,
+            isDevelopmentMode = isDevelopmentMode
+        )
+    }
 }
