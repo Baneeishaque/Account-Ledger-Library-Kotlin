@@ -48,6 +48,7 @@ object ApiUtils {
         )
     }
 
+    @JvmStatic
     fun isNotNoTransactionResponseWithMessage(
 
         responseStatus: UInt,

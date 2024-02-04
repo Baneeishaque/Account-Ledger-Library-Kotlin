@@ -218,9 +218,11 @@ object TransactionUtils {
 
     @JvmStatic
     fun filterTransactionsForUpToDateTime(
+
         isUpToTimeStamp: Boolean,
         upToTimeStamp: String,
         transactions: List<TransactionResponse>
+
     ): List<TransactionResponse> {
 
         return if (isUpToTimeStamp) {
@@ -235,8 +237,10 @@ object TransactionUtils {
 
     @JvmStatic
     fun getTransactionsUpToDateTime(
+
         upToTimeStamp: String,
         transactions: List<TransactionResponse>
+
     ): List<TransactionResponse> {
 
         val upToTimeStampInDateTime: LocalDateTime =
@@ -258,7 +262,7 @@ object TransactionUtils {
         viaAccount: AccountResponse,
         toAccount: AccountResponse
 
-    ) = InsertTransactionResult(
+    ): InsertTransactionResult = InsertTransactionResult(
 
         isSuccess = false,
         dateTimeInText = dateTimeInText,
