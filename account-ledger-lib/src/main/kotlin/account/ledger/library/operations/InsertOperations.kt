@@ -287,7 +287,7 @@ object InsertOperations {
 
             when (transactionType) {
 
-                TransactionTypeEnum.NORMAL -> {
+                TransactionTypeEnum.NORMAL, TransactionTypeEnum.SPECIAL -> {
 
                     return IsOkModel(
 
@@ -360,7 +360,7 @@ object InsertOperations {
 
             when (transactionType) {
 
-                TransactionTypeEnum.NORMAL, TransactionTypeEnum.TWO_WAY -> {
+                TransactionTypeEnum.NORMAL, TransactionTypeEnum.TWO_WAY, TransactionTypeEnum.SPECIAL -> {
 
                     return IsOkModel(
 

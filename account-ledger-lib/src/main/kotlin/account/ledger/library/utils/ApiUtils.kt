@@ -1,6 +1,7 @@
 package account.ledger.library.utils
 
 import account.ledger.library.api.response.AccountsResponse
+import account.ledger.library.api.response.MultipleTransactionResponse
 import account.ledger.library.retrofit.data.AccountsDataSource
 import account_ledger_library.constants.ConstantsNative
 import kotlinx.coroutines.runBlocking
@@ -36,14 +37,14 @@ object ApiUtils {
     fun isNoTransactionResponseWithMessage(
 
         responseStatus: UInt,
-        noDataBeforeMessageActions: () -> Unit = fun() {}
+        noDataActions: () -> Unit = fun() {}
 
     ): Boolean {
 
-        return ApiUtilsCommon.isNoDataResponseWithMessageIncludingBeforeMessageActionsAnd1AsIndicator(
+        return ApiUtilsCommon.isNoDataResponseWithMessageAnd1AsIndicator(
 
             responseStatus = responseStatus,
-            noDataMessageBeforeActions = noDataBeforeMessageActions,
+            noDataActions = noDataActions,
             itemSpecification = ConstantsNative.transactionText
         )
     }
@@ -52,11 +53,23 @@ object ApiUtils {
     fun isNotNoTransactionResponseWithMessage(
 
         responseStatus: UInt,
-        noDataBeforeMessageActions: () -> Unit = fun() {}
+        noDataActions: () -> Unit = fun() {}
 
     ): Boolean = !isNoTransactionResponseWithMessage(
 
         responseStatus = responseStatus,
-        noDataBeforeMessageActions = noDataBeforeMessageActions
+        noDataActions = noDataActions
+    )
+
+    @JvmStatic
+    fun isNotNoTransactionResponseWithMessage(
+
+        multipleTransactionResponse: MultipleTransactionResponse,
+        noDataActions: () -> Unit = fun() {}
+
+    ): Boolean = !isNoTransactionResponseWithMessage(
+
+        responseStatus = multipleTransactionResponse.status,
+        noDataActions = noDataActions
     )
 }

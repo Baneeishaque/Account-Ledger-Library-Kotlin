@@ -1,8 +1,10 @@
 package account.ledger.library.operations
 
 import account.ledger.library.api.response.AccountResponse
+import account.ledger.library.api.response.TransactionResponse
 import account.ledger.library.enums.TransactionTypeEnum
 import account.ledger.library.models.InsertTransactionResult
+import account.ledger.library.models.SpecialTransactionTypeModel
 import account.ledger.library.utils.TransactionUtils
 import common.utils.library.utils.DateTimeUtils
 
@@ -64,7 +66,9 @@ object CheckingOperations {
         fromAccountMissingActions: () -> Unit = {},
         toAccountMissingActions: () -> Unit = {},
         viaAccountMissingActions: () -> Unit = {},
-        addTransactionOperation: (UInt, String, TransactionTypeEnum, AccountResponse, AccountResponse, AccountResponse, Boolean, Boolean, UInt, String, String, Float, Boolean, UInt, Boolean, Boolean, Boolean) -> InsertTransactionResult
+        addTransactionOperation: (UInt, String, TransactionTypeEnum, AccountResponse, AccountResponse, AccountResponse, Boolean, Boolean, UInt, String, String, Float, Boolean, UInt, Boolean, Boolean, Boolean, TransactionResponse?, SpecialTransactionTypeModel?) -> InsertTransactionResult,
+        chosenTransactionForSpecial: TransactionResponse?,
+        chosenSpecialTransactionType: SpecialTransactionTypeModel?
 
     ): InsertTransactionResult {
 
@@ -82,9 +86,9 @@ object CheckingOperations {
         ) {
             when (transactionType) {
 
-                TransactionTypeEnum.NORMAL -> {
+                TransactionTypeEnum.NORMAL, TransactionTypeEnum.SPECIAL -> {
 
-                    val addTransactionResult: InsertTransactionResult = addTransaction(
+                    val addTransactionResult: InsertTransactionResult = addTransactionAfterAvailabilitySuccess(
 
                         addTransactionOperation = addTransactionOperation,
                         userId = userId,
@@ -97,7 +101,9 @@ object CheckingOperations {
                         transactionParticulars = transactionParticulars,
                         transactionAmount = transactionAmount,
                         isConsoleMode = isConsoleMode,
-                        isDevelopmentMode = isDevelopmentMode
+                        isDevelopmentMode = isDevelopmentMode,
+                        chosenTransactionForSpecial = chosenTransactionForSpecial,
+                        chosenSpecialTransactionType = chosenSpecialTransactionType,
                     )
 
                     if (addTransactionResult.isSuccess) {
@@ -131,7 +137,9 @@ object CheckingOperations {
                         transactionAmount = transactionAmount,
                         isConsoleMode = isConsoleMode,
                         isDevelopmentMode = isDevelopmentMode,
-                        furtherStepIndicator = 1u
+                        furtherStepIndicator = 1u,
+                        chosenTransactionForSpecial = chosenTransactionForSpecial,
+                        chosenSpecialTransactionType = chosenSpecialTransactionType
                     )
                 }
 
@@ -151,7 +159,9 @@ object CheckingOperations {
                         transactionAmount = transactionAmount,
                         isConsoleMode = isConsoleMode,
                         isDevelopmentMode = isDevelopmentMode,
-                        furtherStepIndicator = 2u
+                        furtherStepIndicator = 2u,
+                        chosenTransactionForSpecial = chosenTransactionForSpecial,
+                        chosenSpecialTransactionType = chosenSpecialTransactionType
                     )
                 }
 
@@ -169,7 +179,9 @@ object CheckingOperations {
                     transactionAmount = transactionAmount,
                     isConsoleMode = isConsoleMode,
                     isDevelopmentMode = isDevelopmentMode,
-                    furtherStepIndicator = 3u
+                    furtherStepIndicator = 3u,
+                    chosenTransactionForSpecial = chosenTransactionForSpecial,
+                    chosenSpecialTransactionType = chosenSpecialTransactionType
                 )
             }
         }
@@ -192,7 +204,7 @@ object CheckingOperations {
     @JvmStatic
     private fun actionWithFurtherActions(
 
-        addTransactionOperation: (UInt, String, TransactionTypeEnum, AccountResponse, AccountResponse, AccountResponse, Boolean, Boolean, UInt, String, String, Float, Boolean, UInt, Boolean, Boolean, Boolean) -> InsertTransactionResult,
+        addTransactionOperation: (UInt, String, TransactionTypeEnum, AccountResponse, AccountResponse, AccountResponse, Boolean, Boolean, UInt, String, String, Float, Boolean, UInt, Boolean, Boolean, Boolean, TransactionResponse?, SpecialTransactionTypeModel?) -> InsertTransactionResult,
         userId: UInt,
         username: String,
         transactionType: TransactionTypeEnum,
@@ -204,11 +216,13 @@ object CheckingOperations {
         transactionAmount: Float,
         isConsoleMode: Boolean,
         isDevelopmentMode: Boolean,
-        furtherStepIndicator: UInt
+        furtherStepIndicator: UInt,
+        chosenTransactionForSpecial: TransactionResponse?,
+        chosenSpecialTransactionType: SpecialTransactionTypeModel?
 
     ): InsertTransactionResult {
 
-        var addTransactionResult: InsertTransactionResult = addTransaction(
+        var addTransactionResult: InsertTransactionResult = addTransactionAfterAvailabilitySuccess(
 
             addTransactionOperation = addTransactionOperation,
             userId = userId,
@@ -221,7 +235,9 @@ object CheckingOperations {
             transactionParticulars = transactionParticulars,
             transactionAmount = transactionAmount,
             isConsoleMode = isConsoleMode,
-            isDevelopmentMode = isDevelopmentMode
+            isDevelopmentMode = isDevelopmentMode,
+            chosenTransactionForSpecial = chosenTransactionForSpecial,
+            chosenSpecialTransactionType = chosenSpecialTransactionType
         )
         if (addTransactionResult.isSuccess) {
 
@@ -229,7 +245,7 @@ object CheckingOperations {
 
                 1u, 2u -> {
 
-                    addTransactionResult = addTransaction(
+                    addTransactionResult = addTransactionAfterAvailabilitySuccess(
 
                         addTransactionOperation = addTransactionOperation,
                         userId = userId,
@@ -244,7 +260,9 @@ object CheckingOperations {
                         transactionParticulars = addTransactionResult.transactionParticulars,
                         transactionAmount = addTransactionResult.transactionAmount,
                         isConsoleMode = isConsoleMode,
-                        isDevelopmentMode = isDevelopmentMode
+                        isDevelopmentMode = isDevelopmentMode,
+                        chosenTransactionForSpecial = chosenTransactionForSpecial,
+                        chosenSpecialTransactionType = chosenSpecialTransactionType
                     )
                     if (addTransactionResult.isSuccess) {
 
@@ -263,7 +281,7 @@ object CheckingOperations {
 
                 3u -> {
 
-                    addTransactionResult = addTransaction(
+                    addTransactionResult = addTransactionAfterAvailabilitySuccess(
 
                         addTransactionOperation = addTransactionOperation,
                         userId = userId,
@@ -277,11 +295,13 @@ object CheckingOperations {
                         transactionParticulars = addTransactionResult.transactionParticulars,
                         transactionAmount = addTransactionResult.transactionAmount,
                         isConsoleMode = isConsoleMode,
-                        isDevelopmentMode = isDevelopmentMode
+                        isDevelopmentMode = isDevelopmentMode,
+                        chosenTransactionForSpecial = chosenTransactionForSpecial,
+                        chosenSpecialTransactionType = chosenSpecialTransactionType
                     )
                     if (addTransactionResult.isSuccess) {
 
-                        addTransactionResult = addTransaction(
+                        addTransactionResult = addTransactionAfterAvailabilitySuccess(
 
                             addTransactionOperation = addTransactionOperation,
                             userId = userId,
@@ -295,7 +315,9 @@ object CheckingOperations {
                             transactionParticulars = addTransactionResult.transactionParticulars,
                             transactionAmount = addTransactionResult.transactionAmount,
                             isConsoleMode = isConsoleMode,
-                            isDevelopmentMode = isDevelopmentMode
+                            isDevelopmentMode = isDevelopmentMode,
+                            chosenTransactionForSpecial = chosenTransactionForSpecial,
+                            chosenSpecialTransactionType = chosenSpecialTransactionType
                         )
 
                         if (addTransactionResult.isSuccess) {
@@ -327,9 +349,9 @@ object CheckingOperations {
     }
 
     @JvmStatic
-    private fun addTransaction(
+    private fun addTransactionAfterAvailabilitySuccess(
 
-        addTransactionOperation: (UInt, String, TransactionTypeEnum, AccountResponse, AccountResponse, AccountResponse, Boolean, Boolean, UInt, String, String, Float, Boolean, UInt, Boolean, Boolean, Boolean) -> InsertTransactionResult,
+        addTransactionOperation: (UInt, String, TransactionTypeEnum, AccountResponse, AccountResponse, AccountResponse, Boolean, Boolean, UInt, String, String, Float, Boolean, UInt, Boolean, Boolean, Boolean, TransactionResponse?, SpecialTransactionTypeModel?) -> InsertTransactionResult,
         userId: UInt,
         username: String,
         transactionType: TransactionTypeEnum,
@@ -343,9 +365,11 @@ object CheckingOperations {
         transactionAmount: Float,
         isConsoleMode: Boolean,
         isDevelopmentMode: Boolean,
-        isCyclicViaStep: Boolean = false
+        isCyclicViaStep: Boolean = false,
+        chosenTransactionForSpecial: TransactionResponse?,
+        chosenSpecialTransactionType: SpecialTransactionTypeModel?
 
-    ) = addTransactionOperation.invoke(
+    ): InsertTransactionResult = addTransactionOperation.invoke(
 
         userId,
         username,
@@ -363,6 +387,8 @@ object CheckingOperations {
         0u,
         isConsoleMode,
         isDevelopmentMode,
-        isCyclicViaStep
+        isCyclicViaStep,
+        chosenTransactionForSpecial,
+        chosenSpecialTransactionType
     )
 }

@@ -23,7 +23,7 @@ object TransactionUtils {
     }
 
     @JvmStatic
-    fun userTransactionsToTextFromList(
+    fun userTransactionsToTextFromListForLedger(
 
         transactions: List<TransactionResponse>,
         currentAccountId: UInt,
@@ -272,4 +272,15 @@ object TransactionUtils {
         viaAccount = viaAccount,
         toAccount = toAccount
     )
+
+    @JvmStatic
+    fun transactionsToTextFromList(transactions: List<TransactionResponse>): String {
+
+        var result = ""
+        transactions.forEachIndexed { index: Int, transaction: TransactionResponse ->
+
+            result += "$index - ${transaction.particulars}\n"
+        }
+        return result
+    }
 }
