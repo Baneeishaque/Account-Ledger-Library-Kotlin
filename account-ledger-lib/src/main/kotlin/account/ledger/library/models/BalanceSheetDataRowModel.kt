@@ -5,7 +5,8 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class BalanceSheetDataRowModel(
-    @Required internal val accountId: UInt,
-    @Required internal val accountName: String,
-    @Required internal val accountBalance: Float
+
+    @Required val accountId: UInt,
+    @Required val accountName: String,
+    @Required val accountBalance: Float
 )
