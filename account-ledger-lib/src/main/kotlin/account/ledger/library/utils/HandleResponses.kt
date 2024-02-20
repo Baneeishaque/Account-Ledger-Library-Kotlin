@@ -17,6 +17,7 @@ object HandleResponses {
         if (apiResponse.isFailure) {
 
             if (isConsoleMode) {
+
                 println("Error : ${(apiResponse.exceptionOrNull() as Exception).localizedMessage}")
             }
             return IsOkModel(isOK = false, error = (apiResponse.exceptionOrNull() as Exception).localizedMessage)
