@@ -1,13 +1,18 @@
 package account.ledger.library.utils
 
 import account.ledger.library.api.response.AccountResponse
+import account.ledger.library.api.response.MultipleTransactionResponse
+import account.ledger.library.api.response.TransactionResponse
 import account.ledger.library.models.AccountFrequencyModel
 import account.ledger.library.models.ChooseAccountResult
 import account.ledger.library.models.FrequencyOfAccountsModel
 import account.ledger.library.models.UserModel
+import account.ledger.library.operations.ServerOperations
 import account_ledger_library.constants.ConstantsNative
 import common.utils.library.constants.CommonConstants
 import common.utils.library.models.IsOkModel
+import common.utils.library.utils.ApiUtilsCommon
+import common.utils.library.utils.IsOkUtils
 import common.utils.library.utils.JsonFileUtils
 
 object AccountUtils {
@@ -128,5 +133,118 @@ object AccountUtils {
         //TODO : Allow a range of user ids
         //TODO : Accumulate frequencies of same Accounts
         return frequencyOfAccounts.users.find { user: UserModel -> user.id == userId }?.accountFrequencies
+    }
+
+    @JvmStatic
+    fun <T> processUserAccountsMap(
+
+        userId: UInt,
+        isConsoleMode: Boolean,
+        isDevelopmentMode: Boolean,
+        successActions: (LinkedHashMap<UInt, AccountResponse>) -> T,
+        failureActions: () -> Unit = fun() {}
+
+    ) {
+        val getUserAccountsMapResult: IsOkModel<LinkedHashMap<UInt, AccountResponse>> =
+            HandleResponses.getUserAccountsMap(
+                apiResponse = ApiUtils.getAccountsFull(
+
+                    userId = userId,
+                    isConsoleMode = isConsoleMode,
+                    isDevelopmentMode = isDevelopmentMode
+                )
+            )
+
+        IsOkUtils.isOkHandler(
+
+            isOkModel = getUserAccountsMapResult,
+            data = Unit,
+            successActions = fun() {
+
+                successActions.invoke(getUserAccountsMapResult.data!!)
+            },
+            failureActions = failureActions
+        )
+    }
+
+    @JvmStatic
+    fun getValidAccountById(
+
+        desiredAccount: AccountResponse?,
+        userAccountsMap: LinkedHashMap<UInt, AccountResponse>,
+        idCorrectionFunction: () -> IsOkModel<UInt>
+
+    ): IsOkModel<AccountResponse> {
+
+        return if (desiredAccount == null) {
+
+            val desiredAccountResult: IsOkModel<UInt> = idCorrectionFunction.invoke()
+            if (desiredAccountResult.isOK) {
+
+                getValidAccountById(
+
+                    desiredAccount = userAccountsMap[desiredAccountResult.data],
+                    userAccountsMap = userAccountsMap,
+                    idCorrectionFunction = idCorrectionFunction
+                )
+            } else {
+                IsOkModel(isOK = false)
+            }
+        } else {
+
+            IsOkModel(isOK = true, data = desiredAccount)
+        }
+    }
+
+    @JvmStatic
+    fun getAccountBalance(
+
+        userId: UInt,
+        desiredAccountId: UInt,
+        isDevelopmentMode: Boolean
+
+    ): IsOkModel<Float> {
+
+        var currentBalance = 0.0F
+        var isSuccess = true
+
+        ApiUtilsCommon.apiResponseHandler(
+
+            apiResponse = ServerOperations.getUserTransactionsForAnAccount(
+
+                userId = userId,
+                accountId = desiredAccountId,
+                isDevelopmentMode = isDevelopmentMode
+            ),
+            apiSuccessActions = fun(multipleTransactionResponse: MultipleTransactionResponse) {
+
+                if (ApiUtils.isNotNoTransactionResponseWithMessage(
+
+                        multipleTransactionResponse = multipleTransactionResponse
+                    )
+                ) {
+
+                    multipleTransactionResponse.transactions.forEach { currentTransaction: TransactionResponse ->
+
+                        if (currentTransaction.fromAccountId == desiredAccountId) {
+
+                            currentBalance -= currentTransaction.amount
+
+                        } else {
+
+                            currentBalance += currentTransaction.amount
+                        }
+                    }
+                } else {
+
+                    isSuccess = false
+                }
+            },
+            apiFailureActions = fun() {
+
+                isSuccess = false
+            }
+        )
+        return IsOkModel(isOK = isSuccess, data = currentBalance)
     }
 }
