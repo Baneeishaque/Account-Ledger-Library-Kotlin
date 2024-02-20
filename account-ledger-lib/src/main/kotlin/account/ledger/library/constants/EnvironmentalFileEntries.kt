@@ -32,6 +32,4 @@ object EnvironmentalFileEntries {
         entryName = EnvironmentFileEntryEnum.BANK_ACCOUNT_ID,
         entryFormalName = "Bank $accountIdFormalName"
     )
-
-    val isDevelopmentMode: EnvironmentFileEntryModel<EnvironmentFileEntryEnum> = EnvironmentFileEntryModel(entryName = EnvironmentFileEntryEnum.IS_DEVELOPMENT_MODE)
 }
