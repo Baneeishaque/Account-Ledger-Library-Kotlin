@@ -263,7 +263,7 @@ object InsertOperations {
         return false
     }
 
-    @JvmStatic
+    /*@JvmStatic
     fun insertTransactionVariants(
 
         userId: UInt,
@@ -288,7 +288,7 @@ object InsertOperations {
 
             when (transactionType) {
 
-                TransactionTypeEnum.NORMAL, TransactionTypeEnum.SPECIAL -> {
+                TransactionTypeEnum.NORMAL -> {
 
                     return IsOkModel(
 
@@ -306,15 +306,18 @@ object InsertOperations {
                     )
                 }
 
-                TransactionTypeEnum.VIA -> return IsOkModel(isOK = false, data = CommonConstants.notImplementedMessage)
-                TransactionTypeEnum.TWO_WAY -> return IsOkModel(isOK = false, data = CommonConstants.notImplementedMessage)
-                TransactionTypeEnum.CYCLIC_VIA -> return IsOkModel(isOK = false, data = CommonConstants.notImplementedMessage)
+                TransactionTypeEnum.VIA, TransactionTypeEnum.TWO_WAY, TransactionTypeEnum.CYCLIC_VIA, TransactionTypeEnum.SPECIAL, TransactionTypeEnum.BAJAJ_COINS -> return IsOkModel(
+
+                    isOK = false,
+                    data = CommonConstants.notImplementedMessage
+                )
             }
         } else if (isTwoWayStep) {
 
             return IsOkModel(
 
                 isOK = insertTransaction(
+
                     userId = userId,
                     eventDateTime = dateTimeInText,
                     particulars = transactionParticulars,
@@ -361,7 +364,7 @@ object InsertOperations {
 
             when (transactionType) {
 
-                TransactionTypeEnum.NORMAL, TransactionTypeEnum.TWO_WAY, TransactionTypeEnum.SPECIAL -> {
+                TransactionTypeEnum.NORMAL, TransactionTypeEnum.TWO_WAY -> {
 
                     return IsOkModel(
 
@@ -396,7 +399,13 @@ object InsertOperations {
                         )
                     )
                 }
+
+                TransactionTypeEnum.SPECIAL, TransactionTypeEnum.BAJAJ_COINS -> return IsOkModel(
+
+                    isOK = false,
+                    data = CommonConstants.notImplementedMessage
+                )
             }
         }
-    }
+    }*/
 }
