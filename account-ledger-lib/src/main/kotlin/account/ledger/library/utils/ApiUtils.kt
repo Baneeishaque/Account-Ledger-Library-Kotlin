@@ -45,7 +45,7 @@ object ApiUtils {
 
             responseStatus = responseStatus,
             noDataActions = noDataActions,
-            itemSpecification = ConstantsNative.transactionText
+            itemSpecification = ConstantsNative.TRANSACTION_TEXT
         )
     }
 

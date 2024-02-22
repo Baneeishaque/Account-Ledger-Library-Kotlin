@@ -1,7 +1,7 @@
 package account.ledger.library.utils
 
 import account.ledger.library.api.response.AccountResponse
-import account_ledger_library.models.TransactionModel
+import account.ledger.library.models.TransactionModel
 import common.utils.library.utils.DateTimeUtils
 
 object TransactionForBajajCoinsUtils {
@@ -37,8 +37,8 @@ object TransactionForBajajCoinsUtils {
             transactions.add(
                 element = TransactionModel(
 
-                    fromAccountId = sourceAccount.id,
-                    toAccountId = secondPartyAccount.id,
+                    fromAccount = sourceAccount,
+                    toAccount = secondPartyAccount,
                     amount = amountToSpendForBajajCoinRewards.toFloat(),
                     particulars = "To Spend for Bajaj Finserv UPI Transactions to get rewards - Flat $rewardCoinsSum Coins on ${perTransactionAmountForBajajCoins}x$totalNumberOfTransactionsForBajajCoins, Receive on $listOfCoinRewardingTransactionIndexesInText Transactions",
                     eventDateTimeInText = localEventDateTimeInText
@@ -57,8 +57,8 @@ object TransactionForBajajCoinsUtils {
             transactions.add(
                 element = TransactionModel(
 
-                    fromAccountId = secondPartyAccount.id,
-                    toAccountId = sourceAccount.id,
+                    fromAccount = secondPartyAccount,
+                    toAccount = sourceAccount,
                     amount = perTransactionAmountForBajajCoins.toFloat(),
                     particulars = "To ${sourceAccount.name} for Bajaj Finserv UPI Reward - Flat $rewardCoinsSum Coins on ${perTransactionAmountForBajajCoins}x$totalNumberOfTransactionsForBajajCoins, Receive on $listOfCoinRewardingTransactionIndexesInText Transactions - ${i + 1}th",
                     eventDateTimeInText = localEventDateTimeInText
@@ -77,8 +77,8 @@ object TransactionForBajajCoinsUtils {
                 transactions.add(
                     element = TransactionModel(
 
-                        fromAccountId = bajajCoinsIncomeAccount.id,
-                        toAccountId = bajajCoinsCollectionAccount.id,
+                        fromAccount = bajajCoinsIncomeAccount,
+                        toAccount = bajajCoinsCollectionAccount,
                         amount = (rewardedCoins / bajajCoinConversionRate).toFloat(),
                         particulars = "Bajaj Finserv UPI Reward: ${secondPartyAccount.name} -> ${sourceAccount.name} => ${perTransactionAmountForBajajCoins}x$totalNumberOfTransactionsForBajajCoins times, Flat $rewardCoinsSum Coins as $listOfRewardedCoinsInText on $listOfCoinRewardingTransactionIndexesInText transactions, Actual $rewardedCoins, Conversion Rs. 1 for $bajajCoinConversionRate Points, Balance $actualBajajCoinsCollectionAccountBalance",
                         eventDateTimeInText = localEventDateTimeInText

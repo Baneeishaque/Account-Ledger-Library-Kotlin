@@ -16,7 +16,7 @@ object UserUtils {
         return usersMap
     }
 
-    fun usersToStringFromLinkedHashMap(
+    fun usersToTextFromLinkedHashMap(
 
         usersMap: LinkedHashMap<UInt, UserResponse>
 

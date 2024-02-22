@@ -2,5 +2,5 @@ package account.ledger.library.enums
 
 enum class TransactionTypeEnum {
 
-    NORMAL, VIA, TWO_WAY, CYCLIC_VIA, SPECIAL
+    NORMAL, VIA, TWO_WAY, CYCLIC_VIA, SPECIAL, BAJAJ_COINS
 }

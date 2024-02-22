@@ -36,7 +36,7 @@ object LedgerSheetOperations {
 
                 map = usersMap,
                 itemSpecification = ConstantsNative.userText,
-                items = UserUtils.usersToStringFromLinkedHashMap(usersMap = usersMap)
+                items = UserUtils.usersToTextFromLinkedHashMap(usersMap = usersMap)
 
             ), usersMap = usersMap
         )
