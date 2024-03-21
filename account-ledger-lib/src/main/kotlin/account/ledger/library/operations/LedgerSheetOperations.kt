@@ -19,6 +19,7 @@ import io.github.cdimascio.dotenv.Dotenv
 import kotlinx.coroutines.runBlocking
 import kotlinx.serialization.builtins.serializer
 import kotlinx.serialization.json.Json
+import java.time.LocalDate
 import kotlin.math.absoluteValue
 
 object LedgerSheetOperations {
@@ -752,125 +753,130 @@ object LedgerSheetOperations {
 
         val apiResponse: Result<MultipleTransactionResponse>
 
-        //TODO : Only applicable for user_first_entry_date usernames
-        val specifiedDate: IsOkModel<String> = MysqlUtils.normalDateTextToMySqlDateText(
+        val userInitialTransactionDateFromUsernameResult: IsOkModel<LocalDate> =
+            DataOperations.getUserInitialTransactionDateFromUsername(username = currentUserName)
 
-            //TODO : migrate to DateTimeUtils
-            normalDateText = DataOperations.getUserInitialTransactionDateFromUsername(username = currentUserName)
-                .minusDays(
-                    /* daysToSubtract = */ 1
-                ).format(DateTimeUtils.normalDatePattern)
-        )
-        if (specifiedDate.isOK) {
+        if (userInitialTransactionDateFromUsernameResult.isOK) {
 
-            //TODO : migrate to ApiUtilsCommon
-            runBlocking {
+            //TODO : Only applicable for user_first_entry_date usernames
+            val specifiedDate: IsOkModel<String> = MysqlUtils.normalDateTextToMySqlDateText(
 
-                apiResponse = multipleTransactionDataSource.selectUserTransactionsAfterSpecifiedDate(
+                //TODO : migrate to DateTimeUtils
+                normalDateText = DataOperations.getUserInitialTransactionDateFromUsername(username = currentUserName).data!!
+                    .minusDays(
+                        /* daysToSubtract = */ 1
+                    ).format(DateTimeUtils.normalDatePattern)
+            )
+            if (specifiedDate.isOK) {
 
-                    userId = currentUserId,
-                    specifiedDate = specifiedDate.data!!
-                )
-            }
+                //TODO : migrate to ApiUtilsCommon
+                runBlocking {
 
-            // println("Response : $apiResponse2")
-            if (apiResponse.isFailure) {
+                    apiResponse = multipleTransactionDataSource.selectUserTransactionsAfterSpecifiedDate(
 
-                if (isNotApiCall) {
-
-                    println("Error : ${(apiResponse.exceptionOrNull() as Exception).localizedMessage}")
-                    do {
-
-                        print("Retry (Y/N) ? : ")
-                        when (readln()) {
-
-                            "Y", "" -> {
-
-                                return generateSheetOfUser(
-
-                                    currentUserName = currentUserName,
-                                    currentUserId = currentUserId,
-                                    getDesiredAccountIdsForSheetOfUser = getDesiredAccountIdsForSheetOfUser,
-                                    isConsoleMode = isConsoleMode,
-                                    isDevelopmentMode = isDevelopmentMode
-                                )
-                            }
-
-                            "N" -> {
-
-                                return IsOkModel(
-
-                                    isOK = false,
-                                    error = CommonConstants.USER_CANCELED_MESSAGE
-                                )
-                            }
-
-                            else -> InteractiveUtils.invalidOptionMessage()
-                        }
-                    } while (true)
-
-                } else {
-
-                    return IsOkModel(
-
-                        isOK = false,
-                        error = Json.encodeToString(
-
-                            serializer = CommonDataModel.serializer(Unit.serializer()),
-                            value = CommonDataModel(
-
-                                status = 1,
-                                error = "Error : ${(apiResponse.exceptionOrNull() as Exception).localizedMessage}"
-                            )
-                        )
+                        userId = currentUserId,
+                        specifiedDate = specifiedDate.data!!
                     )
                 }
-            } else {
 
-                val selectUserTransactionsAfterSpecifiedDateResult: MultipleTransactionResponse =
-                    apiResponse.getOrNull()!!
-                // TODO : migrate to ApiUtils
-                if (selectUserTransactionsAfterSpecifiedDateResult.status == 1u) {
+                // println("Response : $apiResponse2")
+                if (apiResponse.isFailure) {
 
-                    return IsOkModel(
+                    if (isNotApiCall) {
 
-                        isOK = false,
-                        error = Json.encodeToString(
+                        println("Error : ${(apiResponse.exceptionOrNull() as Exception).localizedMessage}")
+                        do {
 
-                            serializer = CommonDataModel.serializer(Unit.serializer()),
-                            value = CommonDataModel(
+                            print("Retry (Y/N) ? : ")
+                            when (readln()) {
 
-                                status = 2,
-                                error = "No Transactions"
+                                "Y", "" -> {
+
+                                    return generateSheetOfUser(
+
+                                        currentUserName = currentUserName,
+                                        currentUserId = currentUserId,
+                                        getDesiredAccountIdsForSheetOfUser = getDesiredAccountIdsForSheetOfUser,
+                                        isConsoleMode = isConsoleMode,
+                                        isDevelopmentMode = isDevelopmentMode
+                                    )
+                                }
+
+                                "N" -> {
+
+                                    return IsOkModel(
+
+                                        isOK = false,
+                                        error = CommonConstants.USER_CANCELED_MESSAGE
+                                    )
+                                }
+
+                                else -> InteractiveUtils.invalidOptionMessage()
+                            }
+                        } while (true)
+
+                    } else {
+
+                        return IsOkModel(
+
+                            isOK = false,
+                            error = Json.encodeToString(
+
+                                serializer = CommonDataModel.serializer(Unit.serializer()),
+                                value = CommonDataModel(
+
+                                    status = 1,
+                                    error = "Error : ${(apiResponse.exceptionOrNull() as Exception).localizedMessage}"
+                                )
                             )
                         )
-                    )
+                    }
                 } else {
 
-                    val getDesiredAccountIdsForSheetOfUserResult = getDesiredAccountIdsForSheetOfUser(
-                        selectUserTransactionsAfterSpecifiedDateResult
-                    )
-                    if (getDesiredAccountIdsForSheetOfUserResult.isOK) {
+                    val selectUserTransactionsAfterSpecifiedDateResult: MultipleTransactionResponse =
+                        apiResponse.getOrNull()!!
+                    // TODO : migrate to ApiUtils
+                    if (selectUserTransactionsAfterSpecifiedDateResult.status == 1u) {
 
-                        val accounts: MutableMap<UInt, String> = getDesiredAccountIdsForSheetOfUserResult.data!!
+                        return IsOkModel(
 
-                        val sheetDataRows: MutableList<BalanceSheetDataRowModel> = mutableListOf()
-                        for (account: MutableMap.MutableEntry<UInt, String> in accounts) {
+                            isOK = false,
+                            error = Json.encodeToString(
 
-                            //TODO : migrate to ApiUtilsCommon
-                            val apiResponse2: Result<MultipleTransactionResponse> =
-                                ServerOperations.getUserTransactionsForAnAccount(
+                                serializer = CommonDataModel.serializer(Unit.serializer()),
+                                value = CommonDataModel(
 
-                                    userId = currentUserId,
-                                    accountId = account.key,
-                                    isNotFromBalanceSheet = false,
-                                    isDevelopmentMode = isDevelopmentMode
+                                    status = 2,
+                                    error = "No Transactions"
                                 )
-                            if (apiResponse2.isFailure) {
+                            )
+                        )
+                    } else {
 
-                                if (isNotApiCall) {
+                        val getDesiredAccountIdsForSheetOfUserResult = getDesiredAccountIdsForSheetOfUser(
+                            selectUserTransactionsAfterSpecifiedDateResult
+                        )
+                        if (getDesiredAccountIdsForSheetOfUserResult.isOK) {
 
-                                    println("Error : ${(apiResponse2.exceptionOrNull() as Exception).localizedMessage}")
+                            val accounts: MutableMap<UInt, String> = getDesiredAccountIdsForSheetOfUserResult.data!!
+
+                            val sheetDataRows: MutableList<BalanceSheetDataRowModel> = mutableListOf()
+                            for (account: MutableMap.MutableEntry<UInt, String> in accounts) {
+
+                                //TODO : migrate to ApiUtilsCommon
+                                val apiResponse2: Result<MultipleTransactionResponse> =
+                                    ServerOperations.getUserTransactionsForAnAccount(
+
+                                        userId = currentUserId,
+                                        accountId = account.key,
+                                        isNotFromBalanceSheet = false,
+                                        isDevelopmentMode = isDevelopmentMode
+                                    )
+                                if (apiResponse2.isFailure) {
+
+                                    if (isNotApiCall) {
+
+                                        println("Error : ${(apiResponse2.exceptionOrNull() as Exception).localizedMessage}")
 //                            do {
 //                                print("Retry (Y/N) ? : ")
 //                                val input: String = readLine()!!
@@ -882,101 +888,116 @@ object LedgerSheetOperations {
 //                                    else -> invalidOptionMessage()
 //                                }
 //                            } while (input != "N")
-                                } else {
+                                    } else {
 
-                                    return IsOkModel(
+                                        return IsOkModel(
 
-                                        isOK = false,
-                                        error = Json.encodeToString(
+                                            isOK = false,
+                                            error = Json.encodeToString(
 
-                                            serializer = CommonDataModel.serializer(Unit.serializer()),
-                                            value = CommonDataModel(
+                                                serializer = CommonDataModel.serializer(Unit.serializer()),
+                                                value = CommonDataModel(
 
-                                                status = 1,
-                                                error = "Error : ${(apiResponse2.exceptionOrNull() as Exception).localizedMessage}"
+                                                    status = 1,
+                                                    error = "Error : ${(apiResponse2.exceptionOrNull() as Exception).localizedMessage}"
+                                                )
                                             )
                                         )
-                                    )
-                                }
-                            } else {
+                                    }
+                                } else {
 
-                                val userMultipleTransactionResponseResult: MultipleTransactionResponse =
-                                    apiResponse2.getOrNull()!!
-                                if (userMultipleTransactionResponseResult.status == 0u) {
+                                    val userMultipleTransactionResponseResult: MultipleTransactionResponse =
+                                        apiResponse2.getOrNull()!!
+                                    if (userMultipleTransactionResponseResult.status == 0u) {
 
-                                    var currentBalance = 0.0F
-                                    userMultipleTransactionResponseResult.transactions.forEach { currentTransaction: TransactionResponse ->
+                                        var currentBalance = 0.0F
+                                        userMultipleTransactionResponseResult.transactions.forEach { currentTransaction: TransactionResponse ->
 
-                                        if (currentTransaction.fromAccountId == account.key) {
+                                            if (currentTransaction.fromAccountId == account.key) {
 
-                                            currentBalance -= currentTransaction.amount
+                                                currentBalance -= currentTransaction.amount
 
-                                        } else {
+                                            } else {
 
-                                            currentBalance += currentTransaction.amount
+                                                currentBalance += currentTransaction.amount
+                                            }
                                         }
-                                    }
-                                    if (currentBalance != 0.0F) {
+                                        if (currentBalance != 0.0F) {
 
-                                        sheetDataRows.add(
+                                            sheetDataRows.add(
 
-                                            element = BalanceSheetDataRowModel(
+                                                element = BalanceSheetDataRowModel(
 
-                                                accountId = account.key,
-                                                accountName = account.value,
-                                                accountBalance = currentBalance
+                                                    accountId = account.key,
+                                                    accountName = account.value,
+                                                    accountBalance = currentBalance
+                                                )
+                                            )
+                                        }
+                                    } else {
+
+                                        return IsOkModel(
+
+                                            isOK = false,
+                                            error = Json.encodeToString(
+
+                                                serializer = CommonDataModel.serializer(Unit.serializer()),
+                                                value = CommonDataModel(
+
+                                                    status = 1,
+                                                    error = "Server Execution Error, Execution Status is ${userMultipleTransactionResponseResult.status}"
+                                                )
                                             )
                                         )
                                     }
-                                } else {
-
-                                    return IsOkModel(
-
-                                        isOK = false,
-                                        error = Json.encodeToString(
-
-                                            serializer = CommonDataModel.serializer(Unit.serializer()),
-                                            value = CommonDataModel(
-
-                                                status = 1,
-                                                error = "Server Execution Error, Execution Status is ${userMultipleTransactionResponseResult.status}"
-                                            )
-                                        )
-                                    )
                                 }
                             }
-                        }
 
-                        //TODO : print Formatted Sheet on Console
-                        return IsOkModel(
+                            //TODO : print Formatted Sheet on Console
+                            return IsOkModel(
 
-                            isOK = true,
-                            data = Json.encodeToString(
+                                isOK = true,
+                                data = Json.encodeToString(
 
-                                serializer = CommonDataModel.serializer(BalanceSheetDataRowModel.serializer()),
-                                value = CommonDataModel(
+                                    serializer = CommonDataModel.serializer(BalanceSheetDataRowModel.serializer()),
+                                    value = CommonDataModel(
 
-                                    status = 0,
-                                    data = sheetDataRows.sortedBy { balanceSheetDataRow: BalanceSheetDataRowModel ->
+                                        status = 0,
+                                        data = sheetDataRows.sortedBy { balanceSheetDataRow: BalanceSheetDataRowModel ->
 
-                                        balanceSheetDataRow.accountId
-                                    }
+                                            balanceSheetDataRow.accountId
+                                        }
+                                    )
                                 )
                             )
-                        )
-                    } else {
+                        } else {
 
-                        return IsOkModel(
+                            return IsOkModel(
 
-                            isOK = false,
-                            error = getDesiredAccountIdsForSheetOfUserResult.error
-                        )
+                                isOK = false,
+                                error = getDesiredAccountIdsForSheetOfUserResult.error
+                            )
+                        }
+
                     }
-
                 }
+            } else {
+
+                return IsOkModel(
+
+                    isOK = false,
+                    error = Json.encodeToString(
+
+                        serializer = CommonDataModel.serializer(Unit.serializer()),
+                        value = CommonDataModel(
+
+                            status = 1,
+                            error = "Error : ${specifiedDate.data!!}"
+                        )
+                    )
+                )
             }
         } else {
-
             return IsOkModel(
 
                 isOK = false,
@@ -986,7 +1007,7 @@ object LedgerSheetOperations {
                     value = CommonDataModel(
 
                         status = 1,
-                        error = "Error : ${specifiedDate.data!!}"
+                        error = ConstantsNative.DATE_FROM_USERNAME_ERROR
                     )
                 )
             )

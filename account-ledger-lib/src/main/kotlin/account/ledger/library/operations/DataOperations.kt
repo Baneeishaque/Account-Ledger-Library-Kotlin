@@ -1,19 +1,18 @@
 package account.ledger.library.operations
 
+import common.utils.library.models.IsOkModel
+import common.utils.library.utils.DateTimeUtils
 import java.time.LocalDate
-import java.time.format.DateTimeFormatter
-import java.util.*
 
 object DataOperations {
 
     @JvmStatic
-    fun getUserInitialTransactionDateFromUsername(username: String): LocalDate {
+    fun getUserInitialTransactionDateFromUsername(username: String): IsOkModel<LocalDate> {
 
-        return LocalDate.parse(
+        return DateTimeUtils.parseDateWithPatterns(
 
-            // TODO : Use environment variable for user prefix
-            username.removePrefix("banee_ishaque_k_"),
-            DateTimeFormatter.ofPattern("dd_MM_yyyy", Locale.getDefault())
+            dateString = username.removePrefix("banee_ishaque_k_"),
+            patterns = listOf("dd_MM_yyyy", "dd_MM_yyyy_HH_mm")
         )
     }
 }
