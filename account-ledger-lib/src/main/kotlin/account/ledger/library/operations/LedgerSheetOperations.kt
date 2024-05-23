@@ -43,10 +43,10 @@ object LedgerSheetOperations {
         )
         if (chooseUserResult.isChosen) {
 
-            LedgerSheetOperations.printBalanceSheetOfUser(
+            printBalanceSheetOfUser(
 
                 currentUserName = chooseUserResult.chosenUser!!.username,
-                currentUserId = chooseUserResult.chosenUser!!.id,
+                currentUserId = chooseUserResult.chosenUser.id,
                 isConsoleMode = isConsoleMode,
                 isDevelopmentMode = isDevelopmentMode,
                 dotenv = dotenv
@@ -739,14 +739,14 @@ object LedgerSheetOperations {
 
     ): IsOkModel<String> {
 
-        if (isConsoleMode) {
+        if (isConsoleMode && isDevelopmentMode) {
 
             println("currentUser : $currentUserName")
         }
 
         val multipleTransactionDataSource = MultipleTransactionDataSource()
 
-        if (isNotApiCall) {
+        if (isNotApiCall && isDevelopmentMode) {
 
             println("Contacting Server...")
         }
