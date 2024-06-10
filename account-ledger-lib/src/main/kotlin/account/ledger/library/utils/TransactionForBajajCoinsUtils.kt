@@ -1,10 +1,21 @@
 package account.ledger.library.utils
 
 import account.ledger.library.api.response.AccountResponse
+import account.ledger.library.enums.TransactionTypeEnum
 import account.ledger.library.models.TransactionModel
 import common.utils.library.utils.DateTimeUtils
 
 object TransactionForBajajCoinsUtils {
+
+    @JvmStatic
+    val bajajCoinTransactionTypes: List<TransactionTypeEnum> =
+        TransactionTypeEnum.entries.filter { transactionTypeEnum: TransactionTypeEnum ->
+            transactionTypeEnum in listOf<TransactionTypeEnum>(
+
+                TransactionTypeEnum.BAJAJ_COINS,
+                TransactionTypeEnum.BAJAJ_COINS_WITHOUT_SOURCE
+            )
+        }
 
     @JvmStatic
     fun prepareTransactions(

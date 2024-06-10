@@ -86,7 +86,7 @@ object CheckingOperations {
         ) {
             when (transactionType) {
 
-                TransactionTypeEnum.NORMAL, TransactionTypeEnum.SPECIAL, TransactionTypeEnum.BAJAJ_COINS -> {
+                TransactionTypeEnum.NORMAL, TransactionTypeEnum.SPECIAL, TransactionTypeEnum.BAJAJ_COINS, TransactionTypeEnum.BAJAJ_COINS_WITHOUT_SOURCE, TransactionTypeEnum.BAJAJ_SUB_WALLET, TransactionTypeEnum.BAJAJ_SUB_WALLET_WITHOUT_SOURCE -> {
 
                     val addTransactionResult: InsertTransactionResult = addTransactionAfterAvailabilitySuccess(
 
