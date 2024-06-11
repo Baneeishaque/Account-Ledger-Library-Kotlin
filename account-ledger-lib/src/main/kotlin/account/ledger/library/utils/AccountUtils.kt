@@ -14,6 +14,8 @@ import common.utils.library.models.IsOkModel
 import common.utils.library.utils.ApiUtilsCommon
 import common.utils.library.utils.IsOkUtils
 import common.utils.library.utils.JsonFileUtils
+import common.utils.library.utils.MysqlUtilsInteractive
+import java.time.LocalDateTime
 
 object AccountUtils {
 
@@ -201,12 +203,14 @@ object AccountUtils {
 
         userId: UInt,
         desiredAccountId: UInt,
-        isDevelopmentMode: Boolean
+        isDevelopmentMode: Boolean,
+        upToDateTime: LocalDateTime? = null
 
     ): IsOkModel<Float> {
 
         var currentBalance = 0.0F
         var isSuccess = true
+        var error: String? = null
 
         ApiUtilsCommon.apiResponseHandler(
 
@@ -223,16 +227,37 @@ object AccountUtils {
                         multipleTransactionResponse = multipleTransactionResponse
                     )
                 ) {
+                    if (upToDateTime != null) {
 
-                    multipleTransactionResponse.transactions.forEach { currentTransaction: TransactionResponse ->
+                        multipleTransactionResponse.transactions =
+                            multipleTransactionResponse.transactions.filter { currentTransaction: TransactionResponse ->
 
-                        if (currentTransaction.fromAccountId == desiredAccountId) {
+                                val dateConversionResult: IsOkModel<LocalDateTime> =
+                                    MysqlUtilsInteractive.mySqlDateTimeTextToDateTimeWithMessage(
 
-                            currentBalance -= currentTransaction.amount
+                                        mySqlDateTimeText = currentTransaction.eventDateTime
+                                    )
+                                if (dateConversionResult.isOK) {
+                                    dateConversionResult.data!! < upToDateTime
+                                } else {
+                                    isSuccess = false
+                                    error = dateConversionResult.error
+                                    false
+                                }
+                            }
+                    }
+                    if (isSuccess) {
 
-                        } else {
+                        multipleTransactionResponse.transactions.forEach { currentTransaction: TransactionResponse ->
 
-                            currentBalance += currentTransaction.amount
+                            if (currentTransaction.fromAccountId == desiredAccountId) {
+
+                                currentBalance -= currentTransaction.amount
+
+                            } else {
+
+                                currentBalance += currentTransaction.amount
+                            }
                         }
                     }
                 } else {
@@ -245,6 +270,11 @@ object AccountUtils {
                 isSuccess = false
             }
         )
-        return IsOkModel(isOK = isSuccess, data = currentBalance)
+        return IsOkModel(
+
+            isOK = isSuccess,
+            data = currentBalance,
+            error = error
+        )
     }
 }

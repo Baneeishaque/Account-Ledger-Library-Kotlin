@@ -137,8 +137,8 @@ object TransactionUtils {
 
                 InteractiveUtils.printErrorMessage(
 
-                    dateSpecification = dataSpecification,
-                    data = userTransactionsToTextFromListForLedgerInstance.error!!
+                    dataSpecification = dataSpecification,
+                    message = userTransactionsToTextFromListForLedgerInstance.error!!
                 )
             }
         }
