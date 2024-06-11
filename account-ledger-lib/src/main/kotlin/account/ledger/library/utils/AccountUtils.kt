@@ -3,6 +3,7 @@ package account.ledger.library.utils
 import account.ledger.library.api.response.AccountResponse
 import account.ledger.library.api.response.MultipleTransactionResponse
 import account.ledger.library.api.response.TransactionResponse
+import account.ledger.library.enums.AccountsListSortMode
 import account.ledger.library.models.AccountFrequencyModel
 import account.ledger.library.models.ChooseAccountResult
 import account.ledger.library.models.FrequencyOfAccountsModel
@@ -49,11 +50,52 @@ object AccountUtils {
 
     //TODO : Write List to String, then rewrite userAccountsToStringFromList, usersToStringFromLinkedHashMap, userAccountsToStringFromLinkedHashMap & userAccountsToStringFromListPair
 
-    fun userAccountsToStringFromList(accounts: List<AccountResponse>): String {
+    fun userAccountsToStringFromList(
 
-        var result = ""
-        accounts.forEach { account -> result += "${ConstantsNative.accountText.first()}${account.id} - ${account.fullName}\n" }
+        accounts: List<AccountResponse>,
+        sortMode: AccountsListSortMode = AccountsListSortMode.BASED_ON_ID
+
+    ): String {
+
+        var result: String = ""
+        var localAccounts: List<AccountResponse> = accounts
+
+        when (sortMode) {
+
+            AccountsListSortMode.BASED_ON_ID -> {
+
+                localAccounts = accounts.sortedBy { account: AccountResponse -> account.id }
+            }
+
+            AccountsListSortMode.BASED_ON_FULL_NAME -> {
+
+                localAccounts = accounts.sortedBy { account: AccountResponse -> account.fullName }
+            }
+
+            AccountsListSortMode.BASED_ON_NAME -> {
+
+                localAccounts = accounts.sortedBy { account: AccountResponse -> account.name }
+            }
+
+            AccountsListSortMode.BASED_ON_PARENT_ID -> {
+
+                localAccounts = accounts.sortedBy { account: AccountResponse -> account.parentAccountId }
+            }
+        }
+        localAccounts.forEach { account: AccountResponse ->
+
+            result = concatenateAccountToText(
+
+                result = result,
+                account = account
+            )
+        }
         return result
+    }
+
+    private fun concatenateAccountToText(result: String, account: AccountResponse): String {
+
+        return result + "${ConstantsNative.accountText.first()}${account.id} - ${account.fullName}\n"
     }
 
     @JvmStatic
