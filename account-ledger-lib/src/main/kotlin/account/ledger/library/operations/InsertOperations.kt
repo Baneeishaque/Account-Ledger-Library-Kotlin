@@ -2,14 +2,12 @@ package account.ledger.library.operations
 
 import account.ledger.library.api.response.AccountResponse
 import account.ledger.library.api.response.TransactionManipulationResponse
-import account.ledger.library.enums.TransactionTypeEnum
 import account.ledger.library.models.AccountFrequencyModel
 import account.ledger.library.models.FrequencyOfAccountsModel
 import account.ledger.library.models.UserModel
 import account.ledger.library.retrofit.data.TransactionDataSource
-import common.utils.library.constants.CommonConstants
 import common.utils.library.models.IsOkModel
-import common.utils.library.utils.ApiUtilsCommon
+import common.utils.library.utils.ApiUtilsInteractiveCommon
 import common.utils.library.utils.MysqlUtils
 import kotlinx.coroutines.runBlocking
 
@@ -28,15 +26,9 @@ object InsertOperations {
         isDevelopmentMode: Boolean,
         eventDateTimeConversionFunction: () -> IsOkModel<String> = {
 
-            MysqlUtils.dateTimeTextConversion(
+            MysqlUtils.normalDateTimeTextToMySqlDateTimeText(
 
-                dateTimeTextConversionFunction = fun(): IsOkModel<String> {
-
-                    return MysqlUtils.normalDateTimeTextToMySqlDateTimeText(
-
-                        normalDateTimeText = eventDateTime,
-                    )
-                },
+                normalDateTimeText = eventDateTime
             )
         },
         transactionManipulationSuccessActions: () -> Unit = {}
@@ -84,7 +76,7 @@ object InsertOperations {
     ): Boolean {
 
         val transactionManipulationApiRequestResult: IsOkModel<TransactionManipulationResponse> =
-            ApiUtilsCommon.makeApiRequestWithOptionalRetries(
+            ApiUtilsInteractiveCommon.makeApiRequestWithOptionalRetries(
 
                 apiCallFunction = transactionManipulationApiRequest,
                 isConsoleMode = isConsoleMode,
@@ -198,13 +190,10 @@ object InsertOperations {
         manipulateTransactionOperation: (() -> Result<TransactionManipulationResponse>, () -> Unit, (String) -> Unit, Boolean, Boolean) -> Boolean = InsertOperations::manipulateTransaction,
         eventDateTimeConversionOperation: () -> IsOkModel<String> = {
 
-            MysqlUtils.dateTimeTextConversion(dateTimeTextConversionFunction = fun(): IsOkModel<String> {
+            MysqlUtils.normalDateTimeTextToMySqlDateTimeText(
 
-                return MysqlUtils.normalDateTimeTextToMySqlDateTimeText(
-
-                    normalDateTimeText = eventDateTime
-                )
-            })
+                normalDateTimeText = eventDateTime
+            )
         }
 
     ): Boolean {

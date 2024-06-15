@@ -6,8 +6,8 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class UserModel(
-    @SerialName(UserJsonObjectFields.id)
+    @SerialName(UserJsonObjectFields.ID)
     val id: UInt,
-    @SerialName(UserJsonObjectFields.accountFrequencies)
+    @SerialName(UserJsonObjectFields.ACCOUNT_FREQUENCIES)
     var accountFrequencies: List<AccountFrequencyModel>
 )

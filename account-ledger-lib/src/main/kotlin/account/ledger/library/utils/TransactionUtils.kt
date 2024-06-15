@@ -8,140 +8,23 @@ import account.ledger.library.models.TransactionModel
 import account.ledger.library.models.TransactionModelForLedger
 import common.utils.library.models.IsOkModel
 import common.utils.library.utils.DateTimeUtils
-import common.utils.library.utils.InteractiveUtils
 import common.utils.library.utils.MysqlUtils
-
 import java.time.LocalDateTime
 
 object TransactionUtils {
 
     @JvmStatic
-    fun prepareUserTransactionsMap(transactions: List<TransactionResponse>): LinkedHashMap<UInt, TransactionResponse> {
+    fun prepareUserTransactionsMap(
+
+        transactions: List<TransactionResponse>
+
+    ): LinkedHashMap<UInt, TransactionResponse> {
 
         val userTransactionsMap = LinkedHashMap<UInt, TransactionResponse>()
         transactions.forEach { currentTransaction: TransactionResponse ->
             userTransactionsMap[currentTransaction.id] = currentTransaction
         }
         return userTransactionsMap
-    }
-
-    @JvmStatic
-    fun userTransactionsToTextFromListForLedger(
-
-        transactions: List<TransactionModelForLedger>,
-        currentAccountId: UInt = 0u,
-        isCreditDebitMode: Boolean = false,
-        isDevelopmentMode: Boolean
-
-    ): IsOkModel<String> {
-
-        if (isDevelopmentMode) {
-
-            println("transactions = $transactions")
-        }
-        if (currentAccountId == 0u) {
-
-            var currentTextLedger = ""
-            transactions.forEach { currentTransaction: TransactionModelForLedger ->
-
-                currentTextLedger = appendToTextLedger(
-
-                    currentTransactionId = currentTransaction.id,
-                    currentTransactionEventDateTime = currentTransaction.eventDateTime,
-                    currentTransactionFromAccountFullName = currentTransaction.fromAccountFullName,
-                    currentTransactionToAccountFullName = currentTransaction.toAccountFullName,
-                    currentTransactionParticulars = currentTransaction.particulars,
-                    currentTransactionAmount = currentTransaction.amount,
-                    currentTextLedger = currentTextLedger
-                )
-            }
-            return IsOkModel(
-
-                isOK = true,
-                data = currentTextLedger
-            )
-
-        } else {
-
-            var currentLedger = TransactionLedgerInText(text = "", balance = 0.0F)
-            var currentCreditLedger = TransactionLedgerInText(text = "", balance = 0.0F)
-            var currentDebitLedger = TransactionLedgerInText(text = "", balance = 0.0F)
-
-            transactions.forEach { currentTransaction: TransactionModelForLedger ->
-
-                val appendToLedgerWithDebitCreditLedgersResult: Triple<Boolean, Triple<TransactionLedgerInText, TransactionLedgerInText, TransactionLedgerInText>, String?> =
-                    appendToLedgerWithDebitCreditLedgers(
-
-                        currentTransactionId = currentTransaction.id,
-                        currentTransactionEventDateTime = currentTransaction.eventDateTime,
-                        currentTransactionFromAccountFullName = currentTransaction.fromAccountFullName,
-                        currentTransactionFromAccountId = currentTransaction.fromAccountId,
-                        currentTransactionToAccountFullName = currentTransaction.toAccountFullName,
-                        currentTransactionParticulars = currentTransaction.particulars,
-                        currentTransactionAmount = currentTransaction.amount,
-                        currentAccountId = currentAccountId,
-                        currentLedger = currentLedger,
-                        currentCreditLedger = currentCreditLedger,
-                        currentDebitLedger = currentDebitLedger
-                    )
-                if (appendToLedgerWithDebitCreditLedgersResult.first) {
-
-                    currentLedger = appendToLedgerWithDebitCreditLedgersResult.second.first
-                    currentCreditLedger = appendToLedgerWithDebitCreditLedgersResult.second.second
-                    currentDebitLedger = appendToLedgerWithDebitCreditLedgersResult.second.third
-
-                } else {
-
-                    return IsOkModel(
-
-                        isOK = false,
-                        error = appendToLedgerWithDebitCreditLedgersResult.third.toString()
-                    )
-                }
-            }
-            return if (isCreditDebitMode) {
-
-                IsOkModel(
-
-                    isOK = true,
-                    data = "Credit\n----------------\n${currentCreditLedger.text}===============\n${currentCreditLedger.balance}\n\nDebit\n--------------------\n${currentDebitLedger.text}================\n${currentDebitLedger.balance}\n\nBalance => ${currentCreditLedger.balance} - ${currentDebitLedger.balance} = ${currentCreditLedger.balance - currentDebitLedger.balance}\n"
-                )
-
-
-            } else {
-
-                IsOkModel(
-
-                    isOK = true,
-                    data = currentLedger.text
-                )
-            }
-        }
-    }
-
-    @JvmStatic
-    fun printUserTransactionsToTextFromListForLedgerError(
-
-        dataSpecification: String = "userTransactionsToTextFromListForLedger",
-        userTransactionsToTextFromListForLedgerInstance: IsOkModel<*>
-    ) {
-
-        if (userTransactionsToTextFromListForLedgerInstance.isOK) {
-
-            // TODO: Throw Exception
-
-        } else {
-
-            // TODO: Create child class for userTransactionsToTextFromListForLedger
-            if (userTransactionsToTextFromListForLedgerInstance.error != null) {
-
-                InteractiveUtils.printErrorMessage(
-
-                    dataSpecification = dataSpecification,
-                    message = userTransactionsToTextFromListForLedgerInstance.error!!
-                )
-            }
-        }
     }
 
     @JvmStatic
@@ -195,19 +78,30 @@ object TransactionUtils {
             }
 
             return Triple(
-                true,
-                Triple(
-                    TransactionLedgerInText(
+
+                first = true,
+                second = Triple(
+
+                    first = TransactionLedgerInText(
+
                         text = "${currentLedger.text}[${currentTransactionId}] [${validatedDateResult.data}]\t[${currentTransactionParticulars}]\t[${transactionDirection}${currentTransactionAmount}]\t[${secondAccountName}]\t[${localCurrentBalance}]\n",
                         balance = localCurrentBalance
                     ),
-                    currentCreditLedger,
-                    currentDebitLedger
+                    second = currentCreditLedger,
+                    third = currentDebitLedger
                 ),
-                null
+                third = null
             )
         }
-        return Triple(false, Triple(currentLedger, currentCreditLedger, currentDebitLedger), validatedDateResult.error)
+        return Triple(
+
+            first = false,
+            second = Triple(
+
+                first = currentLedger, second = currentCreditLedger, third = currentDebitLedger
+            ),
+            third = validatedDateResult.error
+        )
     }
 
     @JvmStatic
@@ -221,10 +115,8 @@ object TransactionUtils {
         currentTransactionAmount: Float,
         currentTextLedger: String
 
-    ): String {
-
-        return "${currentTextLedger}[$currentTransactionId] [$currentTransactionEventDateTime]\t[($currentTransactionFromAccountFullName) -> ($currentTransactionToAccountFullName)]\t[$currentTransactionParticulars]\t[$currentTransactionAmount]\n"
-    }
+    ): String =
+        "${currentTextLedger}[$currentTransactionId] [$currentTransactionEventDateTime]\t[($currentTransactionFromAccountFullName) -> ($currentTransactionToAccountFullName)]\t[$currentTransactionParticulars]\t[$currentTransactionAmount]\n"
 
     @JvmStatic
     fun filterTransactionsForUpToDateTime(
@@ -233,16 +125,16 @@ object TransactionUtils {
         upToTimeStamp: String,
         transactions: List<TransactionResponse>
 
-    ): List<TransactionResponse> {
+    ): List<TransactionResponse> = if (isUpToTimeStamp) {
 
-        return if (isUpToTimeStamp) {
+        getTransactionsUpToDateTime(
 
-            getTransactionsUpToDateTime(upToTimeStamp = upToTimeStamp, transactions = transactions)
+            upToTimeStamp = upToTimeStamp, transactions = transactions
+        )
 
-        } else {
+    } else {
 
-            transactions
-        }
+        transactions
     }
 
     @JvmStatic
@@ -284,7 +176,11 @@ object TransactionUtils {
     )
 
     @JvmStatic
-    fun transactionsToTextFromList(transactions: List<TransactionResponse>): String {
+    fun transactionsToTextFromList(
+
+        transactions: List<TransactionResponse>
+
+    ): String {
 
         var result = ""
         transactions.forEachIndexed { index: Int, transaction: TransactionResponse ->
@@ -294,33 +190,39 @@ object TransactionUtils {
         return result
     }
 
-    fun convertTransactionResponseListToTransactionListForLedger(transactions: List<TransactionResponse>): List<TransactionModelForLedger> {
-        return transactions.map { transaction: TransactionResponse ->
+    fun convertTransactionResponseListToTransactionListForLedger(
 
-            TransactionModelForLedger(
-                id = transaction.id.toString(),
-                eventDateTime = transaction.eventDateTime,
-                fromAccountFullName = transaction.fromAccountFullName,
-                fromAccountId = transaction.fromAccountId,
-                toAccountFullName = transaction.toAccountFullName,
-                particulars = transaction.particulars,
-                amount = transaction.amount
-            )
-        }
+        transactions: List<TransactionResponse>
+
+    ): List<TransactionModelForLedger> = transactions.map { transaction: TransactionResponse ->
+
+        TransactionModelForLedger(
+
+            id = transaction.id.toString(),
+            eventDateTime = transaction.eventDateTime,
+            fromAccountFullName = transaction.fromAccountFullName,
+            fromAccountId = transaction.fromAccountId,
+            toAccountFullName = transaction.toAccountFullName,
+            particulars = transaction.particulars,
+            amount = transaction.amount
+        )
     }
 
-    fun convertTransactionModelListToToTransactionListForLedger(transactions: List<TransactionModel>): List<TransactionModelForLedger> {
-        return transactions.map { transaction: TransactionModel ->
+    fun convertTransactionModelListToToTransactionListForLedger(
 
-            TransactionModelForLedger(
-                id = "-",
-                eventDateTime = transaction.eventDateTimeInText,
-                fromAccountFullName = transaction.fromAccount.fullName,
-                fromAccountId = transaction.fromAccount.id,
-                toAccountFullName = transaction.toAccount.fullName,
-                particulars = transaction.particulars,
-                amount = transaction.amount
-            )
-        }
+        transactions: List<TransactionModel>
+
+    ): List<TransactionModelForLedger> = transactions.map { transaction: TransactionModel ->
+
+        TransactionModelForLedger(
+
+            id = "-",
+            eventDateTime = transaction.eventDateTimeInText,
+            fromAccountFullName = transaction.fromAccount.fullName,
+            fromAccountId = transaction.fromAccount.id,
+            toAccountFullName = transaction.toAccount.fullName,
+            particulars = transaction.particulars,
+            amount = transaction.amount
+        )
     }
 }

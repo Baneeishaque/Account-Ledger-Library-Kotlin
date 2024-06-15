@@ -5,6 +5,7 @@ import account.ledger.library.api.response.MultipleTransactionResponse
 import account.ledger.library.retrofit.data.AccountsDataSource
 import account.ledger.library.retrofit.data.MultipleTransactionDataSource
 import common.utils.library.utils.ApiUtilsCommon
+import common.utils.library.utils.ApiUtilsInteractiveCommon
 import kotlinx.coroutines.runBlocking
 
 object ServerOperations {
@@ -19,7 +20,7 @@ object ServerOperations {
 
     ): Result<AccountsResponse> {
 
-        return ApiUtilsCommon.getResultFromApiRequestWithOptionalRetries(apiCallFunction = fun(): Result<AccountsResponse> {
+        return ApiUtilsInteractiveCommon.getResultFromApiRequestWithOptionalRetries(apiCallFunction = fun(): Result<AccountsResponse> {
 
             return runBlocking {
 
@@ -42,7 +43,7 @@ object ServerOperations {
 
     ): Result<MultipleTransactionResponse> {
 
-        return ApiUtilsCommon.getResultFromApiRequestWithOptionalRetries(
+        return ApiUtilsInteractiveCommon.getResultFromApiRequestWithOptionalRetries(
 
             apiCallFunction = fun(): Result<MultipleTransactionResponse> {
 

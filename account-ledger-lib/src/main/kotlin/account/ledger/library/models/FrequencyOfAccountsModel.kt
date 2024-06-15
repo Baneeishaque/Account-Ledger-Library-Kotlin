@@ -6,6 +6,6 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class FrequencyOfAccountsModel(
-    @SerialName(FrequencyOfAccountsJsonObjectFields.users)
+    @SerialName(FrequencyOfAccountsJsonObjectFields.USERS)
     var users: List<UserModel>
 )

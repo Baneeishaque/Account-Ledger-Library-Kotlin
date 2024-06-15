@@ -1,102 +1,78 @@
 package account.ledger.library.utils
 
 import account.ledger.library.api.response.AccountResponse
+import account.ledger.library.enums.BajajDiscountTypeEnum
+import account_ledger_library.enums.BajajRewardTypeEnum
 import account.ledger.library.enums.TransactionTypeEnum
 import account.ledger.library.models.TransactionModel
-import common.utils.library.utils.DateTimeUtils
 
 object TransactionForBajajCoinsUtils {
 
     @JvmStatic
     val bajajCoinTransactionTypes: List<TransactionTypeEnum> =
         TransactionTypeEnum.entries.filter { transactionTypeEnum: TransactionTypeEnum ->
-            transactionTypeEnum in listOf<TransactionTypeEnum>(
 
-                TransactionTypeEnum.BAJAJ_COINS,
-                TransactionTypeEnum.BAJAJ_COINS_WITHOUT_SOURCE
+            transactionTypeEnum in listOf(
+
+                TransactionTypeEnum.BAJAJ_COINS_FLAT,
+                TransactionTypeEnum.BAJAJ_COINS_FLAT_WITHOUT_SOURCE,
+                TransactionTypeEnum.BAJAJ_COINS_FLAT_WITHOUT_BALANCE_CHECK,
+
+                TransactionTypeEnum.BAJAJ_COINS_UP_TO,
+                TransactionTypeEnum.BAJAJ_COINS_UP_TO_WITHOUT_SOURCE,
+                TransactionTypeEnum.BAJAJ_COINS_UP_TO_WITHOUT_BALANCE_CHECK
             )
         }
 
     @JvmStatic
-    fun prepareTransactions(
+    fun prepareTransactionsForCoins(
 
-        isSourceTransactionPresent: Boolean = true,
+        isSourceTransactionPresent: Boolean,
         sourceAccount: AccountResponse,
         secondPartyAccount: AccountResponse,
-        bajajCoinsIncomeAccount: AccountResponse,
-        bajajCoinsCollectionAccount: AccountResponse,
-        amountToSpendForBajajCoinRewards: UInt,
-        perTransactionAmountForBajajCoins: UInt,
-        totalNumberOfTransactionsForBajajCoins: UInt,
-        listOfCoinRewardingTransactionIndexes: List<UInt>,
-        listOfRewardedCoins: List<UInt>,
-        bajajCoinsCollectionAccountBalance: Float,
+        rewardIncomeAccount: AccountResponse,
+        rewardCollectionAccount: AccountResponse,
+        amountToSpendForReward: UInt,
+        perTransactionAmountForReward: UInt,
+        totalNumberOfTransactionsForRewards: UInt,
+        listOfRewardingTransactionIndexes: List<UInt>,
+        listOfRewards: List<UInt>,
         eventDateTimeInText: String,
-        bajajCoinConversionRate: UInt
+        coinsCollectionAccountBalance: Float,
+        coinConversionRate: UInt,
+        discountType: BajajDiscountTypeEnum,
+        upToValue: UInt?
 
     ): List<TransactionModel> {
 
-        val transactions: MutableList<TransactionModel> = mutableListOf()
-        var localEventDateTimeInText: String = eventDateTimeInText
+        var localCoinsCollectionAccountBalance: UInt =
+            (coinsCollectionAccountBalance * coinConversionRate.toInt()).toUInt()
 
-        val rewardCoinsSum: UInt = listOfRewardedCoins.sum()
-        val listOfCoinRewardingTransactionIndexesInText: String =
-            listOfCoinRewardingTransactionIndexes.joinToString(separator = ", ")
+        return TransactionForBajajUtils.prepareTransactionsBase(
 
-        if (isSourceTransactionPresent) {
+            isSourceTransactionPresent = isSourceTransactionPresent,
+            sourceAccount = sourceAccount,
+            secondPartyAccount = secondPartyAccount,
+            rewardIncomeAccount = rewardIncomeAccount,
+            rewardCollectionAccount = rewardCollectionAccount,
+            amountToSpendForReward = amountToSpendForReward,
+            perTransactionAmountForReward = perTransactionAmountForReward,
+            totalNumberOfTransactionsForRewards = totalNumberOfTransactionsForRewards,
+            listOfRewardingTransactionIndexes = listOfRewardingTransactionIndexes,
+            listOfRewards = listOfRewards,
+            eventDateTimeInText = eventDateTimeInText,
+            calculateTransactionAmount = fun(rewardedCoins: UInt): Float {
 
-            transactions.add(
-                element = TransactionModel(
+                return (rewardedCoins / coinConversionRate).toFloat()
+            },
+            generateTransactionParticularsSuffix = fun(rewardedCoins: UInt): String {
 
-                    fromAccount = sourceAccount,
-                    toAccount = secondPartyAccount,
-                    amount = amountToSpendForBajajCoinRewards.toFloat(),
-                    particulars = "To Spend for Bajaj Finserv UPI Transactions to get rewards - Flat $rewardCoinsSum Coins on ${perTransactionAmountForBajajCoins}x$totalNumberOfTransactionsForBajajCoins, Receive on $listOfCoinRewardingTransactionIndexesInText Transactions",
-                    eventDateTimeInText = localEventDateTimeInText
-                )
-            )
-        }
-
-        // Prepare the next Y transactions
-        var actualBajajCoinsCollectionAccountBalance: UInt =
-            (bajajCoinsCollectionAccountBalance * bajajCoinConversionRate.toInt()).toUInt()
-        for (i in 0 until totalNumberOfTransactionsForBajajCoins.toInt()) {
-
-            localEventDateTimeInText =
-                DateTimeUtils.add5MinutesToNormalDateTimeInText(dateTimeInText = localEventDateTimeInText)
-
-            transactions.add(
-                element = TransactionModel(
-
-                    fromAccount = secondPartyAccount,
-                    toAccount = sourceAccount,
-                    amount = perTransactionAmountForBajajCoins.toFloat(),
-                    particulars = "To ${sourceAccount.name} for Bajaj Finserv UPI Reward - Flat $rewardCoinsSum Coins on ${perTransactionAmountForBajajCoins}x$totalNumberOfTransactionsForBajajCoins, Receive on $listOfCoinRewardingTransactionIndexesInText Transactions - ${i + 1}th",
-                    eventDateTimeInText = localEventDateTimeInText
-                )
-            )
-
-            // If the current transaction index is one of the rewarding transactions
-            if (listOfCoinRewardingTransactionIndexes.contains((i + 1).toUInt())) {
-
-                localEventDateTimeInText = DateTimeUtils.add5MinutesToNormalDateTimeInText(localEventDateTimeInText)
-                val rewardedCoins: UInt =
-                    listOfRewardedCoins[listOfCoinRewardingTransactionIndexes.indexOf((i + 1).toUInt())]
-                actualBajajCoinsCollectionAccountBalance += rewardedCoins
-                val listOfRewardedCoinsInText = listOfRewardedCoins.joinToString(separator = ", ")
-
-                transactions.add(
-                    element = TransactionModel(
-
-                        fromAccount = bajajCoinsIncomeAccount,
-                        toAccount = bajajCoinsCollectionAccount,
-                        amount = (rewardedCoins / bajajCoinConversionRate).toFloat(),
-                        particulars = "Bajaj Finserv UPI Reward: ${secondPartyAccount.name} -> ${sourceAccount.name} => ${perTransactionAmountForBajajCoins}x$totalNumberOfTransactionsForBajajCoins times, Flat $rewardCoinsSum Coins as $listOfRewardedCoinsInText on $listOfCoinRewardingTransactionIndexesInText transactions, Actual $rewardedCoins, Conversion Rs. 1 for $bajajCoinConversionRate Points, Balance $actualBajajCoinsCollectionAccountBalance",
-                        eventDateTimeInText = localEventDateTimeInText
-                    )
-                )
-            }
-        }
-        return transactions
+                localCoinsCollectionAccountBalance += rewardedCoins
+                return ", Actual $rewardedCoins, Conversion Rs. 1 for $coinConversionRate Points, Balance $localCoinsCollectionAccountBalance"
+            },
+            rewardSpecifier = BajajRewardTypeEnum.COINS,
+            discountType = discountType,
+            upToValue = upToValue
+        )
     }
 }

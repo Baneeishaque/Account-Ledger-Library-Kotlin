@@ -9,9 +9,8 @@ import account.ledger.library.models.BalanceSheetDataRowModel
 import account.ledger.library.models.ChooseUserResult
 import account.ledger.library.retrofit.data.MultipleTransactionDataSource
 import account.ledger.library.utils.UserUtils
-import account.ledger.library.utils.handleUserSelection
 import account_ledger_library.constants.ConstantsNative
-import common.utils.library.constants.CommonConstants
+import common.utils.library.constants.ConstantsCommon
 import common.utils.library.models.CommonDataModel
 import common.utils.library.models.IsOkModel
 import common.utils.library.utils.*
@@ -30,13 +29,13 @@ object LedgerSheetOperations {
         usersMap: LinkedHashMap<UInt, UserResponse>,
         isConsoleMode: Boolean,
         isDevelopmentMode: Boolean,
-        dotenv: Dotenv
+        dotEnv: Dotenv
     ) {
-        val chooseUserResult: ChooseUserResult = handleUserSelection(
-            chosenUserId = ListUtils.getValidIndexFromCollectionWithSelectionPromptAndZeroAsBack(
+        val chooseUserResult: ChooseUserResult = UserUtils.handleUserSelection(
+            chosenUserId = ListUtilsInteractive.getValidIndexFromCollectionWithSelectionPromptAndZeroAsBack(
 
                 map = usersMap,
-                itemSpecification = ConstantsNative.userText,
+                itemSpecification = ConstantsNative.USER_TEXT,
                 items = UserUtils.usersToTextFromLinkedHashMap(usersMap = usersMap)
 
             ), usersMap = usersMap
@@ -49,7 +48,7 @@ object LedgerSheetOperations {
                 currentUserId = chooseUserResult.chosenUser.id,
                 isConsoleMode = isConsoleMode,
                 isDevelopmentMode = isDevelopmentMode,
-                dotenv = dotenv
+                dotEnv = dotEnv
             )
         }
     }
@@ -125,7 +124,7 @@ object LedgerSheetOperations {
         if (isConsoleMode) {
 
             println("\nUser : $currentUserName $sheetTitle Sheet Ledger")
-            println(CommonConstants.dashedLineSeparator)
+            println(ConstantsCommon.dashedLineSeparator)
             for (balanceSheetDataRow: BalanceSheetDataRowModel in balanceSheetDataRows) {
 
                 println("${balanceSheetDataRow.accountId} : ${balanceSheetDataRow.accountName} : ${balanceSheetDataRow.accountBalance}")
@@ -159,7 +158,7 @@ object LedgerSheetOperations {
         isNotApiCall: Boolean = true,
         isConsoleMode: Boolean,
         isDevelopmentMode: Boolean,
-        dotenv: Dotenv
+        dotEnv: Dotenv
 
     ): IsOkModel<List<BalanceSheetDataRowModel>> {
 
@@ -174,7 +173,7 @@ object LedgerSheetOperations {
                     refineLevel = refineLevel,
                     selectUserTransactionsAfterSpecifiedDateResult = selectUserTransactionsAfterSpecifiedDateResult,
                     isDevelopmentMode = isDevelopmentMode,
-                    dotenv = dotenv
+                    dotEnv = dotEnv
                 )
             },
             sheetTitle = "Balance",
@@ -213,7 +212,7 @@ object LedgerSheetOperations {
     @JvmStatic
     fun printFinalBalanceOfBalanceSheetDataRows(balanceSheetDataRows: List<BalanceSheetDataRowModel>) {
 
-        println(CommonConstants.dashedLineSeparator)
+        println(ConstantsCommon.dashedLineSeparator)
         println(calculateFinalBalanceOfBalanceSheetDataRows(balanceSheetDataRows))
     }
 
@@ -241,7 +240,7 @@ object LedgerSheetOperations {
         environmentVariable: EnvironmentFileEntryEnum,
         environmentVariablesForAccountsToIgnore: List<EnvironmentFileEntryEnum>,
         operationsWithData: (List<BalanceSheetDataRowModel>, Boolean, String, String, (List<BalanceSheetDataRowModel>) -> Unit) -> List<BalanceSheetDataRowModel>,
-        dotenv: Dotenv
+        dotEnv: Dotenv
 
     ): IsOkModel<List<BalanceSheetDataRowModel>> {
 
@@ -257,7 +256,7 @@ object LedgerSheetOperations {
                     selectUserTransactionsAfterSpecifiedDateResult = selectUserTransactionsAfterSpecifiedDateResult,
                     isDevelopmentMode = isDevelopmentMode,
                     environmentVariablesForAccountsToIgnore = environmentVariablesForAccountsToIgnore,
-                    dotenv = dotenv
+                    dotEnv = dotEnv
                 )
             },
             sheetTitle = sheetTitle,
@@ -281,7 +280,7 @@ object LedgerSheetOperations {
         environmentVariable: EnvironmentFileEntryEnum,
         environmentVariablesForAccountsToIgnore: List<EnvironmentFileEntryEnum>,
         operationsWithData: (List<BalanceSheetDataRowModel>, Boolean, String, String, (List<BalanceSheetDataRowModel>) -> Unit) -> List<BalanceSheetDataRowModel>,
-        dotenv: Dotenv
+        dotEnv: Dotenv
 
     ): IsOkModel<List<BalanceSheetDataRowModel>> = printSheetOfUserByAccountIdsFromEnvironment(
 
@@ -295,7 +294,7 @@ object LedgerSheetOperations {
         environmentVariable = environmentVariable,
         environmentVariablesForAccountsToIgnore = environmentVariablesForAccountsToIgnore,
         operationsWithData = operationsWithData,
-        dotenv = dotenv
+        dotEnv = dotEnv
     )
 
     @JvmStatic
@@ -306,7 +305,7 @@ object LedgerSheetOperations {
         isNotApiCall: Boolean = true,
         isConsoleMode: Boolean,
         isDevelopmentMode: Boolean,
-        dotenv: Dotenv
+        dotEnv: Dotenv
 
     ): IsOkModel<List<BalanceSheetDataRowModel>> {
 
@@ -327,7 +326,7 @@ object LedgerSheetOperations {
                 EnvironmentFileEntryEnum.ASSET_ACCOUNT_IDS_FOR_SHEET
             ),
             operationsWithData = LedgerSheetOperations::printSheetOfUserDefaultOperation,
-            dotenv = dotenv
+            dotEnv = dotEnv
         )
     }
 
@@ -339,7 +338,7 @@ object LedgerSheetOperations {
         isNotApiCall: Boolean = true,
         isConsoleMode: Boolean,
         isDevelopmentMode: Boolean,
-        dotenv: Dotenv
+        dotEnv: Dotenv
 
     ): IsOkModel<List<BalanceSheetDataRowModel>> {
 
@@ -360,7 +359,7 @@ object LedgerSheetOperations {
                 EnvironmentFileEntryEnum.ASSET_ACCOUNT_IDS_FOR_SHEET
             ),
             operationsWithData = LedgerSheetOperations::printSheetOfUserDefaultOperation,
-            dotenv = dotenv
+            dotEnv = dotEnv
         )
     }
 
@@ -372,7 +371,7 @@ object LedgerSheetOperations {
         isNotApiCall: Boolean = true,
         isConsoleMode: Boolean,
         isDevelopmentMode: Boolean,
-        dotenv: Dotenv
+        dotEnv: Dotenv
 
     ): IsOkModel<List<BalanceSheetDataRowModel>> {
 
@@ -393,7 +392,7 @@ object LedgerSheetOperations {
                 EnvironmentFileEntryEnum.ASSET_ACCOUNT_IDS_FOR_SHEET
             ),
             operationsWithData = LedgerSheetOperations::printSheetOfUserDefaultOperation,
-            dotenv = dotenv
+            dotEnv = dotEnv
         )
     }
 
@@ -405,7 +404,7 @@ object LedgerSheetOperations {
         isNotApiCall: Boolean = true,
         isConsoleMode: Boolean,
         isDevelopmentMode: Boolean,
-        dotenv: Dotenv
+        dotEnv: Dotenv
 
     ): IsOkModel<List<BalanceSheetDataRowModel>> {
 
@@ -426,7 +425,7 @@ object LedgerSheetOperations {
                 EnvironmentFileEntryEnum.ASSET_ACCOUNT_IDS_FOR_SHEET
             ),
             operationsWithData = LedgerSheetOperations::printSheetOfUserDefaultOperation,
-            dotenv = dotenv
+            dotEnv = dotEnv
         )
     }
 
@@ -438,7 +437,7 @@ object LedgerSheetOperations {
         isNotApiCall: Boolean = true,
         isConsoleMode: Boolean,
         isDevelopmentMode: Boolean,
-        dotenv: Dotenv
+        dotEnv: Dotenv
 
     ): IsOkModel<List<BalanceSheetDataRowModel>> {
 
@@ -459,7 +458,7 @@ object LedgerSheetOperations {
                 EnvironmentFileEntryEnum.EXPENSE_INCOME_DEBIT_CREDIT_IGNORE_ACCOUNT_IDS_FOR_SHEET
             ),
             operationsWithData = LedgerSheetOperations::printSheetOfUserDefaultOperation,
-            dotenv = dotenv
+            dotEnv = dotEnv
         )
     }
 
@@ -471,7 +470,7 @@ object LedgerSheetOperations {
         isNotApiCall: Boolean = true,
         isConsoleMode: Boolean,
         isDevelopmentMode: Boolean,
-        dotenv: Dotenv
+        dotEnv: Dotenv
 
     ): IsOkModel<List<BalanceSheetDataRowModel>> {
 
@@ -513,7 +512,7 @@ object LedgerSheetOperations {
                     operationsAfterPrint = operationsAfterPrint
                 )
             },
-            dotenv = dotenv
+            dotEnv = dotEnv
         )
     }
 
@@ -525,7 +524,7 @@ object LedgerSheetOperations {
         isNotApiCall: Boolean = true,
         isConsoleMode: Boolean,
         isDevelopmentMode: Boolean,
-        dotenv: Dotenv
+        dotEnv: Dotenv
 
     ): IsOkModel<List<BalanceSheetDataRowModel>> {
 
@@ -567,7 +566,7 @@ object LedgerSheetOperations {
                     operationsAfterPrint = operationsAfterPrint
                 )
             },
-            dotenv = dotenv
+            dotEnv = dotEnv
         )
     }
 
@@ -579,7 +578,7 @@ object LedgerSheetOperations {
         isNotApiCall: Boolean = true,
         isConsoleMode: Boolean,
         isDevelopmentMode: Boolean,
-        dotenv: Dotenv
+        dotEnv: Dotenv
 
     ): IsOkModel<List<BalanceSheetDataRowModel>> {
 
@@ -600,7 +599,7 @@ object LedgerSheetOperations {
                 EnvironmentFileEntryEnum.EXPENSE_INCOME_DEBIT_CREDIT_ASSET_IGNORE_ACCOUNT_IDS_FOR_SHEET
             ),
             operationsWithData = LedgerSheetOperations::printSheetOfUserDefaultOperation,
-            dotenv = dotenv
+            dotEnv = dotEnv
         )
     }
 
@@ -612,7 +611,7 @@ object LedgerSheetOperations {
         isNotApiCall: Boolean = true,
         isConsoleMode: Boolean,
         isDevelopmentMode: Boolean,
-        dotenv: Dotenv
+        dotEnv: Dotenv
 
     ) {
         printSheetOfUserWithSummarizedBalance(
@@ -624,7 +623,7 @@ object LedgerSheetOperations {
             isDevelopmentMode = isDevelopmentMode,
             balanceSheetOkModelFromSubtract = LedgerSheetOperations::printIncomeSheetOfUser,
             balanceSheetOkModelToSubtract = LedgerSheetOperations::printExpenseSheetOfUser,
-            dotenv = dotenv
+            dotEnv = dotEnv
         )
     }
 
@@ -636,7 +635,7 @@ object LedgerSheetOperations {
         isNotApiCall: Boolean = true,
         isConsoleMode: Boolean,
         isDevelopmentMode: Boolean,
-        dotenv: Dotenv
+        dotEnv: Dotenv
 
     ) {
         printSheetOfUserWithSummarizedBalance(
@@ -648,7 +647,7 @@ object LedgerSheetOperations {
             isDevelopmentMode = isDevelopmentMode,
             balanceSheetOkModelFromSubtract = LedgerSheetOperations::printDebitSheetOfUser,
             balanceSheetOkModelToSubtract = LedgerSheetOperations::printCreditSheetOfUser,
-            dotenv = dotenv
+            dotEnv = dotEnv
         )
     }
 
@@ -662,7 +661,7 @@ object LedgerSheetOperations {
         isDevelopmentMode: Boolean,
         balanceSheetOkModelFromSubtract: (String, UInt, Boolean, Boolean, Boolean, Dotenv) -> IsOkModel<List<BalanceSheetDataRowModel>>,
         balanceSheetOkModelToSubtract: (String, UInt, Boolean, Boolean, Boolean, Dotenv) -> IsOkModel<List<BalanceSheetDataRowModel>>,
-        dotenv: Dotenv
+        dotEnv: Dotenv
     ) {
         val balanceSheetOkModelFromSubtractResult: IsOkModel<List<BalanceSheetDataRowModel>> =
             balanceSheetOkModelFromSubtract.invoke(
@@ -672,7 +671,7 @@ object LedgerSheetOperations {
                 isNotApiCall,
                 isConsoleMode,
                 isDevelopmentMode,
-                dotenv
+                dotEnv
             )
         val balanceSheetOkModelToSubtractResult: IsOkModel<List<BalanceSheetDataRowModel>> =
             balanceSheetOkModelToSubtract.invoke(
@@ -682,11 +681,11 @@ object LedgerSheetOperations {
                 isNotApiCall,
                 isConsoleMode,
                 isDevelopmentMode,
-                dotenv
+                dotEnv
             )
         if (balanceSheetOkModelFromSubtractResult.isOK && balanceSheetOkModelToSubtractResult.isOK) {
 
-            println(CommonConstants.DOUBLE_DASHED_LINE_SEPARATOR)
+            println(ConstantsCommon.DOUBLE_DASHED_LINE_SEPARATOR)
 
             val fromBalance = calculateFinalBalanceOfBalanceSheetDataRows(balanceSheetOkModelFromSubtractResult.data!!)
             val toBalance = calculateFinalBalanceOfBalanceSheetDataRows(balanceSheetOkModelToSubtractResult.data!!)
@@ -703,7 +702,7 @@ object LedgerSheetOperations {
         isNotApiCall: Boolean = true,
         isConsoleMode: Boolean,
         isDevelopmentMode: Boolean,
-        dotenv: Dotenv
+        dotEnv: Dotenv
 
     ): IsOkModel<List<BalanceSheetDataRowModel>> {
 
@@ -724,7 +723,7 @@ object LedgerSheetOperations {
                 EnvironmentFileEntryEnum.DEBIT_OR_CREDIT_ACCOUNT_IDS_FOR_SHEET
             ),
             operationsWithData = LedgerSheetOperations::printSheetOfUserDefaultOperation,
-            dotenv = dotenv
+            dotEnv = dotEnv
         )
     }
 
@@ -807,11 +806,11 @@ object LedgerSheetOperations {
                                     return IsOkModel(
 
                                         isOK = false,
-                                        error = CommonConstants.USER_CANCELED_MESSAGE
+                                        error = ConstantsCommon.USER_CANCELED_MESSAGE
                                     )
                                 }
 
-                                else -> InteractiveUtils.invalidOptionMessage()
+                                else -> ErrorUtilsInteractive.printInvalidOptionMessage()
                             }
                         } while (true)
 
@@ -992,7 +991,7 @@ object LedgerSheetOperations {
                         value = CommonDataModel(
 
                             status = 1,
-                            error = "Error : ${specifiedDate.data!!}"
+                            error = "Error : ${specifiedDate.error!!}"
                         )
                     )
                 )
@@ -1019,7 +1018,7 @@ object LedgerSheetOperations {
         refineLevel: BalanceSheetRefineLevelEnum,
         selectUserTransactionsAfterSpecifiedDateResult: MultipleTransactionResponse,
         isDevelopmentMode: Boolean,
-        dotenv: Dotenv
+        dotEnv: Dotenv
 
     ): IsOkModel<MutableMap<UInt, String>> {
 
@@ -1033,43 +1032,43 @@ object LedgerSheetOperations {
 
                 // TODO : Change to new api methods
                 // TODO : Change to EnvironmentFileEntryEnum
-                accountsToExclude = (dotenv["OPEN_BALANCE_ACCOUNT_IDS"] ?: "0").split(',')
+                accountsToExclude = (dotEnv["OPEN_BALANCE_ACCOUNT_IDS"] ?: "0").split(',')
             }
 
             BalanceSheetRefineLevelEnum.WITHOUT_MISC_INCOMES -> {
 
-                accountsToExclude = (dotenv["OPEN_BALANCE_ACCOUNT_IDS"]
-                    ?: "0").split(',') + (dotenv["MISC_INCOME_ACCOUNT_IDS"]
+                accountsToExclude = (dotEnv["OPEN_BALANCE_ACCOUNT_IDS"]
+                    ?: "0").split(',') + (dotEnv["MISC_INCOME_ACCOUNT_IDS"]
                     ?: "0").split(',')
             }
 
             BalanceSheetRefineLevelEnum.WITHOUT_INVESTMENT_RETURNS -> {
 
                 accountsToExclude =
-                    (dotenv["OPEN_BALANCE_ACCOUNT_IDS"]
-                        ?: "0").split(',') + (dotenv["MISC_INCOME_ACCOUNT_IDS"]
-                        ?: "0").split(',') + (dotenv["INVESTMENT_RETURNS_ACCOUNT_IDS"]
+                    (dotEnv["OPEN_BALANCE_ACCOUNT_IDS"]
+                        ?: "0").split(',') + (dotEnv["MISC_INCOME_ACCOUNT_IDS"]
+                        ?: "0").split(',') + (dotEnv["INVESTMENT_RETURNS_ACCOUNT_IDS"]
                         ?: "0").split(',')
             }
 
             BalanceSheetRefineLevelEnum.WITHOUT_FAMILY_ACCOUNTS -> {
 
                 accountsToExclude =
-                    (dotenv["OPEN_BALANCE_ACCOUNT_IDS"]
-                        ?: "0").split(',') + (dotenv["MISC_INCOME_ACCOUNT_IDS"]
-                        ?: "0").split(',') + (dotenv["INVESTMENT_RETURNS_ACCOUNT_IDS"]
-                        ?: "0").split(',') + (dotenv["FAMILY_ACCOUNT_IDS"]
+                    (dotEnv["OPEN_BALANCE_ACCOUNT_IDS"]
+                        ?: "0").split(',') + (dotEnv["MISC_INCOME_ACCOUNT_IDS"]
+                        ?: "0").split(',') + (dotEnv["INVESTMENT_RETURNS_ACCOUNT_IDS"]
+                        ?: "0").split(',') + (dotEnv["FAMILY_ACCOUNT_IDS"]
                         ?: "0").split(',')
             }
 
             BalanceSheetRefineLevelEnum.WITHOUT_EXPENSE_ACCOUNTS -> {
 
                 accountsToExclude =
-                    (dotenv["OPEN_BALANCE_ACCOUNT_IDS"]
-                        ?: "0").split(',') + (dotenv["MISC_INCOME_ACCOUNT_IDS"]
-                        ?: "0").split(',') + (dotenv["INVESTMENT_RETURNS_ACCOUNT_IDS"]
-                        ?: "0").split(',') + (dotenv["FAMILY_ACCOUNT_IDS"]
-                        ?: "0").split(',') + (dotenv["EXPENSE_ACCOUNT_IDS"]
+                    (dotEnv["OPEN_BALANCE_ACCOUNT_IDS"]
+                        ?: "0").split(',') + (dotEnv["MISC_INCOME_ACCOUNT_IDS"]
+                        ?: "0").split(',') + (dotEnv["INVESTMENT_RETURNS_ACCOUNT_IDS"]
+                        ?: "0").split(',') + (dotEnv["FAMILY_ACCOUNT_IDS"]
+                        ?: "0").split(',') + (dotEnv["EXPENSE_ACCOUNT_IDS"]
                         ?: "0").split(',')
             }
 
@@ -1107,17 +1106,17 @@ object LedgerSheetOperations {
         selectUserTransactionsAfterSpecifiedDateResult: MultipleTransactionResponse,
         isDevelopmentMode: Boolean,
         environmentVariablesForAccountsToIgnore: List<EnvironmentFileEntryEnum>,
-        dotenv: Dotenv
+        dotEnv: Dotenv
 
     ): IsOkModel<MutableMap<UInt, String>> {
 
         //TODO : Check duplication of account ids
 
-        val accountsToInclude: List<String> = (dotenv[environmentVariable.name] ?: "0").split(',')
+        val accountsToInclude: List<String> = (dotEnv[environmentVariable.name] ?: "0").split(',')
 
         val accountsToIgnore: List<String> = environmentVariablesForAccountsToIgnore
             .flatMap { environmentVariableForAccountToIgnore ->
-                dotenv[environmentVariableForAccountToIgnore.name]?.split(',') ?: emptyList()
+                dotEnv[environmentVariableForAccountToIgnore.name]?.split(',') ?: emptyList()
             }
 
         val accounts: MutableMap<UInt, String> = mutableMapOf()

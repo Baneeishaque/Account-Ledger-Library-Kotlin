@@ -7,6 +7,7 @@ import account.ledger.library.models.InsertTransactionResult
 import account.ledger.library.models.SpecialTransactionTypeModel
 import account.ledger.library.utils.TransactionUtils
 import common.utils.library.utils.DateTimeUtils
+import io.github.cdimascio.dotenv.Dotenv
 
 object CheckingOperations {
 
@@ -66,9 +67,10 @@ object CheckingOperations {
         fromAccountMissingActions: () -> Unit = {},
         toAccountMissingActions: () -> Unit = {},
         viaAccountMissingActions: () -> Unit = {},
-        addTransactionOperation: (UInt, String, TransactionTypeEnum, AccountResponse, AccountResponse, AccountResponse, Boolean, Boolean, UInt, String, String, Float, Boolean, UInt, Boolean, Boolean, Boolean, TransactionResponse?, SpecialTransactionTypeModel?) -> InsertTransactionResult,
+        addTransactionOperation: (UInt, String, TransactionTypeEnum, AccountResponse, AccountResponse, AccountResponse, Boolean, Boolean, UInt, String, String, Float, Boolean, UInt, Boolean, Boolean, Boolean, TransactionResponse?, SpecialTransactionTypeModel?, Dotenv) -> InsertTransactionResult,
         chosenTransactionForSpecial: TransactionResponse?,
-        chosenSpecialTransactionType: SpecialTransactionTypeModel?
+        chosenSpecialTransactionType: SpecialTransactionTypeModel?,
+        dotEnv: Dotenv
 
     ): InsertTransactionResult {
 
@@ -85,41 +87,6 @@ object CheckingOperations {
             ) == 0
         ) {
             when (transactionType) {
-
-                TransactionTypeEnum.NORMAL, TransactionTypeEnum.SPECIAL, TransactionTypeEnum.BAJAJ_COINS, TransactionTypeEnum.BAJAJ_COINS_WITHOUT_SOURCE, TransactionTypeEnum.BAJAJ_SUB_WALLET, TransactionTypeEnum.BAJAJ_SUB_WALLET_WITHOUT_SOURCE -> {
-
-                    val addTransactionResult: InsertTransactionResult = addTransactionAfterAvailabilitySuccess(
-
-                        addTransactionOperation = addTransactionOperation,
-                        userId = userId,
-                        username = username,
-                        transactionType = transactionType,
-                        fromAccount = fromAccount,
-                        viaAccount = viaAccount,
-                        toAccount = toAccount,
-                        dateTimeInText = dateTimeInText,
-                        transactionParticulars = transactionParticulars,
-                        transactionAmount = transactionAmount,
-                        isConsoleMode = isConsoleMode,
-                        isDevelopmentMode = isDevelopmentMode,
-                        chosenTransactionForSpecial = chosenTransactionForSpecial,
-                        chosenSpecialTransactionType = chosenSpecialTransactionType,
-                    )
-
-                    if (addTransactionResult.isSuccess) {
-
-                        return InsertTransactionResult(
-
-                            isSuccess = true,
-                            dateTimeInText = DateTimeUtils.add5MinutesToNormalDateTimeInText(dateTimeInText = addTransactionResult.dateTimeInText),
-                            transactionParticulars = addTransactionResult.transactionParticulars,
-                            transactionAmount = addTransactionResult.transactionAmount,
-                            fromAccount = fromAccount,
-                            viaAccount = viaAccount,
-                            toAccount = toAccount
-                        )
-                    }
-                }
 
                 TransactionTypeEnum.VIA -> {
 
@@ -139,7 +106,8 @@ object CheckingOperations {
                         isDevelopmentMode = isDevelopmentMode,
                         furtherStepIndicator = 1u,
                         chosenTransactionForSpecial = chosenTransactionForSpecial,
-                        chosenSpecialTransactionType = chosenSpecialTransactionType
+                        chosenSpecialTransactionType = chosenSpecialTransactionType,
+                        dotEnv = dotEnv
                     )
                 }
 
@@ -161,7 +129,8 @@ object CheckingOperations {
                         isDevelopmentMode = isDevelopmentMode,
                         furtherStepIndicator = 2u,
                         chosenTransactionForSpecial = chosenTransactionForSpecial,
-                        chosenSpecialTransactionType = chosenSpecialTransactionType
+                        chosenSpecialTransactionType = chosenSpecialTransactionType,
+                        dotEnv = dotEnv
                     )
                 }
 
@@ -181,8 +150,45 @@ object CheckingOperations {
                     isDevelopmentMode = isDevelopmentMode,
                     furtherStepIndicator = 3u,
                     chosenTransactionForSpecial = chosenTransactionForSpecial,
-                    chosenSpecialTransactionType = chosenSpecialTransactionType
+                    chosenSpecialTransactionType = chosenSpecialTransactionType,
+                    dotEnv = dotEnv
                 )
+
+                else -> {
+
+                    val addTransactionResult: InsertTransactionResult = addTransactionAfterAvailabilitySuccess(
+
+                        addTransactionOperation = addTransactionOperation,
+                        userId = userId,
+                        username = username,
+                        transactionType = transactionType,
+                        fromAccount = fromAccount,
+                        viaAccount = viaAccount,
+                        toAccount = toAccount,
+                        dateTimeInText = dateTimeInText,
+                        transactionParticulars = transactionParticulars,
+                        transactionAmount = transactionAmount,
+                        isConsoleMode = isConsoleMode,
+                        isDevelopmentMode = isDevelopmentMode,
+                        chosenTransactionForSpecial = chosenTransactionForSpecial,
+                        chosenSpecialTransactionType = chosenSpecialTransactionType,
+                        dotEnv = dotEnv
+                    )
+
+                    if (addTransactionResult.isSuccess) {
+
+                        return InsertTransactionResult(
+
+                            isSuccess = true,
+                            dateTimeInText = DateTimeUtils.add5MinutesToNormalDateTimeInText(dateTimeInText = addTransactionResult.dateTimeInText),
+                            transactionParticulars = addTransactionResult.transactionParticulars,
+                            transactionAmount = addTransactionResult.transactionAmount,
+                            fromAccount = fromAccount,
+                            viaAccount = viaAccount,
+                            toAccount = toAccount
+                        )
+                    }
+                }
             }
         }
         return TransactionUtils.getFailedInsertTransactionResult(
@@ -204,7 +210,7 @@ object CheckingOperations {
     @JvmStatic
     private fun actionWithFurtherActions(
 
-        addTransactionOperation: (UInt, String, TransactionTypeEnum, AccountResponse, AccountResponse, AccountResponse, Boolean, Boolean, UInt, String, String, Float, Boolean, UInt, Boolean, Boolean, Boolean, TransactionResponse?, SpecialTransactionTypeModel?) -> InsertTransactionResult,
+        addTransactionOperation: (UInt, String, TransactionTypeEnum, AccountResponse, AccountResponse, AccountResponse, Boolean, Boolean, UInt, String, String, Float, Boolean, UInt, Boolean, Boolean, Boolean, TransactionResponse?, SpecialTransactionTypeModel?, Dotenv) -> InsertTransactionResult,
         userId: UInt,
         username: String,
         transactionType: TransactionTypeEnum,
@@ -218,7 +224,8 @@ object CheckingOperations {
         isDevelopmentMode: Boolean,
         furtherStepIndicator: UInt,
         chosenTransactionForSpecial: TransactionResponse?,
-        chosenSpecialTransactionType: SpecialTransactionTypeModel?
+        chosenSpecialTransactionType: SpecialTransactionTypeModel?,
+        dotEnv: Dotenv
 
     ): InsertTransactionResult {
 
@@ -237,7 +244,8 @@ object CheckingOperations {
             isConsoleMode = isConsoleMode,
             isDevelopmentMode = isDevelopmentMode,
             chosenTransactionForSpecial = chosenTransactionForSpecial,
-            chosenSpecialTransactionType = chosenSpecialTransactionType
+            chosenSpecialTransactionType = chosenSpecialTransactionType,
+            dotEnv = dotEnv
         )
         if (addTransactionResult.isSuccess) {
 
@@ -262,7 +270,8 @@ object CheckingOperations {
                         isConsoleMode = isConsoleMode,
                         isDevelopmentMode = isDevelopmentMode,
                         chosenTransactionForSpecial = chosenTransactionForSpecial,
-                        chosenSpecialTransactionType = chosenSpecialTransactionType
+                        chosenSpecialTransactionType = chosenSpecialTransactionType,
+                        dotEnv = dotEnv
                     )
                     if (addTransactionResult.isSuccess) {
 
@@ -297,7 +306,8 @@ object CheckingOperations {
                         isConsoleMode = isConsoleMode,
                         isDevelopmentMode = isDevelopmentMode,
                         chosenTransactionForSpecial = chosenTransactionForSpecial,
-                        chosenSpecialTransactionType = chosenSpecialTransactionType
+                        chosenSpecialTransactionType = chosenSpecialTransactionType,
+                        dotEnv = dotEnv
                     )
                     if (addTransactionResult.isSuccess) {
 
@@ -317,7 +327,8 @@ object CheckingOperations {
                             isConsoleMode = isConsoleMode,
                             isDevelopmentMode = isDevelopmentMode,
                             chosenTransactionForSpecial = chosenTransactionForSpecial,
-                            chosenSpecialTransactionType = chosenSpecialTransactionType
+                            chosenSpecialTransactionType = chosenSpecialTransactionType,
+                            dotEnv = dotEnv
                         )
 
                         if (addTransactionResult.isSuccess) {
@@ -351,7 +362,30 @@ object CheckingOperations {
     @JvmStatic
     private fun addTransactionAfterAvailabilitySuccess(
 
-        addTransactionOperation: (UInt, String, TransactionTypeEnum, AccountResponse, AccountResponse, AccountResponse, Boolean, Boolean, UInt, String, String, Float, Boolean, UInt, Boolean, Boolean, Boolean, TransactionResponse?, SpecialTransactionTypeModel?) -> InsertTransactionResult,
+        addTransactionOperation: (
+
+            UInt,
+            String,
+            TransactionTypeEnum,
+            AccountResponse,
+            AccountResponse,
+            AccountResponse,
+            Boolean,
+            Boolean,
+            UInt,
+            String,
+            String,
+            Float,
+            Boolean,
+            UInt,
+            Boolean,
+            Boolean,
+            Boolean,
+            TransactionResponse?,
+            SpecialTransactionTypeModel?,
+            Dotenv
+
+        ) -> InsertTransactionResult,
         userId: UInt,
         username: String,
         transactionType: TransactionTypeEnum,
@@ -367,7 +401,8 @@ object CheckingOperations {
         isDevelopmentMode: Boolean,
         isCyclicViaStep: Boolean = false,
         chosenTransactionForSpecial: TransactionResponse?,
-        chosenSpecialTransactionType: SpecialTransactionTypeModel?
+        chosenSpecialTransactionType: SpecialTransactionTypeModel?,
+        dotEnv: Dotenv
 
     ): InsertTransactionResult = addTransactionOperation.invoke(
 
@@ -389,6 +424,7 @@ object CheckingOperations {
         isDevelopmentMode,
         isCyclicViaStep,
         chosenTransactionForSpecial,
-        chosenSpecialTransactionType
+        chosenSpecialTransactionType,
+        dotEnv
     )
 }

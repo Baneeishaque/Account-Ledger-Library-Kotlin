@@ -6,10 +6,10 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class AccountFrequencyModel(
-    @SerialName(AccountFrequencyJsonObjectFields.accountID)
+    @SerialName(AccountFrequencyJsonObjectFields.ACCOUNT_ID)
     val accountID: UInt,
-    @SerialName(AccountFrequencyJsonObjectFields.accountName)
+    @SerialName(AccountFrequencyJsonObjectFields.ACCOUNT_NAME)
     val accountName: String,
-    @SerialName(AccountFrequencyJsonObjectFields.countOfRepetition)
+    @SerialName(AccountFrequencyJsonObjectFields.COUNT_OF_REPETITION)
     var countOfRepetition: UInt
 )

@@ -11,7 +11,7 @@ class MultipleTransactionDataSource : AppDataSource<MultipleTransactionResponse>
 
     ): Result<MultipleTransactionResponse> {
 
-        return handleApiResponse(
+        return processApiResponse(
 
             apiResponse = retrofitClient.selectUserTransactionsV2M(
 
@@ -27,7 +27,7 @@ class MultipleTransactionDataSource : AppDataSource<MultipleTransactionResponse>
 
     ): Result<MultipleTransactionResponse> {
 
-        return handleApiResponse(
+        return processApiResponse(
 
             apiResponse = retrofitClient.selectTransactionsV2M(
 
@@ -43,7 +43,7 @@ class MultipleTransactionDataSource : AppDataSource<MultipleTransactionResponse>
 
     ): Result<MultipleTransactionResponse> {
 
-        return handleApiResponse(
+        return processApiResponse(
 
             apiResponse = retrofitClient.selectUserTransactionsAfterSpecifiedDate(
 

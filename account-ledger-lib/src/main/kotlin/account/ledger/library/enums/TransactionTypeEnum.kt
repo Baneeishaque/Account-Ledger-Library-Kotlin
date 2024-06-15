@@ -1,6 +1,29 @@
 package account.ledger.library.enums
 
-enum class TransactionTypeEnum {
+enum class TransactionTypeEnum(val value: BajajDiscountTypeEnum?) {
 
-    NORMAL, VIA, TWO_WAY, CYCLIC_VIA, SPECIAL, BAJAJ_COINS, BAJAJ_SUB_WALLET, BAJAJ_COINS_WITHOUT_SOURCE, BAJAJ_SUB_WALLET_WITHOUT_SOURCE
+    NORMAL(value = null),
+
+    TWO_WAY(value = null),
+
+    VIA(value = null),
+    CYCLIC_VIA(value = null),
+
+    SPECIAL(value = null),
+
+    BAJAJ_COINS_FLAT(value = BajajDiscountTypeEnum.Flat),
+    BAJAJ_COINS_FLAT_WITHOUT_SOURCE(value = BajajDiscountTypeEnum.Flat),
+    BAJAJ_COINS_FLAT_WITHOUT_BALANCE_CHECK(value = BajajDiscountTypeEnum.Flat),
+
+    BAJAJ_CASHBACK_FLAT(value = BajajDiscountTypeEnum.Flat),
+    BAJAJ_CASHBACK_FLAT_WITHOUT_SOURCE(value = BajajDiscountTypeEnum.Flat),
+    BAJAJ_CASHBACK_FLAT_WITHOUT_BALANCE_CHECK(value = BajajDiscountTypeEnum.Flat),
+
+    BAJAJ_COINS_UP_TO(value = BajajDiscountTypeEnum.UpTo),
+    BAJAJ_COINS_UP_TO_WITHOUT_SOURCE(value = BajajDiscountTypeEnum.UpTo),
+    BAJAJ_COINS_UP_TO_WITHOUT_BALANCE_CHECK(value = BajajDiscountTypeEnum.UpTo),
+
+    BAJAJ_CASHBACK_UP_TO(value = BajajDiscountTypeEnum.UpTo),
+    BAJAJ_CASHBACK_UP_TO_WITHOUT_SOURCE(value = BajajDiscountTypeEnum.UpTo),
+    BAJAJ_CASHBACK_UP_TO_WITHOUT_BALANCE_CHECK(value = BajajDiscountTypeEnum.UpTo)
 }

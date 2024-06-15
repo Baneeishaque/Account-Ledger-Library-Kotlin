@@ -15,8 +15,10 @@ class TransactionDataSource : AppDataSource<TransactionManipulationResponse>() {
 
     ): Result<TransactionManipulationResponse> {
 
-        return handleApiResponse(
+        return processApiResponse(
+
             apiResponse = retrofitClient.insertTransaction(
+
                 userId = userId,
                 eventDateTimeString = eventDateTimeString,
                 particulars = particulars,
@@ -38,8 +40,10 @@ class TransactionDataSource : AppDataSource<TransactionManipulationResponse>() {
 
     ): Result<TransactionManipulationResponse> {
 
-        return handleApiResponse(
+        return processApiResponse(
+
             apiResponse = retrofitClient.updateTransaction(
+
                 transactionId = transactionId,
                 eventDateTimeString = eventDateTimeString,
                 particulars = particulars,
@@ -53,8 +57,10 @@ class TransactionDataSource : AppDataSource<TransactionManipulationResponse>() {
 
     suspend fun deleteTransaction(transactionId: UInt): Result<TransactionManipulationResponse> {
 
-        return handleApiResponse(
+        return processApiResponse(
+
             apiResponse = retrofitClient.deleteTransaction(
+
                 transactionId = transactionId
             )
         )

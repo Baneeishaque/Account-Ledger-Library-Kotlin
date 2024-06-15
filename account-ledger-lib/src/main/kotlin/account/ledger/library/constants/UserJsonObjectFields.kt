@@ -1,7 +1,8 @@
 package account.ledger.library.constants
 
 internal object UserJsonObjectFields {
-    //    internal const val name: String = "name"
-    internal const val id: String = "id"
-    internal const val accountFrequencies: String = "accountFrequencies"
+
+//    internal const val NAME: String = "name"
+    internal const val ID: String = "id"
+    internal const val ACCOUNT_FREQUENCIES: String = "accountFrequencies"
 }

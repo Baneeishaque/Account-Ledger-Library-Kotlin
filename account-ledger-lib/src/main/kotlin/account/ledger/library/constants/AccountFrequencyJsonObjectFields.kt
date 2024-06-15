@@ -1,7 +1,8 @@
 package account.ledger.library.constants
 
 internal object AccountFrequencyJsonObjectFields {
-    internal const val accountID: String = "accountID"
-    internal const val accountName: String = "accountName"
-    internal const val countOfRepetition: String = "countOfRepetition"
+
+    internal const val ACCOUNT_ID: String = "accountID"
+    internal const val ACCOUNT_NAME: String = "accountName"
+    internal const val COUNT_OF_REPETITION: String = "countOfRepetition"
 }
