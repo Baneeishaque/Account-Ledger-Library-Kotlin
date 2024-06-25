@@ -40,7 +40,7 @@ dependencies {
     implementation(dependencyNotation = "com.massisframework:j-text-utils:0.3.4")
     implementation(dependencyNotation = "io.github.cdimascio:dotenv-kotlin:6.4.1")
 
-    implementation(dependencyNotation = "org.jetbrains.kotlinx:kotlinx-serialization-json:1.7.0")
+    implementation(dependencyNotation = "org.jetbrains.kotlinx:kotlinx-serialization-json:1.7.1")
 
     implementation(dependencyNotation = "io.ktor:ktor-client-core:$ktorVersion")
     implementation(dependencyNotation = "io.ktor:ktor-client-cio:$ktorVersion")
