@@ -34,7 +34,7 @@ dependencies {
     implementation(dependencyNotation = "com.squareup.retrofit2:converter-gson:2.11.0")
 
     implementation(dependencyNotation = "org.jetbrains.kotlinx:kotlinx-cli:0.3.6")
-    implementation(dependencyNotation = "org.jetbrains.kotlinx:kotlinx-coroutines-core:1.8.1")
+    implementation(dependencyNotation = "org.jetbrains.kotlinx:kotlinx-coroutines-core:1.9.0")
 
     implementation(dependencyNotation = "com.github.doyaaaaaken:kotlin-csv-jvm:1.10.0")
     implementation(dependencyNotation = "com.massisframework:j-text-utils:0.3.4")
