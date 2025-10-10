@@ -30,8 +30,8 @@ dependencies {
     implementation(dependencyNotation = project(path = ":common-lib:common-lib"))
     implementation(dependencyNotation = project(path = ":account-ledger-lib-multi-platform:lib"))
 
-    implementation(dependencyNotation = "com.squareup.retrofit2:retrofit:2.11.0")
-    implementation(dependencyNotation = "com.squareup.retrofit2:converter-gson:2.11.0")
+    implementation(dependencyNotation = "com.squareup.retrofit2:retrofit:2.12.0")
+    implementation(dependencyNotation = "com.squareup.retrofit2:converter-gson:2.12.0")
 
     implementation(dependencyNotation = "org.jetbrains.kotlinx:kotlinx-cli:0.3.6")
     implementation(dependencyNotation = "org.jetbrains.kotlinx:kotlinx-coroutines-core:1.10.2")
