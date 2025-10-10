@@ -1,7 +1,7 @@
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 import org.jetbrains.kotlin.gradle.dsl.KotlinVersion
 
-val ktorVersion: String = "2.1.2"
+val ktorVersion: String = "2.3.13"
 
 plugins {
 
