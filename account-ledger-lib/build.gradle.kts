@@ -2,6 +2,7 @@ import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 import org.jetbrains.kotlin.gradle.dsl.KotlinVersion
 
 val ktorVersion: String = "3.3.1"
+val okhttpVersion = "5.3.0"
 val retrofitVersion = "3.0.0"
 
 plugins {
@@ -27,6 +28,8 @@ dependencies {
     // Retrofit + OkHttp
     implementation("com.squareup.retrofit2:retrofit:$retrofitVersion")
     implementation("com.squareup.retrofit2:converter-gson:$retrofitVersion")
+    implementation("com.squareup.okhttp3:okhttp:$okhttpVersion")
+    implementation("com.squareup.okhttp3:logging-interceptor:$okhttpVersion")
 
     // Kotlinx
     implementation("org.jetbrains.kotlinx:kotlinx-cli:0.3.6")
