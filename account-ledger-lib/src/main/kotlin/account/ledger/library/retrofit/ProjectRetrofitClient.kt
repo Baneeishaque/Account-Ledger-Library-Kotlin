@@ -13,6 +13,7 @@ internal object ProjectRetrofitClient {
         Retrofit.Builder()
             .baseUrl(ApiConstants.serverApiAddress)
             .addConverterFactory(GsonConverterFactory.create(GsonBuilder().create()))
-            .build().create(Api::class.java)
+            .build()
+            .create(Api::class.java)
     }
 }

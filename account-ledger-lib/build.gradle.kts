@@ -4,23 +4,15 @@ import org.jetbrains.kotlin.gradle.dsl.KotlinVersion
 val ktorVersion: String = "3.3.1"
 
 plugins {
-
     kotlin(module = "jvm")
     kotlin(module = "plugin.serialization")
     `java-library`
 }
 
 repositories {
-
     mavenCentral()
-    maven {
-
-        url = uri(path = "https://maven.pkg.jetbrains.space/public/p/ktor/eap")
-    }
-    maven {
-
-        url = uri(path = "https://maven.pkg.jetbrains.space/kotlin/p/kotlin/dev")
-    }
+    maven { url = uri("https://maven.pkg.jetbrains.space/public/p/ktor/eap") }
+    maven { url = uri("https://maven.pkg.jetbrains.space/kotlin/p/kotlin/dev") }
 }
 
 dependencies {
@@ -55,34 +47,25 @@ dependencies {
 }
 
 testing {
-
     suites {
-
         val test: JvmTestSuite by getting(type = JvmTestSuite::class) {
-
             useKotlinTest()
         }
     }
 }
 
-kotlin{
-
+kotlin {
     compilerOptions {
-
 //        allWarningsAsErrors = true
         verbose = true
-
         apiVersion = KotlinVersion.KOTLIN_2_2
         languageVersion = KotlinVersion.KOTLIN_2_2
-
         javaParameters = true
         jvmTarget = JvmTarget.JVM_21
     }
 
     sourceSets.all {
-
         languageSettings.apply {
-
             languageVersion = KotlinVersion.KOTLIN_2_2.version
             apiVersion = KotlinVersion.KOTLIN_2_2.version
         }
