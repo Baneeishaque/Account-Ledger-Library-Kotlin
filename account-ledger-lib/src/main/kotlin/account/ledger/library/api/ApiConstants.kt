@@ -2,7 +2,7 @@ package account.ledger.library.api
 
 internal object ApiConstants {
 
-    internal const val serverApiAddress = "https://nomadller.in/http_api/"
+    internal const val serverApiAddress = "http://localhost/http_API/"
 
     internal const val serverFileExtension = "php"
 
