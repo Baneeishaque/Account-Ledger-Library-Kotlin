@@ -2,6 +2,7 @@ import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 import org.jetbrains.kotlin.gradle.dsl.KotlinVersion
 
 val ktorVersion: String = "3.3.1"
+val retrofitVersion = "3.0.0"
 
 plugins {
     kotlin(module = "jvm")
@@ -16,34 +17,39 @@ repositories {
 }
 
 dependencies {
+    // Kotlin BOM
+    implementation(platform("org.jetbrains.kotlin:kotlin-bom"))
 
-    implementation(dependencyNotation = platform(notation = "org.jetbrains.kotlin:kotlin-bom"))
+    // Project modules
+    implementation(project(":common-lib:common-lib"))
+    implementation(project(":account-ledger-lib-multi-platform:lib"))
 
-    implementation(dependencyNotation = project(path = ":common-lib:common-lib"))
-    implementation(dependencyNotation = project(path = ":account-ledger-lib-multi-platform:lib"))
+    // Retrofit + OkHttp
+    implementation("com.squareup.retrofit2:retrofit:$retrofitVersion")
+    implementation("com.squareup.retrofit2:converter-gson:$retrofitVersion")
 
-    implementation(dependencyNotation = "com.squareup.retrofit2:retrofit:3.0.0")
-    implementation(dependencyNotation = "com.squareup.retrofit2:converter-gson:3.0.0")
+    // Kotlinx
+    implementation("org.jetbrains.kotlinx:kotlinx-cli:0.3.6")
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.10.2")
+    implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.9.0")
 
-    implementation(dependencyNotation = "org.jetbrains.kotlinx:kotlinx-cli:0.3.6")
-    implementation(dependencyNotation = "org.jetbrains.kotlinx:kotlinx-coroutines-core:1.10.2")
+    // CSV and text utils
+    implementation("com.github.doyaaaaaken:kotlin-csv-jvm:1.10.0")
+    implementation("com.massisframework:j-text-utils:0.3.4")
 
-    implementation(dependencyNotation = "com.github.doyaaaaaken:kotlin-csv-jvm:1.10.0")
-    implementation(dependencyNotation = "com.massisframework:j-text-utils:0.3.4")
-    implementation(dependencyNotation = "io.github.cdimascio:dotenv-kotlin:6.5.1")
+    // Dotenv
+    implementation("io.github.cdimascio:dotenv-kotlin:6.5.1")
 
-    implementation(dependencyNotation = "org.jetbrains.kotlinx:kotlinx-serialization-json:1.9.0")
+    // Ktor client
+    implementation("io.ktor:ktor-client-core:$ktorVersion")
+    implementation("io.ktor:ktor-client-cio:$ktorVersion")
+    implementation("io.ktor:ktor-client-logging:$ktorVersion")
+    implementation("io.ktor:ktor-client-auth:$ktorVersion")
+    implementation("io.ktor:ktor-client-content-negotiation:$ktorVersion")
+    implementation("io.ktor:ktor-serialization-kotlinx-json:$ktorVersion")
 
-    implementation(dependencyNotation = "io.ktor:ktor-client-core:$ktorVersion")
-    implementation(dependencyNotation = "io.ktor:ktor-client-cio:$ktorVersion")
-
-    implementation(dependencyNotation = "io.ktor:ktor-client-logging:$ktorVersion")
-    implementation(dependencyNotation = "ch.qos.logback:logback-classic:1.5.19")
-
-    implementation(dependencyNotation = "io.ktor:ktor-client-auth:$ktorVersion")
-
-    implementation(dependencyNotation = "io.ktor:ktor-client-content-negotiation:$ktorVersion")
-    implementation(dependencyNotation = "io.ktor:ktor-serialization-kotlinx-json:$ktorVersion")
+    // Logging
+    implementation("ch.qos.logback:logback-classic:1.5.19")
 }
 
 testing {
