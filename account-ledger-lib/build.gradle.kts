@@ -2,7 +2,7 @@ import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 import org.jetbrains.kotlin.gradle.dsl.KotlinVersion
 
 val ktorVersion: String = "3.3.1"
-val okhttpVersion = "4.12.0"
+val okhttpVersion = "5.3.0"
 val retrofitVersion = "3.0.0"
 
 plugins {
