@@ -219,4 +219,5 @@ gradle-app.setting
 
 # End of https://www.toptal.com/developers/gitignore/api/windows,linux,macos,kotlin,gradle,intellij
 
-/.kotlin/__pycache__/
+/.kotlin/
+__pycache__/
