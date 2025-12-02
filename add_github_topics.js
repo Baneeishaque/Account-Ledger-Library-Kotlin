@@ -6,12 +6,16 @@
 //
 // Usage:
 // GITHUB_TOKEN=your_token node add_github_topics.js
+//
+// Optional environment variables:
+// REPO_OWNER - Repository owner (default: Baneeishaque)
+// REPO_NAME - Repository name (default: Account-Ledger-Library-Kotlin)
 
 const { Octokit } = require("@octokit/rest");
 
-// Configuration
-const REPO_OWNER = "Baneeishaque";
-const REPO_NAME = "Account-Ledger-Library-Kotlin";
+// Configuration - can be overridden with environment variables
+const REPO_OWNER = process.env.REPO_OWNER || "Baneeishaque";
+const REPO_NAME = process.env.REPO_NAME || "Account-Ledger-Library-Kotlin";
 
 // Topics to add
 const topics = [

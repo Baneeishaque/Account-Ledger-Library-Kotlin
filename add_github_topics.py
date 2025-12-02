@@ -8,9 +8,9 @@ import json
 import os
 import sys
 
-# Configuration
-REPO_OWNER = "Baneeishaque"
-REPO_NAME = "Account-Ledger-Library-Kotlin"
+# Configuration - can be overridden with environment variables
+REPO_OWNER = os.environ.get('REPO_OWNER', 'Baneeishaque')
+REPO_NAME = os.environ.get('REPO_NAME', 'Account-Ledger-Library-Kotlin')
 
 # Topics to add
 topics = [
@@ -53,9 +53,10 @@ def main():
     
     # Headers
     headers = {
-        "Accept": "application/vnd.github.mercy-preview+json",
+        "Accept": "application/vnd.github+json",
         "Authorization": f"token {github_token}",
-        "Content-Type": "application/json"
+        "Content-Type": "application/json",
+        "X-GitHub-Api-Version": "2022-11-28"
     }
     
     print(f"Topics to be added ({len(topics)} total):")

@@ -4,6 +4,11 @@
 
 set -e
 
+# Configuration - can be overridden with environment variables
+REPO_OWNER="${REPO_OWNER:-Baneeishaque}"
+REPO_NAME="${REPO_NAME:-Account-Ledger-Library-Kotlin}"
+REPO_FULL="${REPO_OWNER}/${REPO_NAME}"
+
 # Colors for output
 GREEN='\033[0;32m'
 BLUE='\033[0;34m'
@@ -13,7 +18,7 @@ NC='\033[0m' # No Color
 
 echo -e "${BLUE}========================================${NC}"
 echo -e "${BLUE}GitHub Topics Addition Script${NC}"
-echo -e "${BLUE}Repository: Account-Ledger-Library-Kotlin${NC}"
+echo -e "${BLUE}Repository: ${REPO_FULL}${NC}"
 echo -e "${BLUE}========================================${NC}"
 echo ""
 
@@ -89,7 +94,7 @@ echo ""
 echo -e "${BLUE}Adding topics to repository...${NC}"
 
 # Add all topics at once
-gh repo edit Baneeishaque/Account-Ledger-Library-Kotlin \
+gh repo edit "${REPO_FULL}" \
   --add-topic kotlin \
   --add-topic kotlin-library \
   --add-topic gradle \
@@ -123,7 +128,7 @@ if [ $? -eq 0 ]; then
     echo -e "${BLUE}Verifying topics...${NC}"
     
     # View the topics
-    gh repo view Baneeishaque/Account-Ledger-Library-Kotlin --json repositoryTopics -q '.repositoryTopics[].name' | sort
+    gh repo view "${REPO_FULL}" --json repositoryTopics -q '.repositoryTopics[].name' | sort
     
     echo ""
     echo -e "${GREEN}========================================${NC}"
@@ -131,7 +136,7 @@ if [ $? -eq 0 ]; then
     echo -e "${GREEN}========================================${NC}"
     echo ""
     echo "You can view the repository at:"
-    echo "https://github.com/Baneeishaque/Account-Ledger-Library-Kotlin"
+    echo "https://github.com/${REPO_FULL}"
 else
     echo ""
     echo -e "${RED}Error: Failed to add topics.${NC}"

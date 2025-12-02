@@ -158,15 +158,17 @@ TOPICS='["kotlin","kotlin-library","gradle","gradle-kotlin-dsl","jvm","kotlin-mu
 
 # Update repository topics
 curl -X PUT \
-  -H "Accept: application/vnd.github.mercy-preview+json" \
-  -H "Authorization: token $GITHUB_TOKEN" \
+  -H "Accept: application/vnd.github+json" \
+  -H "Authorization: Bearer $GITHUB_TOKEN" \
+  -H "X-GitHub-Api-Version: 2022-11-28" \
   -H "Content-Type: application/json" \
   -d "{\"names\": $TOPICS}" \
   https://api.github.com/repos/Baneeishaque/Account-Ledger-Library-Kotlin/topics
 
 # Get current topics
-curl -H "Accept: application/vnd.github.mercy-preview+json" \
-  -H "Authorization: token $GITHUB_TOKEN" \
+curl -H "Accept: application/vnd.github+json" \
+  -H "Authorization: Bearer $GITHUB_TOKEN" \
+  -H "X-GitHub-Api-Version: 2022-11-28" \
   https://api.github.com/repos/Baneeishaque/Account-Ledger-Library-Kotlin/topics
 ```
 
@@ -196,9 +198,10 @@ url = f"https://api.github.com/repos/{REPO_OWNER}/{REPO_NAME}/topics"
 
 # Headers
 headers = {
-    "Accept": "application/vnd.github.mercy-preview+json",
+    "Accept": "application/vnd.github+json",
     "Authorization": f"token {GITHUB_TOKEN}",
-    "Content-Type": "application/json"
+    "Content-Type": "application/json",
+    "X-GitHub-Api-Version": "2022-11-28"
 }
 
 # Update topics

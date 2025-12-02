@@ -12,7 +12,8 @@ on:
         default: 'no'
 
 permissions:
-  contents: write
+  contents: read
+  metadata: write
 
 jobs:
   add-topics:
