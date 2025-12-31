@@ -1,7 +1,7 @@
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 import org.jetbrains.kotlin.gradle.dsl.KotlinVersion
 
-val ktorVersion: String = "3.4.0-eap-1508"
+val ktorVersion: String = "3.4.0-eap-1509"
 val retrofitVersion = "3.0.0"
 
 plugins {
