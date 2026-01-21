@@ -31,7 +31,7 @@ dependencies {
     // Kotlinx
     implementation("org.jetbrains.kotlinx:kotlinx-cli:0.3.6")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.10.2")
-    implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.9.0")
+    implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.10.0")
 
     // CSV and text utils
     implementation("com.github.doyaaaaaken:kotlin-csv-jvm:1.10.0")
