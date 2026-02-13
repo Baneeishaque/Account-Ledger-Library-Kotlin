@@ -1,0 +1,67 @@
+name: Add GitHub Topics
+
+# This workflow can be manually triggered to add topics to the repository
+# It requires repository admin/owner permissions
+
+on:
+  workflow_dispatch:
+    inputs:
+      confirm:
+        description: 'Type "yes" to confirm adding topics'
+        required: true
+        default: 'no'
+
+permissions:
+  contents: read
+  metadata: write
+
+jobs:
+  add-topics:
+    runs-on: ubuntu-latest
+    if: github.event.inputs.confirm == 'yes'
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+      
+      - name: Add topics using GitHub CLI
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          echo "Adding topics to repository..."
+          
+          gh repo edit ${{ github.repository }} \
+            --add-topic kotlin \
+            --add-topic kotlin-library \
+            --add-topic gradle \
+            --add-topic gradle-kotlin-dsl \
+            --add-topic jvm \
+            --add-topic kotlin-multiplatform \
+            --add-topic accounting \
+            --add-topic ledger \
+            --add-topic finance \
+            --add-topic transactions \
+            --add-topic double-entry-bookkeeping \
+            --add-topic account-management \
+            --add-topic retrofit \
+            --add-topic ktor \
+            --add-topic kotlinx-coroutines \
+            --add-topic kotlinx-serialization \
+            --add-topic okhttp \
+            --add-topic rest-api \
+            --add-topic api-client \
+            --add-topic csv \
+            --add-topic library \
+            --add-topic financial-data \
+            --add-topic azure-pipelines \
+            --add-topic renovate \
+            --add-topic continuous-integration
+          
+          echo "Topics added successfully!"
+      
+      - name: Verify topics
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          echo "Current repository topics:"
+          gh repo view ${{ github.repository }} --json repositoryTopics -q '.repositoryTopics[].name' | sort
