@@ -72,4 +72,19 @@ interface Api {
         @Query("user_id") userId: UInt,
         @Query("specified_date") specifiedDate: String
     ): Response<MultipleTransactionResponse>
+
+    @FormUrlEncoded
+    @POST("${ApiConstants.insertAccountMethod}.${ApiConstants.serverFileExtension}")
+    suspend fun insertAccount(
+        @Field("full_name") fullName: String,
+        @Field("name") name: String,
+        @Field("parent_account_id") parentAccountId: UInt,
+        @Field("account_type") accountType: String,
+        @Field("notes") notes: String,
+        @Field("commodity_type") commodityType: String,
+        @Field("commodity_value") commodityValue: String,
+        @Field("owner_id") ownerId: UInt,
+        @Field("taxable") taxable: String,
+        @Field("place_holder") placeHolder: String
+    ): Response<TransactionManipulationResponse>
 }

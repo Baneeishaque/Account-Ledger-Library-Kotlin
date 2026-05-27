@@ -5,6 +5,7 @@ import account.ledger.library.api.response.TransactionManipulationResponse
 import account.ledger.library.models.AccountFrequencyModel
 import account.ledger.library.models.FrequencyOfAccountsModel
 import account.ledger.library.models.UserModel
+import account.ledger.library.retrofit.data.AccountsDataSource
 import account.ledger.library.retrofit.data.TransactionDataSource
 import common.utils.library.models.IsOkModel
 import common.utils.library.utils.ApiUtilsInteractiveCommon
@@ -98,6 +99,54 @@ object InsertOperations {
             }
         }
         return false
+    }
+
+    @JvmStatic
+    fun insertAccount(
+
+        fullName: String,
+        name: String,
+        parentAccountId: UInt,
+        accountType: String = "GROUP",
+        notes: String = "",
+        commodityType: String = "CURRENCY",
+        commodityValue: String = "INR",
+        ownerId: UInt,
+        taxable: Boolean = false,
+        placeHolder: Boolean = false,
+        isConsoleMode: Boolean = false,
+        isDevelopmentMode: Boolean,
+        accountManipulationSuccessActions: () -> Unit = {},
+        accountManipulationFailureActions: (String) -> Unit = {}
+
+    ): Boolean {
+
+        return manipulateTransaction(
+
+            transactionManipulationApiRequest = fun(): Result<TransactionManipulationResponse> {
+
+                return runBlocking {
+
+                    AccountsDataSource().insertAccount(
+
+                        fullName = fullName,
+                        name = name,
+                        parentAccountId = parentAccountId,
+                        accountType = accountType,
+                        notes = notes,
+                        commodityType = commodityType,
+                        commodityValue = commodityValue,
+                        ownerId = ownerId,
+                        taxable = if (taxable) "T" else "F",
+                        placeHolder = if (placeHolder) "T" else "F"
+                    )
+                }
+            },
+            transactionManipulationSuccessActions = accountManipulationSuccessActions,
+            transactionManipulationFailureActions = accountManipulationFailureActions,
+            isConsoleMode = isConsoleMode,
+            isDevelopmentMode = isDevelopmentMode
+        )
     }
 
     @JvmStatic
