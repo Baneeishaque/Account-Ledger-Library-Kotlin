@@ -8,7 +8,12 @@ plugins {
     kotlin(module = "jvm")
     kotlin(module = "plugin.serialization")
     `java-library`
+    `maven-publish`
 }
+
+group = "com.github.Baneeishaque"
+version = "1.0.0"
+
 
 repositories {
     mavenCentral()
@@ -74,6 +79,22 @@ kotlin {
         languageSettings.apply {
             languageVersion = KotlinVersion.KOTLIN_2_2.version
             apiVersion = KotlinVersion.KOTLIN_2_2.version
+        }
+    }
+}
+
+
+java {
+    withSourcesJar()
+}
+
+publishing {
+    publications {
+        create<MavenPublication>("maven") {
+            from(components["java"])
+            groupId = project.group.toString()
+            artifactId = "account-ledger-lib"
+            version = project.version.toString()
         }
     }
 }
