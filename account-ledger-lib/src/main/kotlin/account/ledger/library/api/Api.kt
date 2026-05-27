@@ -87,4 +87,25 @@ interface Api {
         @Field("taxable") taxable: String,
         @Field("place_holder") placeHolder: String
     ): Response<TransactionManipulationResponse>
+
+    @FormUrlEncoded
+    @POST("${ApiConstants.updateAccountMethod}.${ApiConstants.serverFileExtension}")
+    suspend fun updateAccount(
+        @Field("account_id") accountId: UInt,
+        @Field("full_name") fullName: String,
+        @Field("name") name: String,
+        @Field("parent_account_id") parentAccountId: UInt,
+        @Field("account_type") accountType: String,
+        @Field("notes") notes: String,
+        @Field("commodity_type") commodityType: String,
+        @Field("commodity_value") commodityValue: String,
+        @Field("taxable") taxable: String,
+        @Field("place_holder") placeHolder: String
+    ): Response<TransactionManipulationResponse>
+
+    @FormUrlEncoded
+    @POST("${ApiConstants.deleteAccountMethod}.${ApiConstants.serverFileExtension}")
+    suspend fun deleteAccount(
+        @Field("account_id") accountId: UInt
+    ): Response<TransactionManipulationResponse>
 }

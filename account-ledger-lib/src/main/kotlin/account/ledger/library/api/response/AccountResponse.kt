@@ -10,12 +10,12 @@ data class AccountResponse(
     @Required @SerializedName("account_id") val id: UInt,
     @Required @SerializedName("full_name") val fullName: String,
     @Required val name: String,
-    @Required @SerializedName("parent_account_id") internal val parentAccountId: UInt,
-    @Required @SerializedName("account_type") internal val accountType: String,
-    @Required internal val notes: String?,
-    @Required @SerializedName("commodity_type") internal val commodityType: String,
-    @Required @SerializedName("commodity_value") internal val commodityValue: String,
+    @Required @SerializedName("parent_account_id") val parentAccountId: UInt,
+    @Required @SerializedName("account_type") val accountType: String,
+    @Required val notes: String?,
+    @Required @SerializedName("commodity_type") val commodityType: String,
+    @Required @SerializedName("commodity_value") val commodityValue: String,
     @Required @SerializedName("owner_id") internal val ownerId: UInt,
-    @Required internal val taxable: String,
-    @Required @SerializedName("place_holder") internal val placeHolder: String
+    @Required val taxable: String,
+    @Required @SerializedName("place_holder") val placeHolder: String
 )

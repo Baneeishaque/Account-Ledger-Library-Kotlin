@@ -39,6 +39,47 @@ internal class AccountsDataSource : AppDataSource<AccountsResponse>() {
     }
 
 
+    internal suspend fun updateAccount(
+
+        accountId: UInt,
+        fullName: String,
+        name: String,
+        parentAccountId: UInt,
+        accountType: String,
+        notes: String,
+        commodityType: String,
+        commodityValue: String,
+        taxable: String,
+        placeHolder: String
+
+    ): Result<TransactionManipulationResponse> {
+
+        return CommonDataSource<TransactionManipulationResponse>().processApiResponse(
+
+            apiResponse = retrofitClient.updateAccount(
+
+                accountId = accountId,
+                fullName = fullName,
+                name = name,
+                parentAccountId = parentAccountId,
+                accountType = accountType,
+                notes = notes,
+                commodityType = commodityType,
+                commodityValue = commodityValue,
+                taxable = taxable,
+                placeHolder = placeHolder
+            )
+        )
+    }
+
+    internal suspend fun deleteAccount(accountId: UInt): Result<TransactionManipulationResponse> {
+
+        return CommonDataSource<TransactionManipulationResponse>().processApiResponse(
+
+            apiResponse = retrofitClient.deleteAccount(accountId = accountId)
+        )
+    }
+
     internal suspend fun selectUserAccounts(
 
         userId: UInt,

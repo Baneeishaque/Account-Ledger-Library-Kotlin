@@ -150,6 +150,81 @@ object InsertOperations {
     }
 
     @JvmStatic
+    fun updateAccount(
+
+        accountId: UInt,
+        fullName: String,
+        name: String,
+        parentAccountId: UInt,
+        accountType: String = "GROUP",
+        notes: String = "",
+        commodityType: String = "CURRENCY",
+        commodityValue: String = "INR",
+        taxable: Boolean = false,
+        placeHolder: Boolean = false,
+        isConsoleMode: Boolean = false,
+        isDevelopmentMode: Boolean,
+        accountManipulationSuccessActions: () -> Unit = {},
+        accountManipulationFailureActions: (String) -> Unit = {}
+
+    ): Boolean {
+
+        return manipulateTransaction(
+
+            transactionManipulationApiRequest = fun(): Result<TransactionManipulationResponse> {
+
+                return runBlocking {
+
+                    AccountsDataSource().updateAccount(
+
+                        accountId = accountId,
+                        fullName = fullName,
+                        name = name,
+                        parentAccountId = parentAccountId,
+                        accountType = accountType,
+                        notes = notes,
+                        commodityType = commodityType,
+                        commodityValue = commodityValue,
+                        taxable = if (taxable) "T" else "F",
+                        placeHolder = if (placeHolder) "T" else "F"
+                    )
+                }
+            },
+            transactionManipulationSuccessActions = accountManipulationSuccessActions,
+            transactionManipulationFailureActions = accountManipulationFailureActions,
+            isConsoleMode = isConsoleMode,
+            isDevelopmentMode = isDevelopmentMode
+        )
+    }
+
+    @JvmStatic
+    fun deleteAccount(
+
+        accountId: UInt,
+        isConsoleMode: Boolean = false,
+        isDevelopmentMode: Boolean,
+        accountManipulationSuccessActions: () -> Unit = {},
+        accountManipulationFailureActions: (String) -> Unit = {}
+
+    ): Boolean {
+
+        return manipulateTransaction(
+
+            transactionManipulationApiRequest = fun(): Result<TransactionManipulationResponse> {
+
+                return runBlocking {
+
+                    AccountsDataSource().deleteAccount(accountId = accountId)
+                }
+            },
+            transactionManipulationSuccessActions = accountManipulationSuccessActions,
+            transactionManipulationFailureActions = accountManipulationFailureActions,
+            isConsoleMode = isConsoleMode,
+            isDevelopmentMode = isDevelopmentMode
+        )
+    }
+
+    @JvmStatic
     fun updateAccountFrequency(
 
         user: UserModel,

@@ -17,4 +17,6 @@ internal object ApiConstants {
     internal const val updateTransactionMethod = "update_Transaction_v2"
     internal const val deleteTransactionMethod = "delete_Transaction_v2"
     internal const val insertAccountMethod = "insert_Account"
+    internal const val updateAccountMethod = "update_account"
+    internal const val deleteAccountMethod = "delete_account"
 }
