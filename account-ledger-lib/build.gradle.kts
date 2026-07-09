@@ -54,7 +54,7 @@ dependencies {
     implementation("io.ktor:ktor-serialization-kotlinx-json:$ktorVersion")
 
     // Logging
-    implementation("ch.qos.logback:logback-classic:1.5.34")
+    implementation("ch.qos.logback:logback-classic:1.5.38")
 }
 
 testing {
